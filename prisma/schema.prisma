@@ -11,25 +11,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Developer {
-  id        String        @id @default(cuid())
-  key       String
-  createdAt DateTime      @default(now())
-  name      String
-  avatar    String
-  drafts    DraftPlugin[]
-}
-
-model DraftPlugin {
-  id          String       @id @default(cuid())
-  name        String
-  description String
-  icon        String
-  date        DateTime     @default(now())
-  status      PluginStatus @default(Pending)
-  author      Developer    @relation(fields: [authorId], references: [id])
-  authorId    String
-}
 
 enum PluginStatus {
   Private
@@ -37,30 +18,62 @@ enum PluginStatus {
   Pending
 }
 
-//model AdminAccount {
-//  id                 String  @id @default(cuid())
-//  userId             String
-//  type               String
-//  provider           String
-//  providerAccountId  String
-//  refresh_token      String?
-//  access_token       String?
-//  expires_at         Int?
-//  token_type         String?
-//  scope              String?
-//  id_token           String?
-//  session_state      String?
-//  oauth_token_secret String?
-//  oauth_token        String?
-//
-//  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-//
-//  @@unique([provider, providerAccountId])
-//}
+model DraftPlugin {
+  id          String           @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  date        DateTime         @default(now())
+  status      PluginStatus     @default(Pending)
+  authorId    String
 
-model AdminSession {
+  author      DeveloperUser    @relation(fields: [authorId], references: [id])
+}
+
+model DeveloperAccount {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user DeveloperUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model DeveloperSession {
   id           String   @id @default(cuid())
   sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         DeveloperUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DeveloperUser {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      DeveloperAccount[]
+  sessions      DeveloperSession[]
+  drafts        DraftPlugin[]
+}
+
+
+model AdminSession {
+  id           String        @id @default(cuid())
+  sessionToken String        @unique
   userId       String
   expires      DateTime
   user         AdminUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
