@@ -6,7 +6,9 @@
     "dev": "doppler run next dev -- -p 3001",
     "build": "doppler run next build",
     "start": "doppler run next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma-push": "git subtree push --prefix=prisma https://github.com/collapp-zpi/prisma main",
+    "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^0.5.2-next.15",
