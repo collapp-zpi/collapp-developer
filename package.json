@@ -1,0 +1,31 @@
+{
+  "name": "collapp-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "doppler run next dev",
+    "build": "doppler run next build",
+    "start": "doppler run next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next-auth/prisma-adapter": "^0.5.2-next.15",
+    "@prisma/client": "3.1.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "next": "11.1.2",
+    "next-auth": "^4.0.0-beta.4",
+    "nodemailer": "^6.6.5",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.24",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.4.1",
+    "prisma": "3.1.1",
+    "typescript": "4.4.3"
+  }
+}
