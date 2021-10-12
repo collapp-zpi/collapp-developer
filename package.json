@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "doppler run next dev",
+    "dev": "doppler run next dev -- -p 3001",
     "build": "doppler run next build",
     "start": "doppler run next start",
     "lint": "next lint"
@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/react": "17.0.24",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.3.0",
