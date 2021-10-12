@@ -16,7 +16,7 @@ export default async function handler(
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  const developers = await prisma.developer.findMany()
+  const developers = await prisma.developerUser.findMany()
 
   res.json(developers)
 }
