@@ -1,27 +1,8 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { signIn, signOut, useSession } from 'next-auth/react'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
-  const developers = await res.json()
-
-  return {
-    props: { developers },
-  }
-}
-
-const Home = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) => {
+const Home = () => {
   const { data } = useSession()
 
   if (!data)
@@ -31,7 +12,6 @@ const Home = (
       </div>
     )
 
-  console.log(props.developers)
   return (
     <div className={styles.container}>
       <Head>
@@ -41,7 +21,6 @@ const Home = (
       </Head>
       <main className={styles.main}>
         <button onClick={() => signOut()}>Sign out</button>
-        <div>{props.developers.length}</div>
       </main>
     </div>
   )
