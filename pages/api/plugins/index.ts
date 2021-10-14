@@ -13,7 +13,31 @@ export default async function handler(
   }
 
   if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' })
+    const { name, description } = JSON.parse(req.body)
+
+    const errors = []
+    if (!name) errors.push({ field: 'name', message: 'Required field' })
+    if (!description)
+      errors.push({ field: 'description', message: 'Required field' })
+
+    if (errors.length) {
+      return res.status(400).json({ errors })
+    }
+
+    const plugin = await prisma.draftPlugin.create({
+      data: {
+        name,
+        description,
+        icon: '',
+        author: {
+          connect: {
+            id: session.userId as string,
+          },
+        },
+      },
+    })
+
+    return res.status(200).json({ data: plugin })
   }
 
   const plugins = await prisma.draftPlugin.findMany({

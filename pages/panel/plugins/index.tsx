@@ -2,6 +2,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { AuthLayout } from '../../../layouts/AuthLayout'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -22,12 +23,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Plugins = ({
   plugins,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter()
   return (
     <AuthLayout>
       <Head>
         <title>Plugins</title>
       </Head>
       <main>
+        <button onClick={() => router.push('/panel/plugins/create')}>
+          Add
+        </button>
         {!plugins.length ? (
           <div>No plugins</div>
         ) : (
