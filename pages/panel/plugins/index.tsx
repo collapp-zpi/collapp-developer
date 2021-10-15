@@ -48,7 +48,11 @@ const Plugins = ({
             <tbody>
               {plugins.map(
                 ({ id, name, description, status, date }: DraftPlugin) => (
-                  <tr key={id}>
+                  <tr
+                    key={id}
+                    onClick={() => router.push(`/panel/plugins/${id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <td>{name}</td>
                     <td>{description}</td>
                     <td>{status}</td>
