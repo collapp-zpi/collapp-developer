@@ -12,13 +12,11 @@ export default async function handler(
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  if (req.method !== 'GET') {
+  if (req.method === 'POST') {
     const { name, description } = JSON.parse(req.body)
 
     const errors = []
     if (!name) errors.push({ field: 'name', message: 'Required field' })
-    if (!description)
-      errors.push({ field: 'description', message: 'Required field' })
 
     if (errors.length) {
       return res.status(400).json({ errors })
@@ -39,6 +37,9 @@ export default async function handler(
 
     return res.status(200).json({ data: plugin })
   }
+
+  if (req.method !== 'GET')
+    return res.status(401).json({ message: 'Unauthorized' })
 
   const plugins = await prisma.draftPlugin.findMany({
     where: {
