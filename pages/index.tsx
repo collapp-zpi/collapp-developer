@@ -8,7 +8,15 @@ const Home = () => {
   if (!data)
     return (
       <div className={styles.container}>
-        <button onClick={() => signIn('github')}>Sign in</button>
+        <button
+          onClick={() =>
+            signIn('github', {
+              callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/panel`,
+            })
+          }
+        >
+          Sign in
+        </button>
       </div>
     )
 
