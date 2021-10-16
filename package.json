@@ -11,14 +11,19 @@
     "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
+    "@hookform/resolvers": "^2.8.2",
     "@next-auth/prisma-adapter": "^0.5.2-next.15",
     "@prisma/client": "^3.1.1",
     "eslint-plugin-prettier": "^4.0.0",
+    "joi": "^17.4.2",
     "next": "11.1.2",
     "next-auth": "^4.0.0-beta.4",
     "nodemailer": "^6.6.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.17.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/react": "17.0.24",
