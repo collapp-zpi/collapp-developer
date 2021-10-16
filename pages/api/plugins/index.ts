@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   const session = await getSession({ req })
   if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ ok: false, message: 'Unauthorized' })
   }
 
   if (req.method === 'POST') {
@@ -18,7 +18,7 @@ export default async function handler(
     if (!name) errors.push({ field: 'name', message: 'Required field' })
 
     if (errors.length) {
-      return res.status(400).json({ errors })
+      return res.status(400).json({ ok: false, errors })
     }
 
     const plugin = await prisma.draftPlugin.create({
@@ -34,11 +34,11 @@ export default async function handler(
       },
     })
 
-    return res.status(200).json({ data: plugin })
+    return res.status(200).json({ ok: true, data: plugin })
   }
 
   if (req.method !== 'GET')
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(404).json({ ok: false, message: 'Method not found' })
 
   const plugins = await prisma.draftPlugin.findMany({
     where: {

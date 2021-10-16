@@ -11,11 +11,11 @@ export type AnyFunction = (...args: any[]) => any
 
 export type useRequestQuery<T extends AnyFunction> = (
   ...args: Parameters<T>
-) => Promise<ReturnType<T>>
+) => ReturnType<T>
 
 export type useRequestOptions = {
-  onSuccess?: (...args: any[]) => void
-  onError?: (...args: any[]) => void
+  onSuccess?: (args: any) => void
+  onError?: (args: any) => void
 }
 
 const useRequest = <T extends AnyFunction>(
@@ -24,21 +24,20 @@ const useRequest = <T extends AnyFunction>(
 ) => {
   const [status, setStatus] = useState(RequestState.Pending)
 
-  const send = (...args: Parameters<T>) => {
+  const send = async (...args: Parameters<T>) => {
     setStatus(RequestState.Loading)
 
-    query(...args)
-      .then((...data) => {
-        setStatus(RequestState.Success)
+    try {
+      const response = await query(...args)
+      if (!response.ok) throw new Error(response)
+      setStatus(RequestState.Success)
 
-        if (onSuccess) onSuccess(...data)
-      })
+      if (onSuccess) onSuccess(response)
+    } catch (e) {
+      setStatus(RequestState.Error)
 
-      .catch((...data) => {
-        setStatus(RequestState.Error)
-
-        if (onError) onError(...data)
-      })
+      if (onError) onError(e)
+    }
   }
 
   return { send, status }
