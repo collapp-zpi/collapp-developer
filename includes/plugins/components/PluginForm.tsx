@@ -1,7 +1,11 @@
-import useApiForm, { FormProps } from '../../../hooks/useApiForm'
-import { InputText } from '../../../components/form/InputText'
+import { FormProps } from '../../../hooks/useApiForm'
+import { InputText } from '../../../components/input/InputText'
 import { object, string, TypeOf } from 'yup'
-import Form from '../../../components/form/Form'
+import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
+import SubmitButton from '../../../components/button/SubmitButton'
+import { InputTextarea } from '../../../components/input/InputTextarea'
+import { FiAlignCenter } from 'react-icons/fi'
+import { BiText } from 'react-icons/bi'
 
 const schema = object().shape({
   name: string().required(),
@@ -14,22 +18,19 @@ export const PluginForm = ({
   onSuccess,
   onError,
   children,
-}: FormProps<TypeOf<typeof schema>>) => {
-  const { methods, handleSubmit, request } = useApiForm({
-    schema,
-    query,
-    initial,
-    onSuccess,
-    onError,
-  })
-
-  return (
-    <Form {...{ methods, handleSubmit }}>
-      <InputText name="name" label="Name" />
-      <InputText name="description" label="Description" />
-      <button type="submit">Submit</button>
-      {request.status}
-      {children}
-    </Form>
-  )
-}
+}: FormProps<TypeOf<typeof schema>>) => (
+  <UncontrolledForm
+    {...{ schema, query, initial, onSuccess, onError }}
+    className="flex flex-col"
+  >
+    <InputText name="name" label="Name" icon={BiText} />
+    <InputTextarea
+      name="description"
+      label="Description"
+      className="mt-2"
+      icon={FiAlignCenter}
+    />
+    <SubmitButton className="mt-4 ml-auto" />
+    {children}
+  </UncontrolledForm>
+)

@@ -1,16 +1,28 @@
-import { FormProvider, useForm } from 'react-hook-form'
-import { ReactNode } from 'react'
+import { FormProvider } from 'react-hook-form'
+import { ComponentProps, createContext, ReactNode, useContext } from 'react'
 import useApiForm from '../../hooks/useApiForm'
+import useRequest, { RequestState } from '../../hooks/useRequest'
 
-interface FormProps {
-  methods: ReturnType<typeof useForm>
-  handleSubmit: ReturnType<typeof useApiForm>['handleSubmit']
+interface FormProps
+  extends ReturnType<typeof useApiForm>,
+    ComponentProps<'form'> {
   children: ReactNode
 }
 
-const Form = ({ methods, handleSubmit, children }: FormProps) => (
+const RequestContext = createContext<ReturnType<typeof useRequest>>({
+  send: async () => undefined,
+  status: RequestState.Pending,
+})
+
+export const useApiRequest = () => useContext(RequestContext)
+
+const Form = ({ methods, request, children, ...props }: FormProps) => (
   <FormProvider {...methods}>
-    <form onSubmit={handleSubmit}>{children}</form>
+    <RequestContext.Provider value={request}>
+      <form onSubmit={methods.handleSubmit(request.send)} {...props}>
+        {children}
+      </form>
+    </RequestContext.Provider>
   </FormProvider>
 )
 

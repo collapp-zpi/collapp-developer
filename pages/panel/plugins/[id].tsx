@@ -1,9 +1,11 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import { AuthLayout } from '../../../layouts/AuthLayout'
+import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
 import { PluginForm } from '../../../includes/plugins/components/PluginForm'
 import { updatePlugin } from '../../../includes/plugins/api/updatePlugin'
+import Button from '../../../components/button/Button'
+import { GoChevronLeft } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -26,7 +28,6 @@ const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  console.log(plugin)
   const { name, description, id } = plugin
 
   return (
@@ -34,12 +35,22 @@ const Plugin = ({
       <Head>
         <title>Plugin</title>
       </Head>
-      <main>
-        <button type="button" onClick={() => router.push('/panel/plugins')}>
+      <div className="container mx-auto">
+        <Button
+          color="light"
+          onClick={() => router.push('/panel/plugins')}
+          className="mb-4"
+        >
+          <GoChevronLeft className="mr-2 -ml-2" />
           Back
-        </button>
-        <PluginForm initial={{ name, description }} query={updatePlugin(id)} />
-      </main>
+        </Button>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <PluginForm
+            initial={{ name, description }}
+            query={updatePlugin(id)}
+          />
+        </div>
+      </div>
     </AuthLayout>
   )
 }

@@ -1,34 +1,34 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Button from '../components/button/Button'
 
 const Home = () => {
   const { data } = useSession()
 
   if (!data)
     return (
-      <div className={styles.container}>
-        <button
+      <div>
+        <Button
           onClick={() =>
             signIn('github', {
-              callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/panel`,
+              callbackUrl: `${window.location.origin}/panel`,
             })
           }
         >
           Sign in
-        </button>
+        </Button>
       </div>
     )
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Collapp Admin</title>
         <meta name="description" content="Collapp developer basic setup" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <button onClick={() => signOut()}>Sign out</button>
+      <main>
+        <Button onClick={() => signOut()}>Sign out</Button>
       </main>
     </div>
   )

@@ -1,8 +1,10 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
-import { AuthLayout } from '../../../layouts/AuthLayout'
+import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
+import Button from '../../../components/button/Button'
+import { GoPlus } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -29,41 +31,47 @@ const Plugins = ({
       <Head>
         <title>Plugins</title>
       </Head>
-      <main>
-        <button onClick={() => router.push('/panel/plugins/create')}>
+      <div className="container mx-auto">
+        <Button
+          onClick={() => router.push('/panel/plugins/create')}
+          className="ml-auto mb-4"
+        >
+          <GoPlus className="mr-2 -ml-2" />
           Add
-        </button>
+        </Button>
         {!plugins.length ? (
           <div>No plugins</div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plugins.map(
-                ({ id, name, description, status, date }: DraftPlugin) => (
-                  <tr
-                    key={id}
-                    onClick={() => router.push(`/panel/plugins/${id}`)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <td>{name}</td>
-                    <td>{description}</td>
-                    <td>{status}</td>
-                    <td>{date}</td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+          <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left p-4">Name</th>
+                  <th className="text-left p-4">Description</th>
+                  <th className="text-left p-4">Status</th>
+                  <th className="text-left p-4">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {plugins.map(
+                  ({ id, name, description, status, date }: DraftPlugin) => (
+                    <tr
+                      key={id}
+                      onClick={() => router.push(`/panel/plugins/${id}`)}
+                      className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="p-4">{name}</td>
+                      <td className="p-4">{description}</td>
+                      <td className="p-4">{status}</td>
+                      <td className="p-4">{date}</td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
-      </main>
+      </div>
     </AuthLayout>
   )
 }
