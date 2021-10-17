@@ -8,10 +8,14 @@ const CreatePlugin = () => {
 
   return (
     <AuthLayout>
-      <PluginForm query={createPlugin} />
-      <button type="button" onClick={() => router.push('/panel/plugins')}>
-        Back
-      </button>
+      <div className="container mx-auto">
+        <button type="button" onClick={() => router.push('/panel/plugins')}>
+          Back
+        </button>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <PluginForm query={createPlugin} />
+        </div>
+      </div>
     </AuthLayout>
   )
 }

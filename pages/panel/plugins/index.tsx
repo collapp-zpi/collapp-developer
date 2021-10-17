@@ -40,10 +40,10 @@ const Plugins = ({
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="text-left px-2 py-4">Name</th>
-                  <th className="text-left px-2 py-4">Description</th>
-                  <th className="text-left px-2 py-4">Status</th>
-                  <th className="text-left px-2 py-4">Date</th>
+                  <th className="text-left p-4">Name</th>
+                  <th className="text-left p-4">Description</th>
+                  <th className="text-left p-4">Status</th>
+                  <th className="text-left p-4">Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -52,12 +52,12 @@ const Plugins = ({
                     <tr
                       key={id}
                       onClick={() => router.push(`/panel/plugins/${id}`)}
-                      className="cursor-pointer border-t-2 border-gray-100"
+                      className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-2 py-4">{name}</td>
-                      <td className="px-2 py-4">{description}</td>
-                      <td className="px-2 py-4">{status}</td>
-                      <td className="px-2 py-4">{date}</td>
+                      <td className="p-4">{name}</td>
+                      <td className="p-4">{description}</td>
+                      <td className="p-4">{status}</td>
+                      <td className="p-4">{date}</td>
                     </tr>
                   ),
                 )}

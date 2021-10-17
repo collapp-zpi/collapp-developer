@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Button from '../components/form/Button'
 
 const Home = () => {
   const { data } = useSession()
@@ -7,7 +8,7 @@ const Home = () => {
   if (!data)
     return (
       <div>
-        <button
+        <Button
           onClick={() =>
             signIn('github', {
               callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/panel`,
@@ -15,7 +16,7 @@ const Home = () => {
           }
         >
           Sign in
-        </button>
+        </Button>
       </div>
     )
 
@@ -27,7 +28,7 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <button onClick={() => signOut()}>Sign out</button>
+        <Button onClick={() => signOut()}>Sign out</Button>
       </main>
     </div>
   )

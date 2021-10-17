@@ -2,7 +2,7 @@ import { ComponentProps } from 'react'
 import classNames from 'classnames'
 
 const BUTTON_COLORS = {
-  blue: 'bg-blue-500 hover:bg-blue-700 focus:bg-blue-700 text-white',
+  blue: 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white',
 }
 
 export interface ButtonProps extends ComponentProps<'button'> {
@@ -11,7 +11,7 @@ export interface ButtonProps extends ComponentProps<'button'> {
 
 const Button = ({
   color = 'blue',
-  type,
+  type = 'button',
   children,
   className,
   ...props

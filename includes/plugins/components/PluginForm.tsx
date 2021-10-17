@@ -3,6 +3,7 @@ import { InputText } from '../../../components/form/InputText'
 import { object, string, TypeOf } from 'yup'
 import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
 import SubmitButton from '../../../components/form/SubmitButton'
+import { FiAlignCenter } from 'react-icons/fi'
 
 const schema = object().shape({
   name: string().required(),
@@ -21,7 +22,12 @@ export const PluginForm = ({
     className="flex flex-col"
   >
     <InputText name="name" label="Name" />
-    <InputText name="description" label="Description" className="mt-2" />
+    <InputText
+      name="description"
+      label="Description"
+      className="mt-2"
+      icon={FiAlignCenter}
+    />
     <SubmitButton className="mt-4 ml-auto" />
     {children}
   </UncontrolledForm>
