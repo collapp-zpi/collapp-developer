@@ -29,41 +29,43 @@ const Plugins = ({
       <Head>
         <title>Plugins</title>
       </Head>
-      <main>
+      <div className="container mx-auto">
         <button onClick={() => router.push('/panel/plugins/create')}>
           Add
         </button>
         {!plugins.length ? (
           <div>No plugins</div>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plugins.map(
-                ({ id, name, description, status, date }: DraftPlugin) => (
-                  <tr
-                    key={id}
-                    onClick={() => router.push(`/panel/plugins/${id}`)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <td>{name}</td>
-                    <td>{description}</td>
-                    <td>{status}</td>
-                    <td>{date}</td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
+          <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left px-2 py-4">Name</th>
+                  <th className="text-left px-2 py-4">Description</th>
+                  <th className="text-left px-2 py-4">Status</th>
+                  <th className="text-left px-2 py-4">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {plugins.map(
+                  ({ id, name, description, status, date }: DraftPlugin) => (
+                    <tr
+                      key={id}
+                      onClick={() => router.push(`/panel/plugins/${id}`)}
+                      className="cursor-pointer border-t-2 border-gray-100"
+                    >
+                      <td className="px-2 py-4">{name}</td>
+                      <td className="px-2 py-4">{description}</td>
+                      <td className="px-2 py-4">{status}</td>
+                      <td className="px-2 py-4">{date}</td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
-      </main>
+      </div>
     </AuthLayout>
   )
 }
