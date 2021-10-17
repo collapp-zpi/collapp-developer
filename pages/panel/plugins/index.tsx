@@ -5,6 +5,7 @@ import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
 import Button from '../../../components/button/Button'
 import { GoPlus } from 'react-icons/go'
+import dayjs from 'dayjs'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -63,7 +64,7 @@ const Plugins = ({
                       <td className="p-4">{name}</td>
                       <td className="p-4">{description}</td>
                       <td className="p-4">{status}</td>
-                      <td className="p-4">{date}</td>
+                      <td className="p-4">{dayjs(date).format('LLL')}</td>
                     </tr>
                   ),
                 )}

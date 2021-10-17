@@ -11,6 +11,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.0.0
   autoprefixer: ^10.3.7
   classnames: ^2.3.1
+  dayjs: ^1.10.7
   eslint: 7.32.0
   eslint-config-next: 11.1.2
   eslint-config-prettier: ^8.3.0
@@ -39,6 +40,7 @@ dependencies:
   '@prisma/client': 3.1.1_prisma@3.1.1
   autoprefixer: 10.3.7_postcss@8.3.9
   classnames: 2.3.1
+  dayjs: 1.10.7
   eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
   joi: 17.4.2
   next: 11.1.2_bd7797d63db473de6e2318609a63c933
@@ -1479,6 +1481,10 @@ packages:
   /data-uri-to-buffer/3.0.1:
     resolution: {integrity: sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==}
     engines: {node: '>= 6'}
+    dev: false
+
+  /dayjs/1.10.7:
+    resolution: {integrity: sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==}
     dev: false
 
   /debug/2.6.9:
