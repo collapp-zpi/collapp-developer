@@ -9,6 +9,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^4.33.0
   '@typescript-eslint/parser': ^5.0.0
   autoprefixer: ^10.3.7
+  classnames: ^2.3.1
   eslint: 7.32.0
   eslint-config-next: 11.1.2
   eslint-config-prettier: ^8.3.0
@@ -33,6 +34,7 @@ dependencies:
   '@next-auth/prisma-adapter': 0.5.2-next.15_f83b4f02ed3900e328151dfffdacfa0c
   '@prisma/client': 3.1.1_prisma@3.1.1
   autoprefixer: 10.3.7_postcss@8.3.9
+  classnames: 2.3.1
   eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
   joi: 17.4.2
   next: 11.1.2_bd7797d63db473de6e2318609a63c933
@@ -1102,6 +1104,10 @@ packages:
 
   /classnames/2.2.6:
     resolution: {integrity: sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==}
+    dev: false
+
+  /classnames/2.3.1:
+    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
     dev: false
 
   /clean-stack/2.2.0:

@@ -26,7 +26,6 @@ const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  console.log(plugin)
   const { name, description, id } = plugin
 
   return (

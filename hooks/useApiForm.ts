@@ -32,9 +32,8 @@ const useApiForm = <T extends Record<string, unknown>>({
   })
 
   const request = useRequest(query, { onSuccess, onError })
-  const handleSubmit = methods.handleSubmit(request.send)
 
-  return { methods, handleSubmit, request }
+  return { methods, request }
 }
 
 export default useApiForm

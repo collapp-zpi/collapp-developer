@@ -1,7 +1,8 @@
-import useApiForm, { FormProps } from '../../../hooks/useApiForm'
+import { FormProps } from '../../../hooks/useApiForm'
 import { InputText } from '../../../components/form/InputText'
 import { object, string, TypeOf } from 'yup'
-import Form from '../../../components/form/Form'
+import Button from '../../../components/form/Button'
+import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
 
 const schema = object().shape({
   name: string().required(),
@@ -14,22 +15,16 @@ export const PluginForm = ({
   onSuccess,
   onError,
   children,
-}: FormProps<TypeOf<typeof schema>>) => {
-  const { methods, handleSubmit, request } = useApiForm({
-    schema,
-    query,
-    initial,
-    onSuccess,
-    onError,
-  })
-
-  return (
-    <Form {...{ methods, handleSubmit }}>
-      <InputText name="name" label="Name" />
-      <InputText name="description" label="Description" />
-      <button type="submit">Submit</button>
-      {request.status}
-      {children}
-    </Form>
-  )
-}
+}: FormProps<TypeOf<typeof schema>>) => (
+  <UncontrolledForm
+    {...{ schema, query, initial, onSuccess, onError }}
+    className="flex flex-col"
+  >
+    <InputText name="name" label="Name" />
+    <InputText name="description" label="Description" className="mt-2" />
+    <Button type="submit" className="mt-4 ml-auto">
+      Submit
+    </Button>
+    {children}
+  </UncontrolledForm>
+)
