@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import Button from '../form/Button'
+import Button from '../button/Button'
 
 export const AuthLayout = ({ children }: { children: ReactNode }) => {
   const { status } = useSession()

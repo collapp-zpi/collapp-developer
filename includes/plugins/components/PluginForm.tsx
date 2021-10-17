@@ -1,9 +1,10 @@
 import { FormProps } from '../../../hooks/useApiForm'
-import { InputText } from '../../../components/form/InputText'
+import { InputText } from '../../../components/input/InputText'
 import { object, string, TypeOf } from 'yup'
 import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
-import SubmitButton from '../../../components/form/SubmitButton'
+import SubmitButton from '../../../components/button/SubmitButton'
 import { FiAlignCenter } from 'react-icons/fi'
+import { InputTextarea } from '../../../components/input/InputTextarea'
 
 const schema = object().shape({
   name: string().required(),
@@ -22,7 +23,7 @@ export const PluginForm = ({
     className="flex flex-col"
   >
     <InputText name="name" label="Name" />
-    <InputText
+    <InputTextarea
       name="description"
       label="Description"
       className="mt-2"

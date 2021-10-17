@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import Button from '../components/form/Button'
+import Button from '../components/button/Button'
 
 const Home = () => {
   const { data } = useSession()
