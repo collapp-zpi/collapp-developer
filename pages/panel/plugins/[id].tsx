@@ -34,12 +34,17 @@ const Plugin = ({
       <Head>
         <title>Plugin</title>
       </Head>
-      <main>
-        <button type="button" onClick={() => router.push('/panel/plugins')}>
-          Back
-        </button>
-        <PluginForm initial={{ name, description }} query={updatePlugin(id)} />
-      </main>
+      <div className="container mx-auto">
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <button type="button" onClick={() => router.push('/panel/plugins')}>
+            Back
+          </button>
+          <PluginForm
+            initial={{ name, description }}
+            query={updatePlugin(id)}
+          />
+        </div>
+      </div>
     </AuthLayout>
   )
 }

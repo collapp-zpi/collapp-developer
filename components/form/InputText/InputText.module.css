@@ -1,0 +1,21 @@
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+input:not(:placeholder-shown) + .label,
+input:focus + .label {
+  transform: scale(0.75) translateY(-0.4em);
+}
+
+input:focus + .label {
+  color: theme('colors.blue.500');
+}
