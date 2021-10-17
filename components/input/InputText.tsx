@@ -34,11 +34,12 @@ export const InputText = ({
 }: InputTextProps) => {
   const {
     field: { ref, ...field },
+    fieldState: { invalid },
   } = useController({ name })
   const { status } = useApiRequest()
 
   return (
-    <InputFrame {...{ name, className, icon }}>
+    <InputFrame {...{ name, className, icon }} isError={invalid}>
       <input
         ref={ref}
         {...field}

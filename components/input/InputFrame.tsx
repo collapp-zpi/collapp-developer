@@ -1,6 +1,7 @@
 import { ErrorMessage } from '@hookform/error-message'
 import { IconType } from 'react-icons'
 import { ReactNode } from 'react'
+import classNames from 'classnames'
 
 export interface InputGeneric {
   name: string
@@ -14,6 +15,7 @@ interface InputFrameProps {
   className?: string
   icon?: IconType
   children: ReactNode
+  isError: boolean
 }
 
 export const InputFrame = ({
@@ -21,12 +23,21 @@ export const InputFrame = ({
   className,
   icon: Icon,
   children,
+  isError,
 }: InputFrameProps) => (
   <div className={className}>
     <label>
-      <div className="border-gray-200 focus-within:border-blue-400 focus-within:text-blue-500 transition-all border-2 bg-white rounded-lg flex overflow-hidden">
+      <div
+        className={classNames(
+          'focus-within:border-blue-400 focus-within:text-blue-500 transition-all border-2 bg-white rounded-lg flex overflow-hidden',
+          {
+            'border-red-300': isError,
+            'border-gray-200': !isError,
+          },
+        )}
+      >
         {!!Icon && (
-          <div className="flex justify-center p-3 opacity-70 -mr-4 z-10">
+          <div className="flex items-center h-12 justify-center p-3 opacity-70 -mr-4 z-10">
             <Icon size="1.3em" />
           </div>
         )}

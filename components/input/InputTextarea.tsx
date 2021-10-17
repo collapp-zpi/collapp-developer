@@ -35,18 +35,19 @@ export const InputTextarea = ({
 }: InputTextareaProps) => {
   const {
     field: { ref, ...field },
+    fieldState: { invalid },
   } = useController({ name })
   const { status } = useApiRequest()
 
   return (
-    <InputFrame {...{ name, className, icon }}>
+    <InputFrame {...{ name, className, icon }} isError={invalid}>
       <TextareaAutosize
         ref={ref}
         {...field}
         {...props}
         value={field?.value ?? props?.value ?? ''}
         className={classNames(
-          'w-full outline-none px-4 pb-1 pt-5 text-gray-500 resize-none',
+          'w-full outline-none px-4 pb-1 mt-5 text-gray-500 resize-none',
           innerClassName,
         )}
         placeholder=" "

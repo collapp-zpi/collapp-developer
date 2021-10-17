@@ -3,8 +3,9 @@ import { InputText } from '../../../components/input/InputText'
 import { object, string, TypeOf } from 'yup'
 import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
 import SubmitButton from '../../../components/button/SubmitButton'
-import { FiAlignCenter } from 'react-icons/fi'
 import { InputTextarea } from '../../../components/input/InputTextarea'
+import { FiAlignCenter } from 'react-icons/fi'
+import { BiText } from 'react-icons/bi'
 
 const schema = object().shape({
   name: string().required(),
@@ -22,7 +23,7 @@ export const PluginForm = ({
     {...{ schema, query, initial, onSuccess, onError }}
     className="flex flex-col"
   >
-    <InputText name="name" label="Name" />
+    <InputText name="name" label="Name" icon={BiText} />
     <InputTextarea
       name="description"
       label="Description"
