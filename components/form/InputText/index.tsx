@@ -4,7 +4,7 @@ import { ComponentProps } from 'react'
 import styles from './InputText.module.css'
 import { useApiRequest } from '../Form'
 import { RequestState } from '../../../hooks/useRequest'
-import classnames from 'classnames'
+import classNames from 'classnames'
 
 interface InputTextProps extends ComponentProps<'input'> {
   name: string
@@ -35,7 +35,7 @@ export const InputText = ({
               {...field}
               {...props}
               value={field?.value ?? props?.value ?? ''}
-              className={classnames(
+              className={classNames(
                 'w-full outline-none px-4 pb-0.5 pt-5',
                 innerClassName,
               )}

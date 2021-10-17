@@ -1,8 +1,8 @@
 import { FormProps } from '../../../hooks/useApiForm'
 import { InputText } from '../../../components/form/InputText'
 import { object, string, TypeOf } from 'yup'
-import Button from '../../../components/form/Button'
 import { UncontrolledForm } from '../../../components/form/UncontrolledForm'
+import SubmitButton from '../../../components/form/SubmitButton'
 
 const schema = object().shape({
   name: string().required(),
@@ -22,9 +22,7 @@ export const PluginForm = ({
   >
     <InputText name="name" label="Name" />
     <InputText name="description" label="Description" className="mt-2" />
-    <Button type="submit" className="mt-4 ml-auto">
-      Submit
-    </Button>
+    <SubmitButton className="mt-4 ml-auto" />
     {children}
   </UncontrolledForm>
 )
