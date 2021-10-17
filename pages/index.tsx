@@ -11,7 +11,7 @@ const Home = () => {
         <Button
           onClick={() =>
             signIn('github', {
-              callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/panel`,
+              callbackUrl: `${window.location.origin}/panel`,
             })
           }
         >
