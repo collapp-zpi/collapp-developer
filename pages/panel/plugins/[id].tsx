@@ -4,6 +4,8 @@ import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
 import { PluginForm } from '../../../includes/plugins/components/PluginForm'
 import { updatePlugin } from '../../../includes/plugins/api/updatePlugin'
+import Button from '../../../components/button/Button'
+import { GoChevronLeft } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -34,9 +36,14 @@ const Plugin = ({
         <title>Plugin</title>
       </Head>
       <div className="container mx-auto">
-        <button type="button" onClick={() => router.push('/panel/plugins')}>
+        <Button
+          color="light"
+          onClick={() => router.push('/panel/plugins')}
+          className="mb-4"
+        >
+          <GoChevronLeft className="mr-2 -ml-2" />
           Back
-        </button>
+        </Button>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
           <PluginForm
             initial={{ name, description }}

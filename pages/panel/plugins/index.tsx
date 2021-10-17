@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
+import Button from '../../../components/button/Button'
+import { GoPlus } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -30,9 +32,13 @@ const Plugins = ({
         <title>Plugins</title>
       </Head>
       <div className="container mx-auto">
-        <button onClick={() => router.push('/panel/plugins/create')}>
+        <Button
+          onClick={() => router.push('/panel/plugins/create')}
+          className="ml-auto mb-4"
+        >
+          <GoPlus className="mr-2 -ml-2" />
           Add
-        </button>
+        </Button>
         {!plugins.length ? (
           <div>No plugins</div>
         ) : (
