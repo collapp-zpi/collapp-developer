@@ -3,16 +3,21 @@ import { ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 
 const StyledLogoBg = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  top: -50%;
+  animation-duration: 3s;
   background-image: conic-gradient(
     from 90deg,
-    #e175ae 10%,
-    #9d64a9 40%,
-    #6099d2 60%,
-    #75cfe7 90%
+    #e175ae 0%,
+    #9d64a9 25%,
+    #6099d2 50%,
+    #75cfe7 75%,
+    #e175ae 100%
   );
   position: relative;
+  animation-play-state: paused;
 
   &::after {
     content: '';
@@ -22,13 +27,18 @@ const StyledLogoBg = styled.div`
     width: 100%;
     height: 100%;
     background-color: #7a8188;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.3s ease;
   }
 `
 
 const StyledLogo = styled.div`
-  &:hover ${StyledLogoBg}::after {
-    opacity: 0;
+  overflow: hidden;
+  &:hover ${StyledLogoBg} {
+    animation-play-state: running;
+
+    &::after {
+      opacity: 0;
+    }
   }
 `
 
@@ -51,7 +61,7 @@ export const NavbarLogo = (props: Omit<ComponentProps<'svg'>, 'style'>) => {
           height="450"
           clipPath="url(#collapp-clip)"
         >
-          <StyledLogoBg />
+          <StyledLogoBg className="animate-spin" />
         </foreignObject>
       </svg>
     </StyledLogo>
