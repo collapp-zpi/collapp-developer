@@ -1,10 +1,10 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import { AuthLayout } from '../../../components/layout/AuthLayout'
+import { AuthLayout } from '../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
-import { PluginForm } from '../../../includes/plugins/components/PluginForm'
-import { updatePlugin } from '../../../includes/plugins/api/updatePlugin'
-import Button from '../../../components/button/Button'
+import { PluginForm } from '../../includes/plugins/components/PluginForm'
+import { updatePlugin } from '../../includes/plugins/api/updatePlugin'
+import Button from '../../components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -38,7 +38,7 @@ const Plugin = ({
       <div className="container mx-auto">
         <Button
           color="light"
-          onClick={() => router.push('/panel/plugins')}
+          onClick={() => router.push('/plugins')}
           className="mb-4"
         >
           <GoChevronLeft className="mr-2 -ml-2" />

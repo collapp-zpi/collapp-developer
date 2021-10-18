@@ -1,9 +1,9 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
-import { AuthLayout } from '../../../components/layout/AuthLayout'
+import { AuthLayout } from '../../components/layout/AuthLayout'
 import { useRouter } from 'next/router'
-import Button from '../../../components/button/Button'
+import Button from '../../components/button/Button'
 import { GoPlus } from 'react-icons/go'
 import dayjs from 'dayjs'
 
@@ -34,7 +34,7 @@ const Plugins = ({
       </Head>
       <div className="container mx-auto">
         <Button
-          onClick={() => router.push('/panel/plugins/create')}
+          onClick={() => router.push('/plugins/create')}
           className="ml-auto mb-4"
         >
           <GoPlus className="mr-2 -ml-2" />
@@ -58,7 +58,7 @@ const Plugins = ({
                   ({ id, name, description, status, date }: DraftPlugin) => (
                     <tr
                       key={id}
-                      onClick={() => router.push(`/panel/plugins/${id}`)}
+                      onClick={() => router.push(`/plugins/${id}`)}
                       className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
                     >
                       <td className="p-4">{name}</td>

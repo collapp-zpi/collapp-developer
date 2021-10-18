@@ -24,6 +24,7 @@ specifiers:
   prettier: ^2.4.1
   prisma: ^3.1.1
   react: 17.0.2
+  react-cool-onclickoutside: ^1.7.0
   react-dom: 17.0.2
   react-hook-form: ^7.17.4
   react-icons: ^4.3.1
@@ -48,6 +49,7 @@ dependencies:
   nodemailer: 6.6.5
   postcss: 8.3.9
   react: 17.0.2
+  react-cool-onclickoutside: 1.7.0_react@17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.17.4_react@17.0.2
   react-icons: 4.3.1_react@17.0.2
@@ -3648,6 +3650,14 @@ packages:
       http-errors: 1.7.3
       iconv-lite: 0.4.24
       unpipe: 1.0.0
+    dev: false
+
+  /react-cool-onclickoutside/1.7.0_react@17.0.2:
+    resolution: {integrity: sha512-HVZK2155Unee+enpoHKyYP2UdQK69thw90XAOUCjvJBcgRSgfRPgWWt/W1dYzoGp3+nleAa8SJxF1d4FMA4Qmw==}
+    peerDependencies:
+      react: '>= 16.8.0'
+    dependencies:
+      react: 17.0.2
     dev: false
 
   /react-dom/17.0.2_react@17.0.2:

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import { AuthLayout } from '../../../components/layout/AuthLayout'
-import { PluginForm } from '../../../includes/plugins/components/PluginForm'
-import { createPlugin } from '../../../includes/plugins/api/createPlugin'
-import Button from '../../../components/button/Button'
+import { AuthLayout } from '../../components/layout/AuthLayout'
+import { PluginForm } from '../../includes/plugins/components/PluginForm'
+import { createPlugin } from '../../includes/plugins/api/createPlugin'
+import Button from '../../components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 
 const CreatePlugin = () => {
@@ -13,7 +13,7 @@ const CreatePlugin = () => {
       <div className="container mx-auto">
         <Button
           color="light"
-          onClick={() => router.push('/panel/plugins')}
+          onClick={() => router.push('/plugins')}
           className="mb-4"
         >
           <GoChevronLeft className="mr-2 -ml-2" />
