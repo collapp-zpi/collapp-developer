@@ -6,6 +6,7 @@ import { Loading } from './Loading'
 import classNames from 'classnames'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import Button from '../button/Button'
+import { NavbarLogo } from '../NavbarLogo'
 
 const DropdownButton = ({
   children,
@@ -36,6 +37,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="bg-gray-100 flex flex-col h-full min-h-screen text-gray-500">
       <div className="bg-white mb-8 p-2 border-b border-gray-200 flex">
+        <NavbarLogo />
         {status === 'unauthenticated' && (
           <Button
             onClick={() =>
