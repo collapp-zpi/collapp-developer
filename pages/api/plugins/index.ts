@@ -8,18 +8,14 @@ export default async function handler(
 ) {
   const session = await getSession({ req })
   if (!session) {
-    return res.status(401).json({ ok: false, message: 'Unauthorized' })
+    return res.status(401).json({ message: 'Unauthorized' })
   }
 
   if (req.method === 'POST') {
     const { name, description } = JSON.parse(req.body)
 
-    const errors = []
-    if (!name) errors.push({ field: 'name', message: 'Required field' })
-
-    if (errors.length) {
-      return res.status(400).json({ ok: false, errors })
-    }
+    if (!name)
+      return res.status(400).json({ message: 'Plugin name is required' })
 
     const plugin = await prisma.draftPlugin.create({
       data: {
@@ -34,11 +30,11 @@ export default async function handler(
       },
     })
 
-    return res.status(200).json({ ok: true, data: plugin })
+    return res.status(200).json(plugin)
   }
 
   if (req.method !== 'GET')
-    return res.status(404).json({ ok: false, message: 'Method not found' })
+    return res.status(404).json({ message: 'Method not found' })
 
   const plugins = await prisma.draftPlugin.findMany({
     where: {

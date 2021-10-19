@@ -7,36 +7,38 @@ export enum RequestState {
   Success = 'Success',
 }
 
-export type AnyFunction = (...args: any[]) => any
-
-export type useRequestQuery<T extends AnyFunction> = (
-  ...args: Parameters<T>
-) => ReturnType<T>
-
-export type useRequestOptions = {
-  onSuccess?: (args: any) => void
-  onError?: (args: any) => void
+type useRequestErrorType = { message: string }
+export type useRequestQueryType = (...args: any) => Promise<any>
+export type useRequestOptionsType = {
+  onSuccess?: <T>(data: T) => void
+  onError?: (error: useRequestErrorType) => void
 }
 
-const useRequest = <T extends AnyFunction>(
-  query: useRequestQuery<T>,
-  { onSuccess, onError }: useRequestOptions = {},
+const useRequest = <T extends useRequestQueryType>(
+  query: T,
+  { onSuccess, onError }: useRequestOptionsType,
 ) => {
   const [status, setStatus] = useState(RequestState.Pending)
 
   const send = async (...args: Parameters<T>) => {
     setStatus(RequestState.Loading)
 
+    const catchError = (error: useRequestErrorType) => {
+      setStatus(RequestState.Error)
+      if (onError) onError(error)
+    }
+
     try {
       const response = await query(...args)
-      if (!response.ok) throw new Error(response)
+      const data = await response.json()
+      if (!response.ok) {
+        return catchError({ message: data?.message })
+      }
+
       setStatus(RequestState.Success)
-
-      if (onSuccess) onSuccess(response)
-    } catch (e) {
-      setStatus(RequestState.Error)
-
-      if (onError) onError(e)
+      if (onSuccess) onSuccess(data)
+    } catch (e: any) {
+      catchError({ message: e?.message })
     }
   }
 

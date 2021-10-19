@@ -1,11 +1,11 @@
 import { useController } from 'react-hook-form'
 import { ComponentProps } from 'react'
 import { useApiRequest } from '../form/Form'
-import { RequestState } from '../../hooks/useRequest'
 import classNames from 'classnames'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
 import TextareaAutosize from 'react-textarea-autosize'
+import { RequestState } from '../../hooks/useRequest'
 
 type InputTextareaProps = InputGeneric & ComponentProps<'textarea'>
 
