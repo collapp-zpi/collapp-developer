@@ -5,7 +5,7 @@ import useRequest, { RequestState } from '../../hooks/useRequest'
 
 interface FormProps
   extends ReturnType<typeof useApiForm>,
-    ComponentProps<'form'> {
+    Omit<ComponentProps<'form'>, 'onError'> {
   children: ReactNode
 }
 

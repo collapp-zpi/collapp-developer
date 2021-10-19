@@ -8,12 +8,12 @@ export default async function handler(
 ) {
   const session = await getSession({ req })
   if (!session) {
-    return res.status(401).json({ ok: false, message: 'Unauthorized' })
+    return res.status(401).json({ message: 'Unauthorized' })
   }
   const { id } = req.query
 
   if (req.method !== 'GET' && req.method !== 'PATCH')
-    return res.status(404).json({ ok: false, message: 'Method not found' })
+    return res.status(404).json({ message: 'Method not found' })
 
   const plugin = await prisma.draftPlugin.findFirst({
     where: {
@@ -31,12 +31,7 @@ export default async function handler(
 
   const { name, description } = JSON.parse(req.body)
 
-  const errors = []
-  if (!name) errors.push({ field: 'name', message: 'Required field' })
-
-  if (errors.length) {
-    return res.status(400).json({ errors })
-  }
+  if (!name) return res.status(400).json({ message: 'Plugin name is required' })
 
   const newPlugin = await prisma.draftPlugin.update({
     where: {
