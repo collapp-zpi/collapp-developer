@@ -8,7 +8,9 @@
     "start": "doppler run next start",
     "lint": "next lint",
     "prisma-push": "git subtree push --prefix=prisma https://github.com/collapp-zpi/prisma main",
-    "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main"
+    "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main",
+    "shared-push": "git subtree push --prefix=shared https://github.com/collapp-zpi/shared main",
+    "shared-pull": "git subtree pull --prefix=shared https://github.com/collapp-zpi/shared main"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
