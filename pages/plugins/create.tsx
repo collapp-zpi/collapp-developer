@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { AuthLayout } from '../../layouts/AuthLayout'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import { createPlugin } from '../../includes/plugins/api/createPlugin'
-import Button from '../../components/button/Button'
+import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 
 const CreatePlugin = () => {

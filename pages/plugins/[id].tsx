@@ -4,7 +4,7 @@ import { AuthLayout } from '../../layouts/AuthLayout'
 import { useRouter } from 'next/router'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import { updatePlugin } from '../../includes/plugins/api/updatePlugin'
-import Button from '../../components/button/Button'
+import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

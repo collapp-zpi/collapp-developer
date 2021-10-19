@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { AuthLayout } from '../../layouts/AuthLayout'
 import { useRouter } from 'next/router'
-import Button from '../../components/button/Button'
+import Button from '../../shared/components/button/Button'
 import { GoPlus } from 'react-icons/go'
 import dayjs from 'dayjs'
 
