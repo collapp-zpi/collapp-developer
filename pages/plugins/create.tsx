@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { AuthLayout } from '../../components/layout/AuthLayout'
+import { AuthLayout } from '../../layouts/AuthLayout'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import { createPlugin } from '../../includes/plugins/api/createPlugin'
 import Button from '../../components/button/Button'

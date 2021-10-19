@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
-import { AuthLayout } from '../../components/layout/AuthLayout'
+import { AuthLayout } from '../../layouts/AuthLayout'
 import { useRouter } from 'next/router'
 import Button from '../../components/button/Button'
 import { GoPlus } from 'react-icons/go'

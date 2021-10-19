@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import { AuthLayout } from '../../components/layout/AuthLayout'
+import { AuthLayout } from '../../layouts/AuthLayout'
 import { useRouter } from 'next/router'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import { updatePlugin } from '../../includes/plugins/api/updatePlugin'
