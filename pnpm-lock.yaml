@@ -27,6 +27,7 @@ specifiers:
   react-cool-onclickoutside: ^1.7.0
   react-dom: 17.0.2
   react-hook-form: ^7.17.4
+  react-hot-toast: ^2.1.1
   react-icons: ^4.3.1
   react-textarea-autosize: ^8.3.3
   styled-components: ^5.3.1
@@ -52,6 +53,7 @@ dependencies:
   react-cool-onclickoutside: 1.7.0_react@17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-hook-form: 7.17.4_react@17.0.2
+  react-hot-toast: 2.1.1_react-dom@17.0.2+react@17.0.2
   react-icons: 4.3.1_react@17.0.2
   react-textarea-autosize: 8.3.3_9b26932173ac5a93c18fc8634be19f05
   styled-components: 5.3.1_react-dom@17.0.2+react@17.0.2
@@ -2246,6 +2248,12 @@ packages:
       slash: 3.0.0
     dev: true
 
+  /goober/2.0.41:
+    resolution: {integrity: sha512-kwjegMT5018zWydhOQlQneCgCtrKJaPsru7TaBWmTYV0nsMeUrM6L6O8JmNYb9UbPMgWcmtf+9p4Y3oJabIH1A==}
+    peerDependencies:
+      csstype: ^2.6.2
+    dev: false
+
   /got/11.8.2:
     resolution: {integrity: sha512-D0QywKgIe30ODs+fm8wMZiAcZjypcCodPNuMz5H9Mny7RJ+IjJ10BdmGW7OM7fHXP+O7r6ZwapQ/YQmMSvB0UQ==}
     engines: {node: '>=10.19.0'}
@@ -3677,6 +3685,20 @@ packages:
       react: ^16.8.0 || ^17
     dependencies:
       react: 17.0.2
+    dev: false
+
+  /react-hot-toast/2.1.1_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-Odrp4wue0fHh0pOfZt5H+9nWCMtqs3wdlFSzZPp7qsxfzmbE26QmGWIh6hG43CukiPeOjA8WQhBJU8JwtWvWbQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.0.41
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    transitivePeerDependencies:
+      - csstype
     dev: false
 
   /react-icons/4.3.1_react@17.0.2:

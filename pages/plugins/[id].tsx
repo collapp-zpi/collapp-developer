@@ -6,6 +6,7 @@ import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import { updatePlugin } from '../../includes/plugins/api/updatePlugin'
 import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
+import { toast } from 'react-hot-toast'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -30,6 +31,16 @@ const Plugin = ({
   const router = useRouter()
   const { name, description, id } = plugin
 
+  const onSuccess = (data) => {
+    console.log(data)
+    toast.success('The plugin has been updated successfully.')
+  }
+
+  const onError = (data) => {
+    console.log(data)
+    toast.error('There has been an error while updating the plugin.')
+  }
+
   return (
     <AuthLayout>
       <Head>
@@ -48,6 +59,7 @@ const Plugin = ({
           <PluginForm
             initial={{ name, description }}
             query={updatePlugin(id)}
+            {...{ onSuccess, onError }}
           />
         </div>
       </div>
