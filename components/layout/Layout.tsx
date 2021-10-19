@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode, useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { FiLogOut, FiSettings, FiCopy } from 'react-icons/fi'
+import { FiLogOut, FiSettings, FiCopy, FiGithub } from 'react-icons/fi'
 import { Loading } from './Loading'
 import classNames from 'classnames'
 import useOnclickOutside from 'react-cool-onclickoutside'
@@ -47,6 +47,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             }
             className="ml-auto"
           >
+            <FiGithub className="mr-2" />
             Sign in
           </Button>
         )}
