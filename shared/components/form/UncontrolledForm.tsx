@@ -1,18 +1,15 @@
 import { ComponentProps, ReactNode } from 'react'
 import Form from './Form'
 import useApiForm, { useApiFormProps } from '../../hooks/useApiForm'
-import { useRequestQueryType } from '../../hooks/useRequest'
+import { AnyObjectSchema } from 'yup'
 
-interface UncontrolledFormProps<T, S>
+interface UncontrolledFormProps<T extends AnyObjectSchema>
   extends Omit<ComponentProps<'form'>, 'onError'>,
-    useApiFormProps<T, S> {
+    useApiFormProps<T> {
   children: ReactNode
 }
 
-export const UncontrolledForm = <
-  T extends useRequestQueryType,
-  S extends Record<string, any>,
->({
+export const UncontrolledForm = <T extends AnyObjectSchema>({
   schema,
   initial,
   query,
@@ -20,7 +17,7 @@ export const UncontrolledForm = <
   onError,
   children,
   ...props
-}: UncontrolledFormProps<T, S>) => {
+}: UncontrolledFormProps<T>) => {
   const apiForm = useApiForm({
     schema,
     query,

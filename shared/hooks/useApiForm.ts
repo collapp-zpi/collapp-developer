@@ -1,34 +1,28 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import useRequest, {
-  useRequestOptionsType,
-  useRequestQueryType,
-} from './useRequest'
-import { SchemaOf } from 'yup'
+import useRequest, { useRequestOptionsType, useRequestQueryType } from './useRequest'
+import { AnyObjectSchema, TypeOf } from 'yup'
 import { ReactNode } from 'react'
 
-export type FormProps<T, S> = Omit<useApiFormProps<T, S>, 'schema'> & {
+export type FormProps<T extends AnyObjectSchema> = Omit<useApiFormProps<T>, 'schema'> & {
   children?: ReactNode
 }
 
-export type useApiFormProps<T, S> = {
-  schema: SchemaOf<S>
-  query: T
-  initial?: S
+export type useApiFormProps<T extends AnyObjectSchema> = {
+  schema: T
+  query: useRequestQueryType
+  initial?: TypeOf<T>
   onSuccess?: useRequestOptionsType['onSuccess']
   onError?: useRequestOptionsType['onError']
 }
 
-const useApiForm = <
-  T extends useRequestQueryType,
-  S extends Record<string, any>,
->({
+const useApiForm = <T extends AnyObjectSchema>({
   schema,
   initial,
   query,
   onSuccess,
   onError,
-}: useApiFormProps<T, S>) => {
+}: useApiFormProps<T>) => {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {

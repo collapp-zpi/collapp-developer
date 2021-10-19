@@ -18,7 +18,7 @@ export const PluginForm = ({
   onSuccess,
   onError,
   children,
-}: FormProps) => (
+}: FormProps<typeof schema>) => (
   <UncontrolledForm
     {...{ schema, query, initial, onSuccess, onError }}
     className="flex flex-col"
