@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import { AuthLayout } from '../../layouts/AuthLayout'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
-import { createPlugin } from '../../includes/plugins/api/createPlugin'
 import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
+import { createPlugin } from 'includes/plugins/endpoints'
 
 const CreatePlugin = () => {
   const router = useRouter()
@@ -14,9 +14,12 @@ const CreatePlugin = () => {
     toast.success('The plugin has been created successfully.')
   }
 
-  const onError = (data) => {
-    console.log(data)
-    toast.error('There has been an error while creating the plugin.')
+  const onError = ({ message }: { message?: string }) => {
+    toast.error(
+      `There has been an error while creating the plugin. ${
+        !!message && `(${message})`
+      }`,
+    )
   }
 
   return (

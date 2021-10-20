@@ -3,10 +3,10 @@ import Head from 'next/head'
 import { AuthLayout } from '../../layouts/AuthLayout'
 import { useRouter } from 'next/router'
 import { PluginForm } from '../../includes/plugins/components/PluginForm'
-import { updatePlugin } from '../../includes/plugins/api/updatePlugin'
 import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
+import { updatePlugin } from 'includes/plugins/endpoints'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -36,9 +36,12 @@ const Plugin = ({
     toast.success('The plugin has been updated successfully.')
   }
 
-  const onError = (data) => {
-    console.log(data)
-    toast.error('There has been an error while updating the plugin.')
+  const onError = ({ message }: { message?: string }) => {
+    toast.error(
+      `There has been an error while updating the plugin. ${
+        !!message && `(${message})`
+      }`,
+    )
   }
 
   return (
