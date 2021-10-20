@@ -1,11 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import { prisma } from '../../../config/PrismaClient'
+import { prisma } from 'config/PrismaClient'
+import { createHandler, Get } from '@storyofams/next-api-decorators'
+import { NextAuthGuard, RequestUser, User } from 'config/apiDecorators'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+@NextAuthGuard()
+class Plugins {
+  @Get()
+  async fetchPluginList(@User user: RequestUser) {
+    return await prisma.draftPlugin.findMany({
+      where: {
+        authorId: user.id,
+      },
+    })
+  }
+}
+
+export default createHandler(Plugins)
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req })
   if (!session) {
     return res.status(401).json({ message: 'Unauthorized' })
