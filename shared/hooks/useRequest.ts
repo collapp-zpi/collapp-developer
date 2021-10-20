@@ -16,7 +16,7 @@ export type useRequestOptionsType = {
 
 const useRequest = <T extends useRequestQueryType>(
   query: T,
-  { onSuccess, onError }: useRequestOptionsType,
+  { onSuccess, onError }: useRequestOptionsType = {},
 ) => {
   const [status, setStatus] = useState(RequestState.Pending)
 
@@ -30,13 +30,9 @@ const useRequest = <T extends useRequestQueryType>(
 
     try {
       const response = await query(...args)
-      const data = await response.json()
-      if (!response.ok) {
-        return catchError({ message: data?.message })
-      }
 
       setStatus(RequestState.Success)
-      if (onSuccess) onSuccess(data)
+      if (onSuccess) onSuccess(response)
     } catch (e: any) {
       catchError({ message: e?.message })
     }

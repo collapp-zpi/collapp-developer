@@ -1,10 +1,16 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import useRequest, { useRequestOptionsType, useRequestQueryType } from './useRequest'
+import useRequest, {
+  useRequestOptionsType,
+  useRequestQueryType,
+} from './useRequest'
 import { AnyObjectSchema, TypeOf } from 'yup'
 import { ReactNode } from 'react'
 
-export type FormProps<T extends AnyObjectSchema> = Omit<useApiFormProps<T>, 'schema'> & {
+export type FormProps<T extends AnyObjectSchema> = Omit<
+  useApiFormProps<T>,
+  'schema'
+> & {
   children?: ReactNode
 }
 
