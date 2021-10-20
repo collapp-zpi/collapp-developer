@@ -22,12 +22,18 @@ model DraftPlugin {
   id          String           @id @default(cuid())
   name        String
   description String
-  icon        String
+  icon        String?
   date        DateTime         @default(now())
   status      PluginStatus     @default(Pending)
   authorId    String
 
   author      DeveloperUser    @relation(fields: [authorId], references: [id])
+
+  minWidth    Int              @default(1)
+  maxWidth    Int              @default(4)
+  minHeight   Int              @default(1)
+  maxHeight   Int              @default(4)
+  envVars     Json             @default("[]")
 }
 
 model DeveloperAccount {
