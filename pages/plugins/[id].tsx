@@ -6,7 +6,8 @@ import { PluginForm } from '../../includes/plugins/components/PluginForm'
 import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
-import { updatePlugin } from 'includes/plugins/endpoints'
+import { deletePlugin, updatePlugin } from 'includes/plugins/endpoints'
+import useRequest from 'shared/hooks/useRequest'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -31,8 +32,21 @@ const Plugin = ({
   const router = useRouter()
   const { name, description, id } = plugin
 
-  const onSuccess = (data) => {
-    console.log(data)
+  const deleteRequest = useRequest(deletePlugin(id), {
+    onSuccess: () => {
+      toast.success('The plugin has been deleted successfully.')
+      router.push('/plugins')
+    },
+    onError: ({ message }) => {
+      toast.error(
+        `There has been an error while deleting the plugin. ${
+          !!message && `(${message})`
+        }`,
+      )
+    },
+  })
+
+  const onSuccess = () => {
     toast.success('The plugin has been updated successfully.')
   }
 
@@ -64,6 +78,10 @@ const Plugin = ({
             query={updatePlugin(id)}
             {...{ onSuccess, onError }}
           />
+          <Button onClick={deleteRequest.send}>
+            Delete
+            <span className="text-sm ml-1">({deleteRequest.status})</span>
+          </Button>
         </div>
       </div>
     </AuthLayout>

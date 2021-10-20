@@ -2,12 +2,12 @@ const sendFactory =
   (method: string) =>
   (
     url: string,
-    body: BodyInit | null | undefined,
+    body?: BodyInit | null | undefined,
     { headers, ...options }: Omit<Omit<RequestInit, 'body'>, 'method'> = {},
   ) =>
     fetch(url, {
       method,
-      body: JSON.stringify(body),
+      ...(!!body && { body: JSON.stringify(body) }),
       headers: {
         'Content-Type': 'application/json',
         ...headers,
@@ -23,6 +23,7 @@ const request = {
   post: sendFactory('POST'),
   put: sendFactory('PUT'),
   patch: sendFactory('PATCH'),
+  delete: sendFactory('DELETE'),
 }
 
 export default request

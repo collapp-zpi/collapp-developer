@@ -8,8 +8,8 @@ import { BiText } from 'react-icons/bi'
 import { FormProps } from '../../../shared/hooks/useApiForm'
 
 const schema = object().shape({
-  name: string().required(),
-  description: string(),
+  name: string().required().default(''),
+  description: string().default(''),
 })
 
 export const PluginForm = ({

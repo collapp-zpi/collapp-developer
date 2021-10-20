@@ -16,7 +16,7 @@ export type useRequestOptionsType = {
 
 const useRequest = <T extends useRequestQueryType>(
   query: T,
-  { onSuccess, onError }: useRequestOptionsType,
+  { onSuccess, onError }: useRequestOptionsType = {},
 ) => {
   const [status, setStatus] = useState(RequestState.Pending)
 

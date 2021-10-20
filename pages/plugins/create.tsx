@@ -5,13 +5,14 @@ import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
 import { createPlugin } from 'includes/plugins/endpoints'
+import { DraftPlugin } from '@prisma/client'
 
 const CreatePlugin = () => {
   const router = useRouter()
 
-  const onSuccess = (data) => {
-    console.log(data)
+  const onSuccess = (data: DraftPlugin) => {
     toast.success('The plugin has been created successfully.')
+    router.push(`/plugins/${data.id}`)
   }
 
   const onError = ({ message }: { message?: string }) => {
