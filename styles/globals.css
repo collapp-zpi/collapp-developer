@@ -18,3 +18,34 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.spinner-path {
+  opacity: 0.2;
+}
+
+.spinner-path path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 12%;
+}
+
+/*1800*/
+@keyframes spinner-border {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 600;
+  }
+}
+
+.spinner-moving {
+  fill: none;
+  stroke: url('#collapp-gradient');
+  stroke-width: 12%;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 200 400;
+  stroke-dashoffset: 0;
+  animation: spinner-border 0.5s linear both infinite;
+}
