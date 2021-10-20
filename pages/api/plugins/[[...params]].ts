@@ -11,7 +11,7 @@ import {
   UnauthorizedException,
   ValidationPipe,
 } from '@storyofams/next-api-decorators'
-import { NextAuthGuard, RequestUser, User } from 'config/apiDecorators'
+import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { IsNotEmpty } from 'class-validator'
 
 export class CreatePluginDTO {
