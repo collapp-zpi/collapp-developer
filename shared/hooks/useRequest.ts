@@ -30,13 +30,12 @@ const useRequest = <T extends useRequestQueryType>(
 
     try {
       const response = await query(...args)
-      const data = await response.json()
       if (!response.ok) {
-        return catchError({ message: data?.message })
+        return catchError({ message: response?.message })
       }
 
       setStatus(RequestState.Success)
-      if (onSuccess) onSuccess(data)
+      if (onSuccess) onSuccess(response)
     } catch (e: any) {
       catchError({ message: e?.message })
     }

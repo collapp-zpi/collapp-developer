@@ -15,6 +15,8 @@ specifiers:
   autoprefixer: ^10.3.7
   babel-plugin-parameter-decorator: ^1.0.16
   babel-plugin-transform-typescript-metadata: ^0.3.2
+  class-transformer: ^0.4.0
+  class-validator: ^0.13.1
   classnames: ^2.3.1
   dayjs: ^1.10.7
   eslint: 7.32.0
@@ -47,6 +49,8 @@ dependencies:
   '@prisma/client': 3.1.1_prisma@3.1.1
   '@storyofams/next-api-decorators': 1.6.0_317d13b59b05a3a03ee7ba1d6890a343
   autoprefixer: 10.3.7_postcss@8.3.9
+  class-transformer: 0.4.0
+  class-validator: 0.13.1
   classnames: 2.3.1
   dayjs: 1.10.7
   eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
@@ -758,6 +762,10 @@ packages:
       csstype: 3.0.9
     dev: true
 
+  /@types/validator/13.6.4:
+    resolution: {integrity: sha512-M9Lk74A8hjJIxnSW1+TcPo7Iv4arXBUvd91HuucGPjXVKRAhFHWP5HFpWjxhNWrm7HYoJwuyWpB+BKLgFYHq4w==}
+    dev: false
+
   /@typescript-eslint/eslint-plugin/4.33.0_0aa2b7936f480903160f77e2f174338b:
     resolution: {integrity: sha512-aINiAxGVdOl1eJyVjaWn/YcVAq4Gi/Yo35qHGCnqbWVz61g39D0h23veY/MA0rFFGfxK7TySg2uwDeNv+JgVpg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -1451,6 +1459,18 @@ packages:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
+    dev: false
+
+  /class-transformer/0.4.0:
+    resolution: {integrity: sha512-ETWD/H2TbWbKEi7m9N4Km5+cw1hNcqJSxlSYhsLsNjQzWWiZIYA1zafxpK9PwVfaZ6AqR5rrjPVUBGESm5tQUA==}
+    dev: false
+
+  /class-validator/0.13.1:
+    resolution: {integrity: sha512-zWIeYFhUitvAHBwNhDdCRK09hWx+P0HUwFE8US8/CxFpMVzkUK8RJl7yOIE+BVu2lxyPNgeOaFv78tLE47jBIg==}
+    dependencies:
+      '@types/validator': 13.6.4
+      libphonenumber-js: 1.9.38
+      validator: 13.6.0
     dev: false
 
   /classnames/2.2.6:
@@ -2934,6 +2954,10 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
     dev: true
+
+  /libphonenumber-js/1.9.38:
+    resolution: {integrity: sha512-7CCl9NZPYtX4JNXdvV5RnrQqrXp7LsLOTpYSUfEJBiySEnC5hysdwouXAuWgPDB55D/fpKm4RjM2/tUUh8kuoA==}
+    dev: false
 
   /lilconfig/2.0.3:
     resolution: {integrity: sha512-EHKqr/+ZvdKCifpNrJCKxBTgk5XupZA3y/aCPY9mxfgBzmgh93Mt/WqjjQ38oMxXuvDokaKiM3lAgvSH2sjtHg==}
@@ -4717,6 +4741,11 @@ packages:
       spdx-correct: 3.1.1
       spdx-expression-parse: 3.0.1
     dev: true
+
+  /validator/13.6.0:
+    resolution: {integrity: sha512-gVgKbdbHgtxpRyR8K0O6oFZPhhB5tT1jeEHZR0Znr9Svg03U0+r9DXWMrnRAB+HtCStDQKlaIZm42tVsVjqtjg==}
+    engines: {node: '>= 0.10'}
+    dev: false
 
   /vm-browserify/1.1.2:
     resolution: {integrity: sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==}
