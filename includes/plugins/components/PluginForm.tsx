@@ -1,7 +1,6 @@
 import { InputText } from '../../../shared/components/input/InputText'
 import { object, string } from 'yup'
 import { UncontrolledForm } from '../../../shared/components/form/UncontrolledForm'
-import SubmitButton from '../../../shared/components/button/SubmitButton'
 import { InputTextarea } from '../../../shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
 import { BiText } from 'react-icons/bi'
@@ -30,7 +29,6 @@ export const PluginForm = ({
       className="mt-2"
       icon={FiAlignCenter}
     />
-    <SubmitButton className="mt-4 ml-auto" />
     {children}
   </UncontrolledForm>
 )

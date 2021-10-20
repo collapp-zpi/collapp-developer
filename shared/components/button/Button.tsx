@@ -3,7 +3,9 @@ import classNames from 'classnames'
 
 const BUTTON_COLORS = {
   blue: 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 text-white shadow-md',
-  light: 'bg-gray-200 hover:bg-gray-300 focus:bg-gray-300',
+  light: 'bg-gray-800 bg-opacity-5 hover:bg-opacity-20 focus:bg-opacity-20',
+  'red-link':
+    'bg-red-500 text-red-500 bg-opacity-0 hover:bg-opacity-20 focus:bg-opacity-20',
 }
 
 export interface ButtonProps extends ComponentProps<'button'> {

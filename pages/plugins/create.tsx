@@ -6,6 +6,7 @@ import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
 import { createPlugin } from 'includes/plugins/endpoints'
 import { DraftPlugin } from '@prisma/client'
+import SubmitButton from 'shared/components/button/SubmitButton'
 
 const CreatePlugin = () => {
   const router = useRouter()
@@ -35,7 +36,9 @@ const CreatePlugin = () => {
           Back
         </Button>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-          <PluginForm query={createPlugin} {...{ onSuccess, onError }} />
+          <PluginForm query={createPlugin} {...{ onSuccess, onError }}>
+            <SubmitButton className="mt-4 ml-auto" />
+          </PluginForm>
         </div>
       </div>
     </AuthLayout>

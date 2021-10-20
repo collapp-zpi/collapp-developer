@@ -7,7 +7,9 @@ import Button from '../../shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { toast } from 'react-hot-toast'
 import { deletePlugin, updatePlugin } from 'includes/plugins/endpoints'
-import useRequest from 'shared/hooks/useRequest'
+import useRequest, { RequestState } from 'shared/hooks/useRequest'
+import { CgSpinner } from 'react-icons/cg'
+import SubmitButton from 'shared/components/button/SubmitButton'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -77,11 +79,17 @@ const Plugin = ({
             initial={{ name, description }}
             query={updatePlugin(id)}
             {...{ onSuccess, onError }}
-          />
-          <Button onClick={deleteRequest.send}>
-            Delete
-            <span className="text-sm ml-1">({deleteRequest.status})</span>
-          </Button>
+          >
+            <div className="mt-4 flex">
+              <Button onClick={deleteRequest.send} color="red-link">
+                {deleteRequest.status === RequestState.Loading && (
+                  <CgSpinner className="animate-spin mr-2 -ml-2" />
+                )}
+                Delete
+              </Button>
+              <SubmitButton className="ml-auto" />
+            </div>
+          </PluginForm>
         </div>
       </div>
     </AuthLayout>
