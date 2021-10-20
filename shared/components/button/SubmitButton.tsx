@@ -12,7 +12,7 @@ const SubmitButton = ({
   const isLoading = status === RequestState.Loading
 
   return (
-    <Button {...props} type={type}>
+    <Button {...props} type={type} disabled={isLoading}>
       {isLoading && <CgSpinner className="animate-spin mr-2 -ml-2" />}
       {children}
     </Button>

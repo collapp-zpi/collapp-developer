@@ -30,9 +30,6 @@ const useRequest = <T extends useRequestQueryType>(
 
     try {
       const response = await query(...args)
-      if (!response.ok) {
-        return catchError({ message: response?.message })
-      }
 
       setStatus(RequestState.Success)
       if (onSuccess) onSuccess(response)
