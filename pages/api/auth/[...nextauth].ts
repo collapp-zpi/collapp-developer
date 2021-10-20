@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
-import { PrismaExtendedAdapter } from '../../../config/PrismaExtendedAdapter'
+import { PrismaExtendedAdapter } from 'config/PrismaExtendedAdapter'
 
 export default NextAuth({
   providers: [

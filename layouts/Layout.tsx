@@ -5,8 +5,8 @@ import { FiLogOut, FiSettings, FiCopy, FiGithub } from 'react-icons/fi'
 import { Loading } from './Loading'
 import classNames from 'classnames'
 import useOnclickOutside from 'react-cool-onclickoutside'
-import Button from '../shared/components/button/Button'
-import { NavbarLogo } from '../shared/components/NavbarLogo'
+import Button from 'shared/components/button/Button'
+import { NavbarLogo } from 'shared/components/NavbarLogo'
 
 const DropdownButton = ({
   children,

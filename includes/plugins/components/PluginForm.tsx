@@ -1,10 +1,10 @@
-import { InputText } from '../../../shared/components/input/InputText'
+import { InputText } from 'shared/components/input/InputText'
 import { object, string } from 'yup'
-import { UncontrolledForm } from '../../../shared/components/form/UncontrolledForm'
-import { InputTextarea } from '../../../shared/components/input/InputTextarea'
+import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
+import { InputTextarea } from 'shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
 import { BiText } from 'react-icons/bi'
-import { FormProps } from '../../../shared/hooks/useApiForm'
+import { FormProps } from 'shared/hooks/useApiForm'
 
 const schema = object().shape({
   name: string().required().default(''),
