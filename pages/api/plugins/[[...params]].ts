@@ -1,4 +1,4 @@
-import { prisma } from 'config/PrismaClient'
+import { prisma } from 'shared/utils/prismaClient'
 import {
   Body,
   createHandler,
