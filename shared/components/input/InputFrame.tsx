@@ -29,7 +29,7 @@ export const InputFrame = ({
     <label>
       <div
         className={classNames(
-          'focus-within:border-blue-400 focus-within:text-blue-500 transition-all border-2 bg-white rounded-lg flex overflow-hidden',
+          'focus-within:border-blue-400 focus-within:text-blue-500 transition-all border-2 bg-white rounded-lg flex',
           {
             'border-red-300': isError,
             'border-gray-200': !isError,

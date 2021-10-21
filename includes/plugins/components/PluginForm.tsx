@@ -5,11 +5,28 @@ import { InputTextarea } from 'shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
 import { BiText } from 'react-icons/bi'
 import { FormProps } from 'shared/hooks/useApiForm'
+import { InputSelect } from 'shared/components/input/InputSelect'
 
 const schema = object().shape({
   name: string().required().default(''),
   description: string().default(''),
+  testSelect: string().default('a'),
 })
+
+const options = [
+  {
+    value: 'a',
+    label: 'a',
+  },
+  {
+    value: 'b',
+    label: 'b',
+  },
+  {
+    value: 'c',
+    label: 'oby c',
+  },
+]
 
 export const PluginForm = ({
   query,
@@ -28,6 +45,12 @@ export const PluginForm = ({
       label="Description"
       className="mt-2"
       icon={FiAlignCenter}
+    />
+    <InputSelect
+      icon={FiAlignCenter}
+      label="Test"
+      name="testSelect"
+      options={options}
     />
     {children}
   </UncontrolledForm>
