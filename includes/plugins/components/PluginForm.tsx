@@ -5,6 +5,7 @@ import { InputTextarea } from 'shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
 import { BiText } from 'react-icons/bi'
 import { FormProps } from 'shared/hooks/useApiForm'
+import SubmitButton from 'shared/components/button/SubmitButton'
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -16,7 +17,6 @@ export const PluginForm = ({
   initial,
   onSuccess,
   onError,
-  children,
 }: FormProps<typeof schema>) => (
   <UncontrolledForm
     {...{ schema, query, initial, onSuccess, onError }}
@@ -29,6 +29,6 @@ export const PluginForm = ({
       className="mt-2"
       icon={FiAlignCenter}
     />
-    {children}
+    <SubmitButton className="ml-auto mt-4" />
   </UncontrolledForm>
 )

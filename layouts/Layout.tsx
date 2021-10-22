@@ -81,7 +81,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow">{children}</div>
+      <div className="flex-grow pb-8">{children}</div>
     </main>
   )
 }

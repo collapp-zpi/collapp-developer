@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast'
 import { deletePlugin, updatePlugin } from 'includes/plugins/endpoints'
 import useRequest, { RequestState } from 'shared/hooks/useRequest'
 import { CgSpinner } from 'react-icons/cg'
-import SubmitButton from 'shared/components/button/SubmitButton'
+import { PluginSizeForm } from 'includes/plugins/components/PluginSizeForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -32,7 +32,8 @@ const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  const { name, description, id } = plugin
+  const { name, description, id, minWidth, maxWidth, minHeight, maxHeight } =
+    plugin
 
   const deleteRequest = useRequest(deletePlugin(id), {
     onSuccess: () => {
@@ -79,17 +80,21 @@ const Plugin = ({
             initial={{ name, description }}
             query={updatePlugin(id)}
             {...{ onSuccess, onError }}
-          >
-            <div className="mt-4 flex">
-              <Button onClick={deleteRequest.send} color="red-link">
-                {deleteRequest.status === RequestState.Loading && (
-                  <CgSpinner className="animate-spin mr-2 -ml-2" />
-                )}
-                Delete
-              </Button>
-              <SubmitButton className="ml-auto" />
-            </div>
-          </PluginForm>
+          />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <PluginSizeForm
+            query={updatePlugin(id)}
+            initial={{ minWidth, maxWidth, minHeight, maxHeight }}
+          />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <Button onClick={deleteRequest.send} color="red-link">
+            {deleteRequest.status === RequestState.Loading && (
+              <CgSpinner className="animate-spin mr-2 -ml-2" />
+            )}
+            Delete
+          </Button>
         </div>
       </div>
     </AuthLayout>

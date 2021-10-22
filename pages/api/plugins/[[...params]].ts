@@ -1,5 +1,6 @@
 import { prisma } from 'shared/utils/prismaClient'
 import {
+  BadRequestException,
   Body,
   createHandler,
   Delete,
@@ -12,19 +13,51 @@ import {
   ValidationPipe,
 } from '@storyofams/next-api-decorators'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
-import { IsNotEmpty } from 'class-validator'
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  Max,
+  Min,
+  NotEquals,
+} from 'class-validator'
 
 export class CreatePluginDTO {
   @IsNotEmpty({ message: 'Plugin name is required.' })
   name!: string
-
   description!: string
 }
 
 export class UpdatePluginDTO {
-  @IsNotEmpty({ message: 'Plugin name is required.' })
+  @IsOptional()
+  @NotEquals('', { message: 'Plugin name is required.' })
   name?: string
+  @IsOptional()
   description?: string
+
+  @IsOptional()
+  @Min(1)
+  @Max(4)
+  @IsInt()
+  minWidth?: number
+
+  @IsOptional()
+  @Min(1)
+  @Max(4)
+  @IsInt()
+  minHeight?: number
+
+  @IsOptional()
+  @Min(1)
+  @Max(4)
+  @IsInt()
+  maxWidth?: number
+
+  @IsOptional()
+  @Min(1)
+  @Max(4)
+  @IsInt()
+  maxHeight?: number
 }
 
 @NextAuthGuard()
@@ -85,6 +118,18 @@ class Plugins {
     @User user: RequestUser,
   ) {
     await this.innerGetPlugin(id, user)
+
+    if (body?.minWidth && body?.maxWidth && body.minWidth > body.maxWidth) {
+      throw new BadRequestException(
+        `Min. width can't be larger than max. width.`,
+      )
+    }
+
+    if (body?.minHeight && body?.maxHeight && body.minHeight > body.maxHeight) {
+      throw new BadRequestException(
+        `Min. height can't be larger than max. height.`,
+      )
+    }
 
     return await prisma.draftPlugin.update({
       where: { id },

@@ -4,6 +4,7 @@ import { useController } from 'react-hook-form'
 import { useApiRequest } from 'shared/components/form/Form'
 import { RequestState } from 'shared/hooks/useRequest'
 import classNames from 'classnames'
+import { ErrorMessage } from '@hookform/error-message'
 
 type Props = {
   name: string
@@ -62,6 +63,9 @@ export const InputRange = ({
           )}
           {...{ min, max, step }}
         />
+      </div>
+      <div className="text-red-400 ml-1 mt-0.5 text-sm">
+        <ErrorMessage name={name} />
       </div>
     </label>
   )
