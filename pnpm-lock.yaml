@@ -37,6 +37,7 @@ specifiers:
   react-hook-form: ^7.17.4
   react-hot-toast: ^2.1.1
   react-icons: ^4.3.1
+  react-range: ^1.8.11
   react-select: ^5.1.0
   react-textarea-autosize: ^8.3.3
   styled-components: ^5.3.1
@@ -68,6 +69,7 @@ dependencies:
   react-hook-form: 7.17.4_react@17.0.2
   react-hot-toast: 2.1.1_react-dom@17.0.2+react@17.0.2
   react-icons: 4.3.1_react@17.0.2
+  react-range: 1.8.11_react-dom@17.0.2+react@17.0.2
   react-select: 5.1.0_152e7e799885aa8e2c90f8240d94e04e
   react-textarea-autosize: 8.3.3_9b26932173ac5a93c18fc8634be19f05
   styled-components: 5.3.1_react-dom@17.0.2+react@17.0.2
@@ -4008,6 +4010,16 @@ packages:
 
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+    dev: false
+
+  /react-range/1.8.11_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-LaF5xwYy6u0Rnp0hRBBLKqJx0DmNpW2GqMSoj8OJ0IYiCM7GmSNf0UKxmN4cN0BCb2EwzD3zA9nw6Fkug2c3mg==}
+    peerDependencies:
+      react: ^16.8.0-0 || ^17.0.0-0
+      react-dom: ^16.8.0-0 || ^17.0.0-0
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /react-refresh/0.8.3:
