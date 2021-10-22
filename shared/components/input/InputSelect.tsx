@@ -1,15 +1,23 @@
 import { useController } from 'react-hook-form'
-import { ComponentProps, useState } from 'react'
+import { useState } from 'react'
 import { useApiRequest } from '../form/Form'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
 import { RequestState } from '../../hooks/useRequest'
-import Select, { StylesConfig } from 'react-select'
+import Select, { StylesConfig, Props, SingleValue } from 'react-select'
 import classNames from 'classnames'
 
-type InputSelectProps<T> = InputGeneric &
-  ComponentProps<'input'> & {
-    options: T[]
+type OptionValue = {
+  label: string
+  value: string
+}
+
+type InputSelectProps<Value extends OptionValue> = InputGeneric &
+  Props<Value> & {
+    options: readonly Value[]
+    value: string | null
+    onChange: (value: (Value | null)) => void
+    disabled?: boolean
   }
 
 const InputLabel = styled.div<{ $minimized: boolean }>`
@@ -28,7 +36,7 @@ const InputLabel = styled.div<{ $minimized: boolean }>`
   }
 `
 
-const styles: StylesConfig = {
+const styles = <T,>(): StylesConfig<T> => ({
   control: () => ({
     color: 'inherit',
     paddingBottom: '0.25rem',
@@ -54,9 +62,9 @@ const styles: StylesConfig = {
     margin: 0,
     padding: 0,
   }),
-}
+})
 
-export const InputSelect = <T extends { value: string; label: string }>({
+export const InputSelect = <Value extends OptionValue>({
   name,
   label,
   innerClassName,
@@ -65,7 +73,7 @@ export const InputSelect = <T extends { value: string; label: string }>({
   icon,
   options,
   ...props
-}: InputSelectProps<T>) => {
+}: InputSelectProps<Value>) => {
   const {
     field: { ref, value, onChange, ...field },
     fieldState: { invalid },
@@ -80,15 +88,15 @@ export const InputSelect = <T extends { value: string; label: string }>({
         {...props}
         ref={ref}
         value={
-          value === null ? null : options.find((item) => item.value === value)
+          value === null ? null : options.find((item: Value) => item.value === value)
         }
-        onChange={(data) => onChange(data?.value ?? null)}
+        onChange={(data) => onChange((data as SingleValue<Value>)?.value ?? null)}
         isDisabled={status === RequestState.Loading || disabled}
         onInputChange={(data) => setPlaceholderVisible(!!data)}
         isClearable
         placeholder=""
         options={options}
-        styles={styles}
+        styles={styles<Value>()}
         className={classNames(
           // 'w-full outline-none px-4 pb-1 pt-5 text-gray-500',
           'w-full outline-none text-gray-500',
