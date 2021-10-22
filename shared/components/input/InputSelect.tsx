@@ -1,10 +1,10 @@
 import { useController } from 'react-hook-form'
-import { ComponentProps, useMemo } from 'react'
+import { ComponentProps, useState } from 'react'
 import { useApiRequest } from '../form/Form'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
 import { RequestState } from '../../hooks/useRequest'
-import Select, { ContainerProps, components, InputProps } from 'react-select'
+import Select, { StylesConfig } from 'react-select'
 import classNames from 'classnames'
 
 type InputSelectProps<T> = InputGeneric &
@@ -12,22 +12,23 @@ type InputSelectProps<T> = InputGeneric &
     options: T[]
   }
 
-const InputLabel = styled.div`
+const InputLabel = styled.div<{ $minimized: boolean }>`
   position: absolute;
-  left: -1rem;
-  top: -1.25rem;
+  left: 0;
+  top: 0;
   width: 100%;
   pointer-events: none;
   transform-origin: left top;
   transition: transform 0.2s ease;
+  transform: ${({ $minimized }) =>
+    $minimized && 'scale(0.75) translateY(-0.5em)'};
 
-  input:not(:placeholder-shown) + &,
-  input:focus + & {
+  div:focus-within > div > & {
     transform: scale(0.75) translateY(-0.5em);
   }
 `
 
-const styles = {
+const styles: StylesConfig = {
   control: () => ({
     color: 'inherit',
     paddingBottom: '0.25rem',
@@ -55,16 +56,6 @@ const styles = {
   }),
 }
 
-const CustomInput = (label: string) =>
-  function Input(props: InputProps) {
-    return (
-      <>
-        <components.Input {...props} placeholder=" " />
-        <InputLabel className="ml-4 my-3 opacity-70">{label}</InputLabel>
-      </>
-    )
-  }
-
 export const InputSelect = <T extends { value: string; label: string }>({
   name,
   label,
@@ -79,43 +70,37 @@ export const InputSelect = <T extends { value: string; label: string }>({
     field: { ref, value, onChange, ...field },
     fieldState: { invalid },
   } = useController({ name })
+  const [isPlaceholderVisible, setPlaceholderVisible] = useState(false)
   const { status } = useApiRequest()
-
-  const Input = useMemo(() => CustomInput(label as string), [label])
 
   return (
     <InputFrame {...{ name, className, icon }} isError={invalid}>
-      {/*<input*/}
-      {/*  ref={ref}*/}
-      {/*  {...field}*/}
-      {/*  {...props}*/}
-      {/*  value={field?.value ?? props?.value ?? ''}*/}
-      {/*  className={classNames(*/}
-      {/*    'w-full outline-none px-4 pb-1 pt-5 text-gray-500',*/}
-      {/*    innerClassName,*/}
-      {/*  )}*/}
-      {/*  placeholder=" "*/}
-      {/*  disabled={status === RequestState.Loading || disabled}*/}
-      {/*/>*/}
       <Select
-        ref={ref}
         {...field}
+        {...props}
+        ref={ref}
         value={
           value === null ? null : options.find((item) => item.value === value)
         }
         onChange={(data) => onChange(data?.value ?? null)}
         isDisabled={status === RequestState.Loading || disabled}
+        onInputChange={(data) => setPlaceholderVisible(!!data)}
         isClearable
-        placeholder=" "
+        placeholder=""
         options={options}
         styles={styles}
-        components={{ Input }}
         className={classNames(
           // 'w-full outline-none px-4 pb-1 pt-5 text-gray-500',
           'w-full outline-none text-gray-500',
           innerClassName,
         )}
       />
+      <InputLabel
+        className="ml-4 my-3 opacity-70"
+        $minimized={isPlaceholderVisible || value != null}
+      >
+        {label}
+      </InputLabel>
     </InputFrame>
   )
 }
