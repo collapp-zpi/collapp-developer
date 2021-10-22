@@ -17,15 +17,17 @@ const Button = ({
   type = 'button',
   children,
   className,
+  disabled,
   ...props
 }: ButtonProps) => (
   <button
     className={classNames(
-      'py-2 px-6 font-bold rounded-lg transition-colors flex items-center',
+      'py-2 px-6 font-bold rounded-lg transition-colors transition-opacity flex items-center disabled:opacity-50',
       BUTTON_COLORS[color],
       className,
+      disabled && 'pointer-events-none',
     )}
-    type={type}
+    {...{ type, disabled }}
     {...props}
   >
     {children}
