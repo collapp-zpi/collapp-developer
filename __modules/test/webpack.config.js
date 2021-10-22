@@ -12,6 +12,7 @@ module.exports = [
       libraryTarget: 'commonjs2',
       libraryExport: 'default',
     },
+    externals: ['react'],
     module: {
       rules: [
         {
