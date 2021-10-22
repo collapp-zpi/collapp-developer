@@ -16,11 +16,13 @@ interface InputFrameProps {
   icon?: IconType
   children: ReactNode
   isError: boolean
+  overflow?: boolean
 }
 
 export const InputFrame = ({
   name,
   className,
+  overflow = false,
   icon: Icon,
   children,
   isError,
@@ -34,6 +36,7 @@ export const InputFrame = ({
             'border-red-300': isError,
             'border-gray-200': !isError,
           },
+          !overflow && 'overflow-hidden',
         )}
       >
         {!!Icon && (

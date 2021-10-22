@@ -16,7 +16,7 @@ type InputSelectProps<Value extends OptionValue> = InputGeneric &
   Props<Value> & {
     options: readonly Value[]
     value: string | null
-    onChange: (value: (Value | null)) => void
+    onChange: (value: Value | null) => void
     disabled?: boolean
   }
 
@@ -82,15 +82,19 @@ export const InputSelect = <Value extends OptionValue>({
   const { status } = useApiRequest()
 
   return (
-    <InputFrame {...{ name, className, icon }} isError={invalid}>
+    <InputFrame {...{ name, className, icon }} isError={invalid} overflow>
       <Select
         {...field}
         {...props}
         ref={ref}
         value={
-          value === null ? null : options.find((item: Value) => item.value === value)
+          value === null
+            ? null
+            : options.find((item: Value) => item.value === value)
         }
-        onChange={(data) => onChange((data as SingleValue<Value>)?.value ?? null)}
+        onChange={(data) =>
+          onChange((data as SingleValue<Value>)?.value ?? null)
+        }
         isDisabled={status === RequestState.Loading || disabled}
         onInputChange={(data) => setPlaceholderVisible(!!data)}
         isClearable
