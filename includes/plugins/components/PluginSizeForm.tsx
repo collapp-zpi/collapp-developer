@@ -6,8 +6,16 @@ import { toast } from 'react-hot-toast'
 import SubmitButton from 'shared/components/button/SubmitButton'
 
 const schema = object().shape({
-  minWidth: number().default(1),
-  minHeight: number().default(1),
+  minWidth: number()
+    .default(1)
+    .when(['maxWidth'], (maxWidth: number, schema) =>
+      schema.max(maxWidth, `Min. width can't be larger than max. width`),
+    ),
+  minHeight: number()
+    .default(1)
+    .when(['maxHeight'], (maxHeight: number, schema) =>
+      schema.max(maxHeight, `Min. height can't be larger than max. height`),
+    ),
   maxWidth: number().default(4),
   maxHeight: number().default(4),
 })
