@@ -1,2 +1,4 @@
-module.exports.client = require('./dist/client')
-module.exports.server = require('./dist/server')
+import client from './client'
+import server from './server'
+
+export default { client, server }

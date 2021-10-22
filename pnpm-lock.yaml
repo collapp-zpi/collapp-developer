@@ -24,7 +24,6 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
   joi: ^17.4.2
-  modules: file:./modules
   next: 11.1.2
   next-auth: ^4.0.0-beta.4
   nodemailer: ^6.6.5
@@ -57,7 +56,6 @@ dependencies:
   dayjs: 1.10.7
   eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
   joi: 17.4.2
-  modules: link:modules
   next: 11.1.2_39969d7352d8af97f97f0d53dea4f445
   next-auth: 4.0.0-beta.4_4882ea7ce9808d4fe448280a48571183
   nodemailer: 6.6.5
