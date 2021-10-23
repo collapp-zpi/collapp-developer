@@ -22,18 +22,42 @@ model DraftPlugin {
   id          String           @id @default(cuid())
   name        String
   description String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now())
+  status      PluginStatus     @default(Private)
+  source      String?
   icon        String?
-  date        DateTime         @default(now())
-  status      PluginStatus     @default(Pending)
-  authorId    String
 
+  authorId    String
   author      DeveloperUser    @relation(fields: [authorId], references: [id])
+
+  published   PublishedPlugin?
 
   minWidth    Int              @default(1)
   maxWidth    Int              @default(4)
   minHeight   Int              @default(1)
   maxHeight   Int              @default(4)
-  envVars     Json             @default("[]")
+}
+
+model PublishedPlugin {
+  id          String           @id @default(cuid())
+  name        String
+  description String
+  version     Int              @default(1)
+  updatedAt   DateTime         @default(now())
+  isPublic    Boolean          @default(true)
+  icon        String?
+
+  authorId    String
+  author      DeveloperUser    @relation(fields: [authorId], references: [id])
+
+  draftId     String
+  draft       DraftPlugin      @relation(fields: [draftId], references: [id])
+
+  minWidth    Int              @default(1)
+  maxWidth    Int              @default(4)
+  minHeight   Int              @default(1)
+  maxHeight   Int              @default(4)
 }
 
 model DeveloperAccount {
@@ -74,6 +98,7 @@ model DeveloperUser {
   accounts      DeveloperAccount[]
   sessions      DeveloperSession[]
   drafts        DraftPlugin[]
+  published     PublishedPlugin[]
 }
 
 
