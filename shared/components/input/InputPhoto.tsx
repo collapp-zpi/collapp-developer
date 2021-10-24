@@ -19,6 +19,7 @@ type InputPhotoChildrenProps = {
   open: () => void
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T
   value: string
+  onChange: (value?: string) => void
 }
 
 type InputPhotoProps = {
@@ -57,7 +58,7 @@ export const InputPhoto = ({ name, children }: InputPhotoProps) => {
   return (
     <>
       <input {...getInputProps()} />
-      {children({ invalid, isDragAccept, getRootProps, open, value })}
+      {children({ invalid, isDragAccept, getRootProps, open, value, onChange })}
       <InputPhotoModal
         value={file}
         close={() => setFile(null)}

@@ -32,8 +32,16 @@ const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  const { name, description, id, minWidth, maxWidth, minHeight, maxHeight } =
-    plugin
+  const {
+    name,
+    description,
+    id,
+    icon,
+    minWidth,
+    maxWidth,
+    minHeight,
+    maxHeight,
+  } = plugin
 
   const deleteRequest = useRequest(deletePlugin(id), {
     onSuccess: () => {
@@ -77,7 +85,7 @@ const Plugin = ({
         </Button>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
           <PluginForm
-            initial={{ name, description }}
+            initial={{ name, description, icon }}
             query={updatePlugin(id)}
             {...{ onSuccess, onError }}
           />
