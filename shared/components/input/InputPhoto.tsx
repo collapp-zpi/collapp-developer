@@ -1,7 +1,13 @@
 import { DropzoneRootProps, useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import { useController } from 'react-hook-form'
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+  PointerEvent as ReactPointerEvent,
+} from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
 import styled from 'styled-components'
@@ -12,6 +18,7 @@ type InputPhotoChildrenProps = {
   isDragAccept: boolean
   open: () => void
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T
+  value: string
 }
 
 type InputPhotoProps = {
@@ -22,7 +29,7 @@ type InputPhotoProps = {
 export const InputPhoto = ({ name, children }: InputPhotoProps) => {
   const [file, setFile] = useState<File | null>(null)
   const {
-    field: { onChange },
+    field: { value, onChange },
     fieldState: { invalid },
   } = useController({ name })
 
@@ -42,11 +49,20 @@ export const InputPhoto = ({ name, children }: InputPhotoProps) => {
     accept: ['image/png', 'image/jpeg'],
   })
 
+  const handleSave = (image: string) => {
+    onChange(image)
+    setFile(null)
+  }
+
   return (
     <>
       <input {...getInputProps()} />
-      {children({ invalid, isDragAccept, getRootProps, open })}
-      <InputPhotoModal value={file} close={() => setFile(null)} />
+      {children({ invalid, isDragAccept, getRootProps, open, value })}
+      <InputPhotoModal
+        value={file}
+        close={() => setFile(null)}
+        onSave={handleSave}
+      />
     </>
   )
 }
@@ -67,9 +83,10 @@ const MAX_SIZE = 192
 type InputPhotoModalProps = {
   value: File | null
   close: () => void
+  onSave: (image: string) => void
 }
 
-const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
+const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement>()
   const [scale, setScale] = useState(0.5)
   const [isGrabbing, setIsGrabbing] = useState(false)
@@ -116,18 +133,19 @@ const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
     }
   }, [value, canvas])
 
-  const handlePointerDown = (startEvent) => {
+  const handlePointerDown = (startEvent: ReactPointerEvent<HTMLDivElement>) => {
     startEvent.stopPropagation()
     startEvent.preventDefault()
+    if (!canvas) return
     const startX = startEvent.clientX
     const startY = startEvent.clientY
     const startTranslateX = translateX
     const startTranslateY = translateY
-    const width = startEvent.target.width
-    const height = startEvent.target.height
+    const width = canvas.width
+    const height = canvas.height
     setIsGrabbing(true)
 
-    const handlePointerMove = (e) => {
+    const handlePointerMove = (e: PointerEvent) => {
       e.stopPropagation()
       e.preventDefault()
       const { clientX, clientY } = e
@@ -173,12 +191,36 @@ const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
     setScale(scale)
   }
 
+  const handleSave = () => {
+    if (!canvas) return
+    const newCanvas = document.createElement('canvas')
+    newCanvas.width = MAX_SIZE
+    newCanvas.height = MAX_SIZE
+
+    const ctx = newCanvas.getContext('2d')
+    if (!ctx) return
+    ctx.drawImage(
+      canvas,
+      -translateX,
+      -translateY,
+      MAX_SIZE / scale,
+      MAX_SIZE / scale,
+      0,
+      0,
+      MAX_SIZE,
+      MAX_SIZE,
+    )
+
+    const uri = newCanvas.toDataURL('image/jpeg')
+    onSave(uri)
+  }
+
   return (
-    <Modal visible={!!value} close={close}>
+    <Modal visible={!!value}>
       <div className="p-8 overflow-hidden" onPointerDown={handlePointerDown}>
         <CutoffContainer className="relative">
           <canvas
-            ref={handleCanvasRef}
+            ref={(ref) => handleCanvasRef(ref ?? undefined)}
             className="absolute left-0 top-0"
             style={{
               transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
@@ -196,9 +238,14 @@ const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
         min={0.5}
         step={0.1}
       />
-      <Button color="light" onClick={close}>
-        Cancel
-      </Button>
+      <div className="flex">
+        <Button color="light" className="mr-auto" onClick={close}>
+          Cancel
+        </Button>
+        <Button color="blue" className="ml-2" onClick={handleSave}>
+          Save
+        </Button>
+      </div>
     </Modal>
   )
 }

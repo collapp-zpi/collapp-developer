@@ -32,9 +32,9 @@ export const PluginForm = ({
       icon={FiAlignCenter}
     />
     <InputPhoto name="icon">
-      {({ open, getRootProps }) => (
+      {({ open, getRootProps, value }) => (
         <div {...getRootProps()} onClick={open}>
-          Hello from the other side
+          {value ? <img src={value} /> : 'Hello from the other side'}
         </div>
       )}
     </InputPhoto>
