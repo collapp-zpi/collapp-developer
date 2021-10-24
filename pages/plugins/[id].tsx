@@ -62,18 +62,23 @@ const Plugin = ({
           Back
         </Button>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <h1 className="text-2xl font-bold text-gray-500 mb-4">
+            General info
+          </h1>
           <PluginForm
             initial={{ name, description, icon }}
             query={updatePlugin(id)}
           />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-2xl font-bold text-gray-500 mb-4">Plugin size</h1>
           <PluginSizeForm
             query={updatePlugin(id)}
             initial={{ minWidth, maxWidth, minHeight, maxHeight }}
           />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-2xl font-bold text-gray-500 mb-4">Danger zone</h1>
           <DeleteForm {...{ id, name }} />
         </div>
       </div>
