@@ -12,6 +12,8 @@ import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
 import styled from 'styled-components'
 import { PureInputRange } from 'shared/components/input/InputRange'
+import classNames from 'classnames'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 
 type InputPhotoChildrenProps = {
   invalid: boolean
@@ -89,6 +91,7 @@ type InputPhotoModalProps = {
 
 const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement>()
+  const [isLoading, setLoading] = useState(true)
   const [scale, setScale] = useState(0.5)
   const [isGrabbing, setIsGrabbing] = useState(false)
   const [{ translateX, translateY }, setTransform] = useState({
@@ -106,9 +109,7 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
 
     const img = new Image()
     img.src = src
-    // setState({
-    //   isLoading: true,
-    // })
+    setLoading(true)
 
     img.onload = () => {
       const scale =
@@ -126,6 +127,7 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
         translateX: (MAX_SIZE * 2 - canvas.width) / 2,
         translateY: (MAX_SIZE * 2 - canvas.height) / 2,
       })
+      setLoading(false)
     }
 
     return () => {
@@ -222,13 +224,24 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
         <CutoffContainer className="relative">
           <canvas
             ref={(ref) => handleCanvasRef(ref ?? undefined)}
-            className="absolute left-0 top-0"
+            className={classNames(
+              'absolute left-0 top-0 transition-opacity',
+              isLoading && 'opacity-0',
+            )}
             style={{
               transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
               transformOrigin: 'left top',
-              cursor: isGrabbing ? 'grabbing' : 'grab',
+              cursor: !isLoading && (isGrabbing ? 'grabbing' : 'grab'),
             }}
           />
+          <div
+            className={classNames(
+              'absolute left-0 top-0 w-full h-full pointer-events-none flex items-center justify-center',
+              !isLoading && 'opacity-0',
+            )}
+          >
+            <LogoSpinner />
+          </div>
           <CutoffFront className="absolute left-0 top-o w-full h-full border-2" />
         </CutoffContainer>
       </div>
@@ -237,13 +250,24 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
         onChange={handleSetScale}
         max={2}
         min={0.5}
-        step={0.1}
+        step={0.05}
+        disabled={isLoading}
       />
       <div className="flex">
-        <Button color="light" className="mr-auto" onClick={close}>
+        <Button
+          disabled={isLoading}
+          color="light"
+          className="mr-auto"
+          onClick={close}
+        >
           Cancel
         </Button>
-        <Button color="blue" className="ml-2" onClick={handleSave}>
+        <Button
+          disabled={isLoading}
+          color="blue"
+          className="ml-2"
+          onClick={handleSave}
+        >
           Save
         </Button>
       </div>
