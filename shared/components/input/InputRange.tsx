@@ -69,16 +69,7 @@ type PureInputRangeProps = {
 
 export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
   function InnerPureInput(
-    {
-      value,
-      min,
-      max,
-      onChange,
-      onFinalChange,
-      step,
-      disabled,
-      ...props
-    }: PureInputRangeProps,
+    { value, min, max, onChange, onFinalChange, step, disabled, ...props },
     ref,
   ) {
     return (
