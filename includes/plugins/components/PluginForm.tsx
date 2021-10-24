@@ -1,5 +1,5 @@
 import { InputText } from 'shared/components/input/InputText'
-import { mixed, object, string } from 'yup'
+import { object, string } from 'yup'
 import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
 import { InputTextarea } from 'shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
@@ -10,6 +10,7 @@ import { InputPhoto } from 'shared/components/input/InputPhoto'
 import { CgClose } from 'react-icons/cg'
 import { MouseEvent as ReactMouseEvent } from 'react'
 import classNames from 'classnames'
+import { defaultPluginIcon } from 'config/defaultIcons'
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -52,13 +53,12 @@ export const PluginForm = ({
                     <CgClose />
                   </div>
                 )}
-                {(icon || value) && (
-                  <img
-                    src={value || icon}
-                    className="shadow-lg"
-                    style={{ borderRadius: '25%' }}
-                  />
-                )}
+                <img
+                  src={value || icon || defaultPluginIcon}
+                  className="shadow-lg"
+                  alt="Plugin icon"
+                  style={{ borderRadius: '25%' }}
+                />
               </div>
             )
           }}
