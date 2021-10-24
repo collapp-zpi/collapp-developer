@@ -1,5 +1,5 @@
 import { useController } from 'react-hook-form'
-import { ComponentProps } from 'react'
+import { ComponentProps, forwardRef } from 'react'
 import { useApiRequest } from '../form/Form'
 import classNames from 'classnames'
 import styled from 'styled-components'
@@ -23,36 +23,56 @@ const InputLabel = styled.div`
   }
 `
 
-export const InputText = ({
-  name,
-  label,
-  innerClassName,
-  className,
-  disabled,
-  icon,
-  ...props
-}: InputTextProps) => {
+export const InputText = ({ name, disabled, ...props }: InputTextProps) => {
   const {
-    field: { ref, ...field },
+    field: { ref, value, ...field },
     fieldState: { invalid },
   } = useController({ name })
   const { status } = useApiRequest()
 
   return (
-    <InputFrame {...{ name, className, icon }} isError={invalid}>
+    <InputTextPure
+      ref={ref}
+      {...field}
+      {...props}
+      value={value ?? props?.value ?? ''}
+      isError={invalid}
+      disabled={status === RequestState.Loading || disabled}
+    />
+  )
+}
+
+export const InputTextPure = forwardRef<
+  HTMLInputElement,
+  Omit<InputTextProps, 'name'> & { isError?: boolean; name?: string }
+>(function InnerPureInput(
+  {
+    name,
+    label,
+    innerClassName,
+    className,
+    disabled,
+    icon,
+    isError,
+    value,
+    ...props
+  },
+  ref,
+) {
+  return (
+    <InputFrame {...{ name, className, icon }} isError={!!isError}>
       <input
         ref={ref}
-        {...field}
         {...props}
-        value={field?.value ?? props?.value ?? ''}
+        value={value ?? ''}
         className={classNames(
           'w-full outline-none px-4 pb-1 pt-5 text-gray-500',
           innerClassName,
         )}
         placeholder=" "
-        disabled={status === RequestState.Loading || disabled}
+        disabled={disabled}
       />
       <InputLabel className="ml-4 my-3 opacity-70">{label}</InputLabel>
     </InputFrame>
   )
-}
+})

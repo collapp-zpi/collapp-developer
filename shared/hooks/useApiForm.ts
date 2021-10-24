@@ -17,7 +17,7 @@ export type FormProps<T extends AnyObjectSchema> = Omit<
 export type useApiFormProps<T extends AnyObjectSchema> = {
   schema: T
   query: useRequestQueryType
-  initial?: TypeOf<T>
+  initial?: Partial<TypeOf<T>>
   onSuccess?: useRequestOptionsType['onSuccess']
   onError?: useRequestOptionsType['onError']
 }

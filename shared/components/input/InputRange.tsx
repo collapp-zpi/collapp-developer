@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { forwardRef, ReactNode, useState } from 'react'
 import { Range } from 'react-range'
 import { useController } from 'react-hook-form'
 import { useApiRequest } from 'shared/components/form/Form'
@@ -42,13 +42,44 @@ export const InputRange = ({
           {children ? children(innerValue) : innerValue}
         </span>
       </div>
+      <PureInputRange
+        {...field}
+        disabled={status === RequestState.Loading || disabled}
+        onFinalChange={onChange}
+        onChange={setInnerValue}
+        value={innerValue}
+        {...{ min, max, step }}
+      />
+      <div className="text-red-400 ml-1 mt-0.5 text-sm">
+        <ErrorMessage name={name} />
+      </div>
+    </label>
+  )
+}
+
+type PureInputRangeProps = {
+  value: number
+  onFinalChange?: (value: number) => void
+  onChange: (value: number) => void
+  min?: number
+  max: number
+  step?: number
+  disabled?: boolean
+}
+
+export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
+  function InnerPureInput(
+    { value, min, max, onChange, onFinalChange, step, disabled, ...props },
+    ref,
+  ) {
+    return (
       <div className="w-full px-1">
         <Range
-          {...field}
-          disabled={status === RequestState.Loading || disabled}
-          values={[innerValue]}
-          onChange={([value]) => setInnerValue(value)}
-          onFinalChange={([value]) => onChange(value)}
+          {...props}
+          ref={ref}
+          values={[value]}
+          onChange={([value]) => onChange(value)}
+          onFinalChange={([value]) => (onFinalChange ?? onChange)(value)}
           renderTrack={({ props, children }) => (
             <div className="w-full h-9" {...props}>
               <div className="w-full h-1 rounded-full bg-gray-300 absolute top-4" />
@@ -61,12 +92,9 @@ export const InputRange = ({
               {...props}
             />
           )}
-          {...{ min, max, step }}
+          {...{ min, max, step, disabled }}
         />
       </div>
-      <div className="text-red-400 ml-1 mt-0.5 text-sm">
-        <ErrorMessage name={name} />
-      </div>
-    </label>
-  )
-}
+    )
+  },
+)

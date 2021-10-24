@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import Button from 'shared/components/button/Button'
 import { GoPlus } from 'react-icons/go'
 import dayjs from 'dayjs'
+import { defaultPluginIcon } from 'config/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -55,16 +56,31 @@ const Plugins = ({
               </thead>
               <tbody>
                 {plugins.map(
-                  ({ id, name, description, status, date }: DraftPlugin) => (
+                  ({
+                    id,
+                    name,
+                    description,
+                    status,
+                    createdAt,
+                    icon,
+                  }: DraftPlugin) => (
                     <tr
                       key={id}
                       onClick={() => router.push(`/plugins/${id}`)}
                       className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
                     >
-                      <td className="p-4">{name}</td>
+                      <td className="p-4 flex items-center">
+                        <img
+                          src={icon || defaultPluginIcon}
+                          className="shadow-lg w-8 h-8 mr-3 bg-gray-200"
+                          alt="Plugin icon"
+                          style={{ borderRadius: '25%' }}
+                        />
+                        {name}
+                      </td>
                       <td className="p-4">{description}</td>
                       <td className="p-4">{status}</td>
-                      <td className="p-4">{dayjs(date).format('LLL')}</td>
+                      <td className="p-4">{dayjs(createdAt).format('LLL')}</td>
                     </tr>
                   ),
                 )}

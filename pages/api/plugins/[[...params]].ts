@@ -34,6 +34,8 @@ export class UpdatePluginDTO {
   name?: string
   @IsOptional()
   description?: string
+  @IsOptional()
+  icon?: string
 
   @IsOptional()
   @Min(1)
@@ -118,6 +120,11 @@ class Plugins {
     @User user: RequestUser,
   ) {
     await this.innerGetPlugin(id, user)
+
+    if (body?.icon) {
+      console.log(body)
+      // throw new BadRequestException('Image test')
+    }
 
     if (body?.minWidth && body?.maxWidth && body.minWidth > body.maxWidth) {
       throw new BadRequestException(

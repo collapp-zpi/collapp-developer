@@ -11,7 +11,7 @@ export interface InputGeneric {
 }
 
 interface InputFrameProps {
-  name: string
+  name?: string
   className?: string
   icon?: IconType
   children: ReactNode
@@ -46,9 +46,11 @@ export const InputFrame = ({
         )}
         <div className="relative flex-grow flex">{children}</div>
       </div>
-      <div className="text-red-400 ml-1 mt-0.5 text-sm">
-        <ErrorMessage name={name} />
-      </div>
+      {!!name && (
+        <div className="text-red-400 ml-1 mt-0.5 text-sm">
+          <ErrorMessage name={name} />
+        </div>
+      )}
     </label>
   </div>
 )

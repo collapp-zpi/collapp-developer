@@ -41,7 +41,7 @@ a {
 
 .spinner-moving {
   fill: none;
-  stroke: url('#collapp-gradient');
+  stroke: url('#collapp-spinner-gradient');
   stroke-width: 12%;
   stroke-linecap: round;
   stroke-linejoin: round;
