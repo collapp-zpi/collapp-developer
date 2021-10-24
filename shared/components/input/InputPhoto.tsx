@@ -220,7 +220,10 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
 
   return (
     <Modal visible={!!value}>
-      <div className="p-8 overflow-hidden" onPointerDown={handlePointerDown}>
+      <div
+        className="p-8 overflow-hidden rounded-2xl"
+        onPointerDown={handlePointerDown}
+      >
         <CutoffContainer className="relative">
           <canvas
             ref={(ref) => handleCanvasRef(ref ?? undefined)}
@@ -231,7 +234,7 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
             style={{
               transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
               transformOrigin: 'left top',
-              cursor: !isLoading && (isGrabbing ? 'grabbing' : 'grab'),
+              ...(!isLoading && { cursor: isGrabbing ? 'grabbing' : 'grab' }),
             }}
           />
           <div

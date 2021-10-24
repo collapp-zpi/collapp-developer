@@ -72,7 +72,7 @@ const Plugins = ({
                       <td className="p-4 flex items-center">
                         <img
                           src={icon || defaultPluginIcon}
-                          className="shadow-lg w-8 mr-3"
+                          className="shadow-lg w-8 h-8 mr-3 bg-gray-200"
                           alt="Plugin icon"
                           style={{ borderRadius: '25%' }}
                         />
