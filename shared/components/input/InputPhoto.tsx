@@ -158,6 +158,21 @@ const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
     )
   }
 
+  const handleSetScale = (scale: number) => {
+    if (!canvas) return
+    setTransform({
+      translateX: Math.max(
+        Math.min(translateX, 0),
+        MAX_SIZE / scale - canvas.width,
+      ),
+      translateY: Math.max(
+        Math.min(translateY, 0),
+        MAX_SIZE / scale - canvas.height,
+      ),
+    })
+    setScale(scale)
+  }
+
   return (
     <Modal visible={!!value} close={close}>
       <div className="p-8 overflow-hidden" onPointerDown={handlePointerDown}>
@@ -176,7 +191,7 @@ const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
       </div>
       <PureInputRange
         value={scale}
-        onChange={setScale}
+        onChange={handleSetScale}
         max={2}
         min={0.5}
         step={0.1}
