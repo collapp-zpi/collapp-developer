@@ -11,6 +11,7 @@ import { CgClose } from 'react-icons/cg'
 import { MouseEvent as ReactMouseEvent } from 'react'
 import classNames from 'classnames'
 import { defaultPluginIcon } from 'config/defaultIcons'
+import { toast } from 'react-hot-toast'
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -21,9 +22,19 @@ const schema = object().shape({
 export const PluginForm = ({
   query,
   initial: { icon, ...initial },
-  onSuccess,
-  onError,
 }: FormProps<typeof schema>) => {
+  const onSuccess = () => {
+    toast.success('The plugin has been updated successfully.')
+  }
+
+  const onError = ({ message }: { message?: string }) => {
+    toast.error(
+      `There has been an error while updating the plugin. ${
+        !!message && `(${message})`
+      }`,
+    )
+  }
+
   return (
     <UncontrolledForm
       {...{ schema, query, initial, onSuccess, onError }}

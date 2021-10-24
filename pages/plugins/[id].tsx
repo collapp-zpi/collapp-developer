@@ -57,18 +57,6 @@ const Plugin = ({
     },
   })
 
-  const onSuccess = () => {
-    toast.success('The plugin has been updated successfully.')
-  }
-
-  const onError = ({ message }: { message?: string }) => {
-    toast.error(
-      `There has been an error while updating the plugin. ${
-        !!message && `(${message})`
-      }`,
-    )
-  }
-
   return (
     <AuthLayout>
       <Head>
@@ -87,7 +75,6 @@ const Plugin = ({
           <PluginForm
             initial={{ name, description, icon }}
             query={updatePlugin(id)}
-            {...{ onSuccess, onError }}
           />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
