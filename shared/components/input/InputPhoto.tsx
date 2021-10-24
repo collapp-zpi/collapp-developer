@@ -5,6 +5,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
 import styled from 'styled-components'
+import { PureInputRange } from 'shared/components/input/InputRange'
 
 type InputPhotoChildrenProps = {
   invalid: boolean
@@ -63,7 +64,12 @@ const CutoffFront = styled.div`
 
 const MAX_SIZE = 192
 
-const InputPhotoModal = ({ value, close }) => {
+type InputPhotoModalProps = {
+  value: File | null
+  close: () => void
+}
+
+const InputPhotoModal = ({ value, close }: InputPhotoModalProps) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement>()
   const [scale, setScale] = useState(0.5)
   const [isGrabbing, setIsGrabbing] = useState(false)
@@ -78,7 +84,6 @@ const InputPhotoModal = ({ value, close }) => {
     if (!canvas) return
     if (!value) return
 
-    console.log('update img')
     const src = URL.createObjectURL(value)
 
     const img = new Image()
@@ -118,16 +123,25 @@ const InputPhotoModal = ({ value, close }) => {
     const startY = startEvent.clientY
     const startTranslateX = translateX
     const startTranslateY = translateY
+    const width = startEvent.target.width
+    const height = startEvent.target.height
     setIsGrabbing(true)
 
     const handlePointerMove = (e) => {
       e.stopPropagation()
       e.preventDefault()
       const { clientX, clientY } = e
+      if (!canvas) return
 
       setTransform({
-        translateX: startTranslateX + (clientX - startX) / scale,
-        translateY: startTranslateY + (clientY - startY) / scale,
+        translateX: Math.max(
+          Math.min(startTranslateX + (clientX - startX) / scale, 0),
+          MAX_SIZE / scale - width,
+        ),
+        translateY: Math.max(
+          Math.min(startTranslateY + (clientY - startY) / scale, 0),
+          MAX_SIZE / scale - height,
+        ),
       })
     }
 
@@ -138,6 +152,7 @@ const InputPhotoModal = ({ value, close }) => {
         e.stopPropagation()
         e.preventDefault()
         document.removeEventListener('pointermove', handlePointerMove)
+        setIsGrabbing(false)
       },
       { once: true },
     )
@@ -159,6 +174,13 @@ const InputPhotoModal = ({ value, close }) => {
           <CutoffFront className="absolute left-0 top-o w-full h-full border-2" />
         </CutoffContainer>
       </div>
+      <PureInputRange
+        value={scale}
+        onChange={setScale}
+        max={2}
+        min={0.5}
+        step={0.1}
+      />
       <Button color="light" onClick={close}>
         Cancel
       </Button>
