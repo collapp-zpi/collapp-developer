@@ -108,13 +108,25 @@ const DeleteForm = ({ id, name }: { id: string; name: string }) => {
 
   const verification = name.replace(/\s+/g, '-').toLowerCase()
 
+  const handleClose = () => {
+    setModalOpen(false)
+    setValue('')
+  }
+
   return (
     <>
-      <Button onClick={() => setModalOpen(true)} color="red-link">
-        Delete
-      </Button>
+      <div className="flex">
+        <div className="flex-grow flex flex-col mr-2 text-red-700">
+          <h4 className="font-bold text-lg">Delete account</h4>
+          <h6 className="text-sm">This operation is irreversible</h6>
+        </div>
+        <Button onClick={() => setModalOpen(true)} color="red-link">
+          Delete
+        </Button>
+      </div>
       <Modal
         visible={isModalOpen || deleteRequest.status === RequestState.Loading}
+        close={handleClose}
       >
         <div className="p-4">
           <h1 className="text-2xl font-bold text-red-500">Caution!</h1>
@@ -133,14 +145,7 @@ const DeleteForm = ({ id, name }: { id: string; name: string }) => {
             onChange={(e) => setValue(e.target.value)}
           />
           <div className="flex mt-2">
-            <Button
-              onClick={() => {
-                setModalOpen(false)
-                setValue('')
-              }}
-              className="ml-auto"
-              color="light"
-            >
+            <Button onClick={handleClose} className="ml-auto" color="light">
               Cancel
             </Button>
             <Button
