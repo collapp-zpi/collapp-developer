@@ -121,11 +121,6 @@ class Plugins {
   ) {
     await this.innerGetPlugin(id, user)
 
-    if (body?.icon) {
-      console.log(body)
-      // throw new BadRequestException('Image test')
-    }
-
     if (body?.minWidth && body?.maxWidth && body.minWidth > body.maxWidth) {
       throw new BadRequestException(
         `Min. width can't be larger than max. width.`,

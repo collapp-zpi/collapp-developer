@@ -25,7 +25,7 @@ const DropdownButton = ({
 )
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const { status } = useSession()
+  const { status, data } = useSession()
   const router = useRouter()
   const [isDropdownOpen, setDropdownOpen] = useState(false)
   const ref = useOnclickOutside(() => {
@@ -51,13 +51,16 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             Sign in
           </Button>
         )}
-        {status === 'authenticated' && (
+        {status === 'authenticated' && data && (
           <div className="ml-auto relative" ref={ref}>
             <div
               className="hover:bg-gray-200 cursor-pointer transition-colors rounded-xl p-1 h-full flex items-center justify-center"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
-              <div className="bg-red-500 w-8 h-8 rounded-full" />
+              <img
+                src={data.user?.image ?? ''}
+                className="bg-gray-300 w-8 h-8 rounded-25 shadow-lg"
+              />
             </div>
             <div
               className={classNames(

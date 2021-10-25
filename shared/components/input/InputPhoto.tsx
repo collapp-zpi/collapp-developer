@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
   PointerEvent as ReactPointerEvent,
+  MouseEvent as ReactMouseEvent,
 } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
@@ -14,6 +15,8 @@ import styled from 'styled-components'
 import { PureInputRange } from 'shared/components/input/InputRange'
 import classNames from 'classnames'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { CgClose } from 'react-icons/cg'
+import { defaultPluginIcon } from 'config/defaultIcons'
 
 type InputPhotoChildrenProps = {
   invalid: boolean
@@ -29,7 +32,48 @@ type InputPhotoProps = {
   children: (args: InputPhotoChildrenProps) => ReactNode
 }
 
-export const InputPhoto = ({ name, children }: InputPhotoProps) => {
+export const InputPhoto = ({
+  name,
+  image,
+}: {
+  name: string
+  image?: string
+}) => (
+  <InputPhotoPure name={name}>
+    {({ open, getRootProps, value, onChange }) => {
+      const handleClearIcon = (e: ReactMouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+        onChange(undefined)
+      }
+      return (
+        <div
+          {...getRootProps()}
+          onClick={open}
+          className={classNames(
+            'h-28 w-28 rounded-xl border-2 p-2 mr-2 cursor-pointer relative',
+            value && 'border-blue-400',
+          )}
+        >
+          {value && (
+            <div
+              className="right-1 top-1 absolute bg-gray-300 p-1 rounded-lg"
+              onClick={handleClearIcon}
+            >
+              <CgClose />
+            </div>
+          )}
+          <img
+            src={value || image || defaultPluginIcon}
+            className="shadow-lg rounded-25"
+            alt="Plugin icon"
+          />
+        </div>
+      )
+    }}
+  </InputPhotoPure>
+)
+
+export const InputPhotoPure = ({ name, children }: InputPhotoProps) => {
   const [file, setFile] = useState<File | null>(null)
   const {
     field: { value, onChange },
@@ -76,8 +120,6 @@ const CutoffContainer = styled.div`
 `
 
 const CutoffFront = styled.div`
-  border-radius: 25%;
-  pointer-events: none;
   box-shadow: 0 0 0 1000rem #fffa;
 `
 
@@ -245,7 +287,7 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
           >
             <LogoSpinner />
           </div>
-          <CutoffFront className="absolute left-0 top-o w-full h-full border-2" />
+          <CutoffFront className="absolute left-0 top-o w-full h-full border-2 rounded-25 pointer-events-none" />
         </CutoffContainer>
       </div>
       <PureInputRange

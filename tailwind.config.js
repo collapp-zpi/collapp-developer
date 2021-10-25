@@ -13,6 +13,10 @@ module.exports = {
     fontFamily: {
       sans: ['Poppins', ...defaultTheme.fontFamily.sans],
     },
+    borderRadius: {
+      ...defaultTheme.borderRadius,
+      25: '25%',
+    },
     extend: {},
   },
   variants: {
