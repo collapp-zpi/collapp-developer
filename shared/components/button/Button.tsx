@@ -11,6 +11,7 @@ const BUTTON_COLORS = {
 
 export interface ButtonProps extends ComponentProps<'button'> {
   color?: keyof typeof BUTTON_COLORS
+  hasIcon?: boolean
 }
 
 const Button = ({
@@ -19,13 +20,15 @@ const Button = ({
   children,
   className,
   disabled,
+  hasIcon,
   ...props
 }: ButtonProps) => (
   <button
     className={classNames(
-      'py-2 px-6 font-bold rounded-lg transition-all flex justify-center items-center disabled:opacity-50',
+      'py-2 font-bold rounded-lg transition-all flex justify-center items-center disabled:opacity-50',
       BUTTON_COLORS[color],
       className,
+      hasIcon ? 'px-2' : 'px-6',
       disabled && 'pointer-events-none',
     )}
     {...{ type, disabled }}
