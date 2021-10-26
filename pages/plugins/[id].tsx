@@ -8,6 +8,7 @@ import { GoChevronLeft } from 'react-icons/go'
 import { updatePlugin } from 'includes/plugins/endpoints'
 import { PluginSizeForm } from 'includes/plugins/components/PluginSizeForm'
 import { PluginDeleteForm } from 'includes/plugins/components/PluginDeleteForm'
+import { PluginFileForm } from 'includes/plugins/components/PluginFileForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -39,6 +40,7 @@ const Plugin = ({
     maxWidth,
     minHeight,
     maxHeight,
+    file,
   } = plugin
 
   return (
@@ -68,6 +70,10 @@ const Plugin = ({
             query={updatePlugin(id)}
             initial={{ minWidth, maxWidth, minHeight, maxHeight }}
           />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Source code</h1>
+          <PluginFileForm {...{ id, file }} />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
           <h1 className="text-xl font-bold text-gray-500 mb-4">Danger zone</h1>

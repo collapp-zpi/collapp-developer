@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UnauthorizedException,
   ValidationPipe,
 } from '@storyofams/next-api-decorators'
@@ -146,6 +147,18 @@ class Plugins {
     return await prisma.draftPlugin.delete({
       where: { id },
     })
+  }
+
+  @Put('/:id/file')
+  async updatePluginFile(
+    @Param('id') id: string,
+    @Body() body: File,
+    @User user: RequestUser,
+  ) {
+    await this.innerGetPlugin(id, user)
+
+    console.log(body)
+    return {}
   }
 }
 
