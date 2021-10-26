@@ -117,7 +117,7 @@ const DeleteForm = ({ id, name }: { id: string; name: string }) => {
     <>
       <div className="flex">
         <div className="flex-grow flex flex-col mr-2 text-red-700">
-          <h4 className="font-bold text-lg">Delete account</h4>
+          <h4 className="font-bold text-lg">Delete plugin</h4>
           <h6 className="text-sm">This operation is irreversible</h6>
         </div>
         <Button onClick={() => setModalOpen(true)} color="red-link">
