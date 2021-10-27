@@ -154,7 +154,11 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
           >
             Cancel
           </Button>
-          <Button className="ml-2" onClick={() => fileRequest.send(innerFile)}>
+          <Button
+            disabled={fileRequest.isLoading}
+            className="ml-2"
+            onClick={() => fileRequest.send(innerFile)}
+          >
             {fileRequest.isLoading && (
               <CgSpinner className="animate-spin mr-2 -ml-2" />
             )}
