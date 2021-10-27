@@ -8,6 +8,9 @@ export const createPlugin = (data: any) => request.post('/api/plugins', data)
 export const deletePlugin = (id: string) => () =>
   request.delete(`/api/plugins/${id}`)
 
+export const submitPlugin = (id: string) => () =>
+  request.post(`/api/plugins/${id}/submit`)
+
 export const updatePluginFile = (id: string) => (file: File) => {
   const body = new FormData()
   body.append('file', file)

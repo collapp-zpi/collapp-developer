@@ -9,6 +9,7 @@ import { updatePlugin } from 'includes/plugins/endpoints'
 import { PluginSizeForm } from 'includes/plugins/components/PluginSizeForm'
 import { PluginDeleteForm } from 'includes/plugins/components/PluginDeleteForm'
 import { PluginFileForm } from 'includes/plugins/components/PluginFileForm'
+import { PluginSubmitForm } from 'includes/plugins/components/PluginSubmitForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -40,6 +41,7 @@ const Plugin = ({
     maxWidth,
     minHeight,
     maxHeight,
+    isPending,
     source,
   } = plugin
 
@@ -76,7 +78,8 @@ const Plugin = ({
           <PluginFileForm id={id} file={source} />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">Danger zone</h1>
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Manage</h1>
+          <PluginSubmitForm {...{ id, isPending }} />
           <PluginDeleteForm {...{ id, name }} />
         </div>
       </div>

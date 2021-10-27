@@ -162,6 +162,47 @@ class Plugins {
       where: { id },
     })
   }
+
+  @Post('/:id/submit')
+  async submitPlugin(@Param('id') id: string, @User user: RequestUser) {
+    const plugin = await prisma.draftPlugin.findFirst({
+      where: { id },
+      include: {
+        source: true,
+      },
+    })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin does not exist.')
+    }
+
+    if (plugin.authorId !== user.id) {
+      throw new UnauthorizedException('The plugin has a different author.')
+    }
+
+    if (!plugin.source) {
+      throw new BadRequestException(`Plugin must have the source code.`)
+    }
+
+    if (plugin.minWidth > plugin.maxWidth) {
+      throw new BadRequestException(
+        `Min. width can't be larger than max. width.`,
+      )
+    }
+
+    if (plugin.minHeight > plugin.maxHeight) {
+      throw new BadRequestException(
+        `Min. height can't be larger than max. height.`,
+      )
+    }
+
+    return await prisma.draftPlugin.update({
+      where: { id },
+      data: {
+        isPending: true,
+      },
+    })
+  }
 }
 
 export default createHandler(Plugins)
