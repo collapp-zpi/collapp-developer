@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import useRequest, { RequestState } from 'shared/hooks/useRequest'
+import useRequest from 'shared/hooks/useRequest'
 import { deletePlugin } from 'includes/plugins/endpoints'
 import { toast } from 'react-hot-toast'
 import Button from 'shared/components/button/Button'
@@ -9,7 +9,12 @@ import { InputTextPure } from 'shared/components/input/InputText'
 import { RiErrorWarningLine } from 'react-icons/ri'
 import { CgSpinner } from 'react-icons/cg'
 
-export const PluginDeleteForm = ({ id, name }: { id: string; name: string }) => {
+type Props = {
+  id: string
+  name: string
+}
+
+export const PluginDeleteForm = ({ id, name }: Props) => {
   const router = useRouter()
   const [isModalOpen, setModalOpen] = useState(false)
   const [value, setValue] = useState('')
@@ -46,7 +51,7 @@ export const PluginDeleteForm = ({ id, name }: { id: string; name: string }) => 
         </Button>
       </div>
       <Modal
-        visible={isModalOpen || deleteRequest.status === RequestState.Loading}
+        visible={isModalOpen || deleteRequest.isLoading}
         close={handleClose}
       >
         <div className="p-4">
@@ -71,11 +76,11 @@ export const PluginDeleteForm = ({ id, name }: { id: string; name: string }) => 
             </Button>
             <Button
               onClick={deleteRequest.send}
-              disabled={value !== verification}
+              disabled={value !== verification || deleteRequest.isLoading}
               className="ml-2"
               color="red"
             >
-              {deleteRequest.status === RequestState.Loading && (
+              {deleteRequest.isLoading && (
                 <CgSpinner className="animate-spin mr-2 -ml-2" />
               )}
               Delete

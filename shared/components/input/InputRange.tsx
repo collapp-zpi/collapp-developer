@@ -2,7 +2,6 @@ import { forwardRef, ReactNode, useState } from 'react'
 import { Range } from 'react-range'
 import { useController } from 'react-hook-form'
 import { useApiRequest } from 'shared/components/form/Form'
-import { RequestState } from 'shared/hooks/useRequest'
 import classNames from 'classnames'
 import { ErrorMessage } from '@hookform/error-message'
 
@@ -31,7 +30,7 @@ export const InputRange = ({
     field: { value, onChange, ...field },
     // fieldState: { invalid },
   } = useController({ name })
-  const { status } = useApiRequest()
+  const { isLoading } = useApiRequest()
   const [innerValue, setInnerValue] = useState(value ?? min)
 
   return (
@@ -44,7 +43,7 @@ export const InputRange = ({
       </div>
       <PureInputRange
         {...field}
-        disabled={status === RequestState.Loading || disabled}
+        disabled={isLoading || disabled}
         onFinalChange={onChange}
         onChange={setInnerValue}
         value={innerValue}

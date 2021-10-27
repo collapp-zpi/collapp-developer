@@ -12,6 +12,7 @@ interface FormProps
 const RequestContext = createContext<ReturnType<typeof useRequest>>({
   send: async () => undefined,
   status: RequestState.Pending,
+  isLoading: false,
 })
 
 export const useApiRequest = () => useContext(RequestContext)

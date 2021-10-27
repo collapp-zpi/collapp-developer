@@ -7,7 +7,7 @@ import Button from 'shared/components/button/Button'
 import { BsFileEarmarkZip } from 'react-icons/bs'
 import dayjs from 'dayjs'
 import { CgSoftwareDownload, CgSpinner } from 'react-icons/cg'
-import useRequest, { RequestState } from 'shared/hooks/useRequest'
+import useRequest from 'shared/hooks/useRequest'
 import { updatePluginFile } from 'includes/plugins/endpoints'
 import { File as FileModel } from '@prisma/client'
 
@@ -40,14 +40,12 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
     },
   })
 
-  const isLoading = fileRequest.status === RequestState.Loading
-
   const { getRootProps, getInputProps, isDragAccept, isDragReject, open } =
     useDropzone({
       noClick: true,
       noKeyboard: true,
       multiple: false,
-      disabled: isLoading,
+      disabled: fileRequest.isLoading,
       onDropAccepted: (files) => {
         if (!files?.[0]) return
         setInnerFile(files[0])
@@ -95,7 +93,7 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
               color="light"
               className="mx-auto"
               onClick={() => setInnerFile(null)}
-              disabled={isLoading}
+              disabled={fileRequest.isLoading}
             >
               Choose a different file
             </Button>
@@ -152,12 +150,14 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
             color="light"
             className="ml-auto"
             onClick={() => setInnerFile(null)}
-            disabled={isLoading}
+            disabled={fileRequest.isLoading}
           >
             Cancel
           </Button>
           <Button className="ml-2" onClick={() => fileRequest.send(innerFile)}>
-            {isLoading && <CgSpinner className="animate-spin mr-2 -ml-2" />}
+            {fileRequest.isLoading && (
+              <CgSpinner className="animate-spin mr-2 -ml-2" />
+            )}
             Submit
           </Button>
         </div>
