@@ -95,6 +95,7 @@ class Plugins {
       where: { id },
       include: {
         source: true,
+        published: true,
       },
     })
 
@@ -134,7 +135,11 @@ class Plugins {
     @Body(ValidationPipe) body: UpdatePluginDTO,
     @User user: RequestUser,
   ) {
-    await this.innerGetPlugin(id, user)
+    const plugin = await this.innerGetPlugin(id, user)
+
+    if (plugin.isPending) {
+      throw new BadRequestException(`Cannot make changes to a pending plugin.`)
+    }
 
     if (body?.minWidth && body?.maxWidth && body.minWidth > body.maxWidth) {
       throw new BadRequestException(
@@ -156,7 +161,11 @@ class Plugins {
 
   @Delete('/:id')
   async deletePlugin(@Param('id') id: string, @User user: RequestUser) {
-    await this.innerGetPlugin(id, user)
+    const plugin = await this.innerGetPlugin(id, user)
+
+    if (plugin.isPending) {
+      throw new BadRequestException(`Cannot make changes to a pending plugin.`)
+    }
 
     return await prisma.draftPlugin.delete({
       where: { id },
@@ -174,6 +183,10 @@ class Plugins {
 
     if (!plugin) {
       throw new NotFoundException('The plugin does not exist.')
+    }
+
+    if (plugin.isPending) {
+      throw new BadRequestException(`Cannot make changes to a pending plugin.`)
     }
 
     if (plugin.authorId !== user.id) {
