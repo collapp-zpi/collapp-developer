@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useRequest from 'shared/hooks/useRequest'
 import { submitPlugin } from 'includes/plugins/endpoints'
@@ -13,12 +12,10 @@ type Props = {
 }
 
 export const PluginSubmitForm = ({ id, isPending }: Props) => {
-  const router = useRouter()
   const [isModalOpen, setModalOpen] = useState(false)
   const deleteRequest = useRequest(submitPlugin(id), {
     onSuccess: () => {
       toast.success('The plugin has been submitted successfully.')
-      router.push('/plugins')
     },
     onError: ({ message }) => {
       toast.error(

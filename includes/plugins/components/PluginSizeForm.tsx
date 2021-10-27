@@ -4,6 +4,7 @@ import { FormProps } from 'shared/hooks/useApiForm'
 import { InputRange } from 'shared/components/input/InputRange'
 import { toast } from 'react-hot-toast'
 import SubmitButton from 'shared/components/button/SubmitButton'
+import { usePluginContext } from 'includes/plugins/components/PluginContext'
 
 const schema = object().shape({
   minWidth: number()
@@ -24,6 +25,7 @@ export const PluginSizeForm = ({
   query,
   initial,
 }: FormProps<typeof schema>) => {
+  const { isPending } = usePluginContext()
   const onSuccess = () => {
     toast.success('The plugin size has been updated successfully.')
   }
@@ -47,6 +49,7 @@ export const PluginSizeForm = ({
           className="mt-2"
           min={1}
           max={4}
+          disabled={isPending}
         />
         <InputRange
           name="maxWidth"
@@ -54,6 +57,7 @@ export const PluginSizeForm = ({
           className="mt-2"
           min={1}
           max={4}
+          disabled={isPending}
         />
         <InputRange
           name="minHeight"
@@ -61,6 +65,7 @@ export const PluginSizeForm = ({
           className="mt-2"
           min={1}
           max={4}
+          disabled={isPending}
         />
         <InputRange
           name="maxHeight"
@@ -68,6 +73,7 @@ export const PluginSizeForm = ({
           className="mt-2"
           min={1}
           max={4}
+          disabled={isPending}
         />
       </div>
       <SubmitButton className="ml-auto mt-4" />

@@ -30,16 +30,19 @@ type InputPhotoChildrenProps = {
 type InputPhotoProps = {
   name: string
   children: (args: InputPhotoChildrenProps) => ReactNode
+  disabled?: boolean
 }
 
 export const InputPhoto = ({
   name,
   image,
+  disabled,
 }: {
   name: string
   image?: string
+  disabled?: boolean
 }) => (
-  <InputPhotoPure name={name}>
+  <InputPhotoPure {...{ name, disabled }}>
     {({ open, getRootProps, value, onChange }) => {
       const handleClearIcon = (e: ReactMouseEvent<HTMLDivElement>) => {
         e.stopPropagation()
@@ -50,11 +53,12 @@ export const InputPhoto = ({
           {...getRootProps()}
           onClick={open}
           className={classNames(
-            'h-28 w-28 rounded-xl border-2 p-2 mr-2 cursor-pointer relative',
+            'h-28 w-28 rounded-xl border-2 p-2 mr-2 relative',
             value && 'border-blue-400',
+            !disabled && 'cursor-pointer',
           )}
         >
-          {value && (
+          {value && !disabled && (
             <div
               className="right-1 top-1 absolute bg-gray-300 p-1 rounded-lg"
               onClick={handleClearIcon}
@@ -73,7 +77,11 @@ export const InputPhoto = ({
   </InputPhotoPure>
 )
 
-export const InputPhotoPure = ({ name, children }: InputPhotoProps) => {
+export const InputPhotoPure = ({
+  name,
+  children,
+  disabled,
+}: InputPhotoProps) => {
   const [file, setFile] = useState<File | null>(null)
   const {
     field: { value, onChange },
@@ -84,7 +92,7 @@ export const InputPhotoPure = ({ name, children }: InputPhotoProps) => {
     noClick: true,
     noKeyboard: true,
     multiple: false,
-    // disabled: fileMessage,
+    disabled: disabled,
     onDropAccepted: (files) => {
       if (!files?.[0]) return
       setFile(files[0])
@@ -105,11 +113,13 @@ export const InputPhotoPure = ({ name, children }: InputPhotoProps) => {
     <>
       <input {...getInputProps()} />
       {children({ invalid, isDragAccept, getRootProps, open, value, onChange })}
-      <InputPhotoModal
-        value={file}
-        close={() => setFile(null)}
-        onSave={handleSave}
-      />
+      {!disabled && (
+        <InputPhotoModal
+          value={file}
+          close={() => setFile(null)}
+          onSave={handleSave}
+        />
+      )}
     </>
   )
 }

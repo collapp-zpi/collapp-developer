@@ -72,7 +72,7 @@ export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
     ref,
   ) {
     return (
-      <div className="w-full px-1">
+      <div className={classNames('w-full px-1', disabled && 'opacity-50')}>
         <Range
           {...props}
           ref={ref}
