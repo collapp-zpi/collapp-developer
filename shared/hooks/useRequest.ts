@@ -38,7 +38,9 @@ const useRequest = <T extends useRequestQueryType>(
     }
   }
 
-  return { send, status }
+  const isLoading = status === RequestState.Loading
+
+  return { send, status, isLoading }
 }
 
 export default useRequest

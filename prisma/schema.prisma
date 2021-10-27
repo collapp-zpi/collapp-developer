@@ -25,19 +25,13 @@ model File {
   publishedId        String?
 }
 
-enum PluginStatus {
-  Private
-  Rejected
-  Pending
-}
-
 model DraftPlugin {
   id          String           @id @default(cuid())
   name        String
   description String
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @default(now())
-  status      PluginStatus     @default(Private)
+  isPending   Boolean          @default(false)
   icon        String?
 
   source      File?
@@ -59,7 +53,6 @@ model PublishedPlugin {
   description String
   version     Int              @default(1)
   updatedAt   DateTime         @default(now())
-  isPublic    Boolean          @default(true)
   icon        String?
 
   source      File?

@@ -1,7 +1,6 @@
 import { useApiRequest } from '../form/Form'
 import Button, { ButtonProps } from './Button'
 import { CgSpinner } from 'react-icons/cg'
-import { RequestState } from '../../hooks/useRequest'
 import { useFormContext } from 'react-hook-form'
 
 const SubmitButton = ({
@@ -11,8 +10,7 @@ const SubmitButton = ({
 }: ButtonProps) => {
   const { formState } = useFormContext()
   const { isDirty } = formState
-  const { status } = useApiRequest()
-  const isLoading = status === RequestState.Loading
+  const { isLoading } = useApiRequest()
 
   return (
     <Button {...props} type={type} disabled={isLoading || !isDirty}>

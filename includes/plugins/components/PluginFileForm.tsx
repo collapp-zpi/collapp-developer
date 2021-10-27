@@ -7,9 +7,10 @@ import Button from 'shared/components/button/Button'
 import { BsFileEarmarkZip } from 'react-icons/bs'
 import dayjs from 'dayjs'
 import { CgSoftwareDownload, CgSpinner } from 'react-icons/cg'
-import useRequest, { RequestState } from 'shared/hooks/useRequest'
+import useRequest from 'shared/hooks/useRequest'
 import { updatePluginFile } from 'includes/plugins/endpoints'
 import { File as FileModel } from '@prisma/client'
+import { usePluginContext } from 'includes/plugins/components/PluginContext'
 
 export const parseFileSize = (bytes: number) => {
   if (!bytes) return '0 B'
@@ -26,6 +27,7 @@ type PluginFileFormProps = {
 
 export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
   const [innerFile, setInnerFile] = useState<File | undefined | null>()
+  const { isPending } = usePluginContext()
 
   const fileRequest = useRequest(updatePluginFile(id), {
     onSuccess: () => {
@@ -40,14 +42,12 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
     },
   })
 
-  const isLoading = fileRequest.status === RequestState.Loading
-
   const { getRootProps, getInputProps, isDragAccept, isDragReject, open } =
     useDropzone({
       noClick: true,
       noKeyboard: true,
       multiple: false,
-      disabled: isLoading,
+      disabled: fileRequest.isLoading,
       onDropAccepted: (files) => {
         if (!files?.[0]) return
         setInnerFile(files[0])
@@ -85,20 +85,24 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
               <CgSoftwareDownload size="1.5rem" />
             </Button>
           </div>
-          <div className="flex items-center mb-4 mt-2">
-            <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
-            <div className="font-bold text-sm text-gray-400">OR</div>
-            <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
-          </div>
-          {innerFile === undefined && (
-            <Button
-              color="light"
-              className="mx-auto"
-              onClick={() => setInnerFile(null)}
-              disabled={isLoading}
-            >
-              Choose a different file
-            </Button>
+          {!isPending && (
+            <>
+              <div className="flex items-center mb-4 mt-2">
+                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
+                <div className="font-bold text-sm text-gray-400">OR</div>
+                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
+              </div>
+              {innerFile === undefined && (
+                <Button
+                  color="light"
+                  className="mx-auto"
+                  onClick={() => setInnerFile(null)}
+                  disabled={fileRequest.isLoading}
+                >
+                  Choose a different file
+                </Button>
+              )}
+            </>
           )}
         </>
       )}
@@ -152,12 +156,18 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
             color="light"
             className="ml-auto"
             onClick={() => setInnerFile(null)}
-            disabled={isLoading}
+            disabled={fileRequest.isLoading}
           >
             Cancel
           </Button>
-          <Button className="ml-2" onClick={() => fileRequest.send(innerFile)}>
-            {isLoading && <CgSpinner className="animate-spin mr-2 -ml-2" />}
+          <Button
+            disabled={fileRequest.isLoading}
+            className="ml-2"
+            onClick={() => fileRequest.send(innerFile)}
+          >
+            {fileRequest.isLoading && (
+              <CgSpinner className="animate-spin mr-2 -ml-2" />
+            )}
             Submit
           </Button>
         </div>

@@ -30,6 +30,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).json({ message: 'The plugin does not exist' })
   }
 
+  if (plugin.isPending) {
+    return res
+      .status(400)
+      .json({ message: 'Cannot make changes to a pending plugin' })
+  }
+
   if (plugin.authorId !== session.userId) {
     return res
       .status(401)

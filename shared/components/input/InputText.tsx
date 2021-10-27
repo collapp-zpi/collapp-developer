@@ -4,7 +4,6 @@ import { useApiRequest } from '../form/Form'
 import classNames from 'classnames'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
-import { RequestState } from '../../hooks/useRequest'
 
 type InputTextProps = InputGeneric & ComponentProps<'input'>
 
@@ -28,7 +27,7 @@ export const InputText = ({ name, disabled, ...props }: InputTextProps) => {
     field: { ref, value, ...field },
     fieldState: { invalid },
   } = useController({ name })
-  const { status } = useApiRequest()
+  const { isLoading } = useApiRequest()
 
   return (
     <InputTextPure
@@ -37,7 +36,7 @@ export const InputText = ({ name, disabled, ...props }: InputTextProps) => {
       {...props}
       value={value ?? props?.value ?? ''}
       isError={invalid}
-      disabled={status === RequestState.Loading || disabled}
+      disabled={isLoading || disabled}
     />
   )
 }

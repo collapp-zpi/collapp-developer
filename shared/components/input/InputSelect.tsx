@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { useApiRequest } from '../form/Form'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
-import { RequestState } from '../../hooks/useRequest'
-import Select, { StylesConfig, Props, SingleValue } from 'react-select'
+import Select, { Props, SingleValue, StylesConfig } from 'react-select'
 import classNames from 'classnames'
 
 type OptionValue = {
@@ -79,7 +78,7 @@ export const InputSelect = <Value extends OptionValue>({
     fieldState: { invalid },
   } = useController({ name })
   const [isPlaceholderVisible, setPlaceholderVisible] = useState(false)
-  const { status } = useApiRequest()
+  const { isLoading } = useApiRequest()
 
   return (
     <InputFrame {...{ name, className, icon }} isError={invalid} overflow>
@@ -95,7 +94,7 @@ export const InputSelect = <Value extends OptionValue>({
         onChange={(data) =>
           onChange((data as SingleValue<Value>)?.value ?? null)
         }
-        isDisabled={status === RequestState.Loading || disabled}
+        isDisabled={isLoading || disabled}
         onInputChange={(data) => setPlaceholderVisible(!!data)}
         isClearable
         placeholder=""

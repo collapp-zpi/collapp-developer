@@ -7,6 +7,7 @@ import Button from 'shared/components/button/Button'
 import { GoPlus } from 'react-icons/go'
 import dayjs from 'dayjs'
 import { defaultPluginIcon } from 'config/defaultIcons'
+import classNames from 'classnames'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -50,8 +51,8 @@ const Plugins = ({
                 <tr>
                   <th className="text-left p-4">Name</th>
                   <th className="text-left p-4">Description</th>
-                  <th className="text-left p-4">Status</th>
                   <th className="text-left p-4">Date</th>
+                  <th className="text-left p-4">Pending</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,7 +61,7 @@ const Plugins = ({
                     id,
                     name,
                     description,
-                    status,
+                    isPending,
                     createdAt,
                     icon,
                   }: DraftPlugin) => (
@@ -78,8 +79,15 @@ const Plugins = ({
                         {name}
                       </td>
                       <td className="p-4">{description}</td>
-                      <td className="p-4">{status}</td>
                       <td className="p-4">{dayjs(createdAt).format('LLL')}</td>
+                      <td className="p-4">
+                        <div
+                          className={classNames(
+                            'w-4 h-4 rounded-full',
+                            isPending ? 'bg-green-500' : 'bg-gray-300',
+                          )}
+                        />
+                      </td>
                     </tr>
                   ),
                 )}

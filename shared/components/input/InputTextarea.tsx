@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import styled from 'styled-components'
 import { InputFrame, InputGeneric } from './InputFrame'
 import TextareaAutosize from 'react-textarea-autosize'
-import { RequestState } from '../../hooks/useRequest'
 
 type InputTextareaProps = InputGeneric & ComponentProps<'textarea'>
 
@@ -37,7 +36,7 @@ export const InputTextarea = ({
     field: { ref, ...field },
     fieldState: { invalid },
   } = useController({ name })
-  const { status } = useApiRequest()
+  const { isLoading } = useApiRequest()
 
   return (
     <InputFrame {...{ name, className, icon }} isError={invalid}>
@@ -51,7 +50,7 @@ export const InputTextarea = ({
           innerClassName,
         )}
         placeholder=" "
-        disabled={status === RequestState.Loading || disabled}
+        disabled={isLoading || disabled}
       />
       <InputLabel className="ml-4 mt-3 opacity-70">{label}</InputLabel>
     </InputFrame>
