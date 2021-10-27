@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import classNames from 'classnames'
-import { FiUploadCloud } from 'react-icons/fi'
+import { FiArrowDown, FiUploadCloud } from 'react-icons/fi'
 import Button from 'shared/components/button/Button'
 import { BsFileEarmarkZip } from 'react-icons/bs'
 import dayjs from 'dayjs'
@@ -89,7 +89,13 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
             <>
               <div className="flex items-center mb-4 mt-2">
                 <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
-                <div className="font-bold text-sm text-gray-400">OR</div>
+                {!!innerFile ? (
+                  <div className="font-bold text-sm text-gray-400">
+                    <FiArrowDown strokeWidth={3} size="1.1rem" />
+                  </div>
+                ) : (
+                  <div className="font-bold text-sm text-gray-400">OR</div>
+                )}
                 <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
               </div>
               {innerFile === undefined && (

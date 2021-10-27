@@ -58,7 +58,7 @@ export const PluginSubmitForm = ({ id, isPending }: Props) => {
               until the request is processed.
             </p>
             <p className="mt-2 font-bold">Are you sure you want to proceed?</p>
-            <div className="flex mt-2">
+            <div className="flex mt-6">
               <Button onClick={handleClose} className="ml-auto" color="light">
                 Cancel
               </Button>

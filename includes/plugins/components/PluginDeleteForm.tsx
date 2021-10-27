@@ -77,7 +77,7 @@ export const PluginDeleteForm = ({ id, name }: Props) => {
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
-            <div className="flex mt-2">
+            <div className="flex mt-6">
               <Button onClick={handleClose} className="ml-auto" color="light">
                 Cancel
               </Button>

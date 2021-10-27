@@ -20,7 +20,7 @@ const Modal = ({
       className="absolute left-0 top-0 w-full h-full bg-black opacity-50"
       onClick={() => close?.()}
     />
-    <div className="bg-white p-4 z-10 rounded-3xl shadow-lg container mx-4">
+    <div className="bg-white p-4 z-10 rounded-3xl shadow-lg max-w-lg mx-4">
       {children}
     </div>
   </div>
