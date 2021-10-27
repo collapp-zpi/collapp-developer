@@ -9,7 +9,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   UnauthorizedException,
   ValidationPipe,
 } from '@storyofams/next-api-decorators'
@@ -91,8 +90,23 @@ class Plugins {
   }
 
   @Get('/:id')
-  getPlugin(@Param('id') id: string, @User user: RequestUser) {
-    return this.innerGetPlugin(id, user)
+  async getPlugin(@Param('id') id: string, @User user: RequestUser) {
+    const plugin = await prisma.draftPlugin.findFirst({
+      where: { id },
+      include: {
+        source: true,
+      },
+    })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin does not exist.')
+    }
+
+    if (plugin.authorId !== user.id) {
+      throw new UnauthorizedException('The plugin has a different author.')
+    }
+
+    return plugin
   }
 
   @Post()
@@ -147,18 +161,6 @@ class Plugins {
     return await prisma.draftPlugin.delete({
       where: { id },
     })
-  }
-
-  @Put('/:id/file')
-  async updatePluginFile(
-    @Param('id') id: string,
-    @Body() body: File,
-    @User user: RequestUser,
-  ) {
-    await this.innerGetPlugin(id, user)
-
-    console.log(body)
-    return {}
   }
 }
 

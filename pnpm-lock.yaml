@@ -8,6 +8,7 @@ specifiers:
   '@next-auth/prisma-adapter': ^0.5.2-next.15
   '@prisma/client': ^3.3.0
   '@storyofams/next-api-decorators': ^1.6.0
+  '@types/formidable': ^1.2.4
   '@types/react': 17.0.24
   '@types/styled-components': ^5.1.15
   '@typescript-eslint/eslint-plugin': ^4.33.0
@@ -23,6 +24,7 @@ specifiers:
   eslint-config-next: 11.1.2
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
+  formidable: ^1.2.2
   joi: ^17.4.2
   next: 11.1.2
   next-auth: ^4.0.0-beta.4
@@ -58,6 +60,7 @@ dependencies:
   classnames: 2.3.1
   dayjs: 1.10.7
   eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
+  formidable: 1.2.2
   joi: 17.4.2
   next: 11.1.2_39969d7352d8af97f97f0d53dea4f445
   next-auth: 4.0.0-beta.4_4882ea7ce9808d4fe448280a48571183
@@ -81,6 +84,7 @@ dependencies:
 devDependencies:
   '@babel/core': 7.15.8
   '@babel/plugin-proposal-decorators': 7.15.8_@babel+core@7.15.8
+  '@types/formidable': 1.2.4
   '@types/react': 17.0.24
   '@types/styled-components': 5.1.15
   '@typescript-eslint/eslint-plugin': 4.33.0_0aa2b7936f480903160f77e2f174338b
@@ -763,6 +767,12 @@ packages:
       '@types/responselike': 1.0.0
     dev: false
 
+  /@types/formidable/1.2.4:
+    resolution: {integrity: sha512-Z+ICLPV/BPYK5pHYDryNKRk26etA9WCicg620XZM0Uqto5gOv6XySMIlXQ3Ae6V3tS7CZNpE8UdHuuxOZxWVfw==}
+    dependencies:
+      '@types/node': 16.10.1
+    dev: true
+
   /@types/hoist-non-react-statics/3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
@@ -794,7 +804,6 @@ packages:
 
   /@types/node/16.10.1:
     resolution: {integrity: sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==}
-    dev: false
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -2411,6 +2420,10 @@ packages:
 
   /foreach/2.0.5:
     resolution: {integrity: sha1-C+4AUBiusmDQo6865ljdATbsG5k=}
+    dev: false
+
+  /formidable/1.2.2:
+    resolution: {integrity: sha512-V8gLm+41I/8kguQ4/o1D3RIHRmhYFG4pnNyonvua+40rqcEmT4+V71yaZ3B457xbbgCsCfjSPi65u/W6vK1U5Q==}
     dev: false
 
   /fraction.js/4.1.1:

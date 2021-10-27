@@ -11,6 +11,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model File {
+  id                 String               @id @default(cuid())
+  name               String
+  date               DateTime             @default(now())
+  size               Int
+  url                String
+
+  draft              DraftPlugin?         @relation(fields: [draftId], references: [id])
+  draftId            String?
+
+  published          PublishedPlugin?     @relation(fields: [publishedId], references: [id])
+  publishedId        String?
+}
 
 enum PluginStatus {
   Private
@@ -25,8 +38,9 @@ model DraftPlugin {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @default(now())
   status      PluginStatus     @default(Private)
-  source      String?
   icon        String?
+
+  source      File?
 
   authorId    String
   author      DeveloperUser    @relation(fields: [authorId], references: [id])
@@ -47,6 +61,8 @@ model PublishedPlugin {
   updatedAt   DateTime         @default(now())
   isPublic    Boolean          @default(true)
   icon        String?
+
+  source      File?
 
   authorId    String
   author      DeveloperUser    @relation(fields: [authorId], references: [id])

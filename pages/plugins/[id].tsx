@@ -40,7 +40,7 @@ const Plugin = ({
     maxWidth,
     minHeight,
     maxHeight,
-    file,
+    source,
   } = plugin
 
   return (
@@ -73,7 +73,7 @@ const Plugin = ({
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
           <h1 className="text-xl font-bold text-gray-500 mb-4">Source code</h1>
-          <PluginFileForm {...{ id, file }} />
+          <PluginFileForm id={id} file={source} />
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
           <h1 className="text-xl font-bold text-gray-500 mb-4">Danger zone</h1>
