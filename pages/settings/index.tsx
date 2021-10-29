@@ -9,6 +9,7 @@ import { BiText } from 'react-icons/bi'
 import SubmitButton from 'shared/components/button/SubmitButton'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { updateUser } from 'includes/user/endpoints'
+import { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/user`, {
@@ -34,8 +35,10 @@ const schema = object().shape({
 const UserSettings = ({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { mutate } = useSWRConfig()
   const onSuccess = () => {
     toast.success('Your profile has been updated successfully.')
+    return mutate('user')
   }
 
   const onError = ({ message }: { message?: string }) => {

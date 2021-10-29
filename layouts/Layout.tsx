@@ -9,6 +9,7 @@ import Button from 'shared/components/button/Button'
 import { NavbarLogo } from 'shared/components/NavbarLogo'
 import Link from 'next/link'
 import { CgExtension, CgGlobeAlt } from 'react-icons/cg'
+import { useQuery } from 'shared/hooks/useQuery'
 
 const DropdownButton = ({
   children,
@@ -33,6 +34,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   const ref = useOnclickOutside(() => {
     setDropdownOpen(false)
   })
+  const query = useQuery(!!data && 'user', '/api/user')
 
   if (status === 'loading') return <Loading />
 
@@ -77,7 +79,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
               onClick={() => setDropdownOpen(!isDropdownOpen)}
             >
               <img
-                src={data.user?.image ?? ''}
+                src={query?.data?.image ?? ''}
                 className="bg-gray-300 w-8 h-8 rounded-25 shadow-lg"
               />
             </div>
