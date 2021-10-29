@@ -35,7 +35,7 @@ const Published = ({
         {!published.length ? (
           <div>No plugins</div>
         ) : (
-          <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl">
+          <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr>

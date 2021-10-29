@@ -40,18 +40,22 @@ export const Layout = ({ children }: { children: ReactNode }) => {
     <main className="bg-gray-100 flex flex-col h-full min-h-screen text-gray-500">
       <div className="bg-white mb-8 p-2 border-b border-gray-200 flex">
         <NavbarLogo />
-        <Link href="/plugins" passHref>
-          <div className="flex font-bold items-center cursor-pointer py-2 px-3 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
-            <CgExtension className="mr-1.5" size="1.5em" />
-            <span>Plugins</span>
+        {status === 'authenticated' && (
+          <div className="hidden sm:flex">
+            <Link href="/plugins" passHref>
+              <div className="flex font-bold items-center cursor-pointer py-2 px-3 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+                <CgExtension className="mr-1.5" size="1.5em" />
+                <span>Plugins</span>
+              </div>
+            </Link>
+            <Link href="/published" passHref>
+              <div className="flex font-bold items-center cursor-pointer py-2 px-3 mr-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+                <CgGlobeAlt className="mr-1.5" size="1.5em" />
+                <span>Published</span>
+              </div>
+            </Link>
           </div>
-        </Link>
-        <Link href="/published" passHref>
-          <div className="flex font-bold items-center cursor-pointer py-2 px-3 mr-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
-            <CgGlobeAlt className="mr-1.5" size="1.5em" />
-            <span>Published</span>
-          </div>
-        </Link>
+        )}
         <div className="ml-auto" />
         {status === 'unauthenticated' && (
           <Button
@@ -82,6 +86,20 @@ export const Layout = ({ children }: { children: ReactNode }) => {
                 !isDropdownOpen && 'pointer-events-none opacity-0',
               )}
             >
+              <DropdownButton
+                className="sm:hidden"
+                onClick={() => router.push('/plugins')}
+              >
+                <CgExtension size="1rem" className="mr-2" />
+                <span>Plugins</span>
+              </DropdownButton>
+              <DropdownButton
+                className="sm:hidden"
+                onClick={() => router.push('/published')}
+              >
+                <CgGlobeAlt size="1rem" className="mr-2" />
+                <span>Published</span>
+              </DropdownButton>
               <DropdownButton onClick={() => router.push('/settings')}>
                 <FiSettings className="mr-2" />
                 <span>Settings</span>
@@ -94,7 +112,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow pb-8">{children}</div>
+      <div className="flex-grow pb-8 px-8">{children}</div>
     </main>
   )
 }
