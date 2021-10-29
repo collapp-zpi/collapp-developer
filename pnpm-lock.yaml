@@ -46,6 +46,7 @@ specifiers:
   react-select: ^5.1.0
   react-textarea-autosize: ^8.3.3
   styled-components: ^5.3.1
+  swr: ^1.0.1
   tailwindcss: ^2.2.17
   typescript: 4.4.3
   yup: ^0.32.11
@@ -81,6 +82,7 @@ dependencies:
   react-select: 5.1.0_152e7e799885aa8e2c90f8240d94e04e
   react-textarea-autosize: 8.3.3_9b26932173ac5a93c18fc8634be19f05
   styled-components: 5.3.1_react-dom@17.0.2+react@17.0.2
+  swr: 1.0.1_react@17.0.2
   tailwindcss: 2.2.17_96f83969316717847b3edf58a3f353f3
   yup: 0.32.11
 
@@ -1858,6 +1860,11 @@ packages:
   /depd/1.1.2:
     resolution: {integrity: sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /dequal/2.0.2:
+    resolution: {integrity: sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==}
+    engines: {node: '>=6'}
     dev: false
 
   /des.js/1.0.1:
@@ -4638,6 +4645,15 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       has-flag: 4.0.0
+    dev: false
+
+  /swr/1.0.1_react@17.0.2:
+    resolution: {integrity: sha512-EPQAxSjoD4IaM49rpRHK0q+/NzcwoT8c0/Ylu/u3/6mFj/CWnQVjNJ0MV2Iuw/U+EJSd2TX5czdAwKPYZIG0YA==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0
+    dependencies:
+      dequal: 2.0.2
+      react: 17.0.2
     dev: false
 
   /table/6.7.1:

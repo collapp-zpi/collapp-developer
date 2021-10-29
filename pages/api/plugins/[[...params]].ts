@@ -7,8 +7,10 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseNumberPipe,
   Patch,
   Post,
+  Query,
   UnauthorizedException,
   ValidationPipe,
 } from '@storyofams/next-api-decorators'
@@ -21,6 +23,7 @@ import {
   Min,
   NotEquals,
 } from 'class-validator'
+import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 
 export class CreatePluginDTO {
   @IsNotEmpty({ message: 'Plugin name is required.' })
@@ -65,11 +68,15 @@ export class UpdatePluginDTO {
 @NextAuthGuard()
 class Plugins {
   @Get()
-  getPluginList(@User user: RequestUser) {
-    return prisma.draftPlugin.findMany({
-      where: {
-        authorId: user.id,
-      },
+  getPluginList(
+    @User user: RequestUser,
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
+    @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+    @Query('name') name?: string,
+  ) {
+    return fetchWithPagination('draftPlugin', limit, page, {
+      authorId: user.id,
+      ...(name && { name: { contains: name, mode: 'insensitive' } }),
     })
   }
 

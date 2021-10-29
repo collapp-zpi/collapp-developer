@@ -4,18 +4,25 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseNumberPipe,
+  Query,
   UnauthorizedException,
 } from '@storyofams/next-api-decorators'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
+import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 
 @NextAuthGuard()
 class Published {
   @Get()
-  getPublishedList(@User user: RequestUser) {
-    return prisma.publishedPlugin.findMany({
-      where: {
-        authorId: user.id,
-      },
+  getPublishedList(
+    @User user: RequestUser,
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
+    @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+    @Query('name') name?: string,
+  ) {
+    return fetchWithPagination('publishedPlugin', limit, page, {
+      authorId: user.id,
+      ...(name && { name: { contains: name, mode: 'insensitive' } }),
     })
   }
 
