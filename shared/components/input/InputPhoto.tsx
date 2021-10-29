@@ -301,8 +301,8 @@ const InputPhotoModal = ({ value, close, onSave }: InputPhotoModalProps) => {
         </CutoffContainer>
       </div>
       <PureInputRange
-        value={scale}
-        onChange={handleSetScale}
+        values={[scale]}
+        onChange={([scale]) => handleSetScale(scale)}
         max={2}
         min={0.5}
         step={0.05}

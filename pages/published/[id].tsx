@@ -6,6 +6,10 @@ import Button from 'shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
 import { SingleFile } from 'includes/plugins/components/PluginFileForm'
 import Link from 'next/link'
+import {
+  InputRangeFrame,
+  PureInputRange,
+} from 'shared/components/input/InputRange'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -66,13 +70,41 @@ const Published = ({
           <p className="mt-2">{description}</p>
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">
-            Published size
-          </h1>
-          <h4>Width</h4>
-          {minWidth} - {maxWidth}
-          <h4>Height</h4>
-          {minHeight} - {maxHeight}
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Plugin size</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputRangeFrame
+              className="mt-2"
+              label="Width"
+              display={
+                minWidth === maxWidth ? minWidth : `${minWidth} - ${maxWidth}`
+              }
+            >
+              <PureInputRange
+                values={[minWidth, maxWidth]}
+                onChange={() => undefined}
+                min={1}
+                max={4}
+                disabled={true}
+              />
+            </InputRangeFrame>
+            <InputRangeFrame
+              className="mt-2"
+              label="Height"
+              display={
+                minHeight === maxHeight
+                  ? minHeight
+                  : `${minHeight} - ${maxHeight}`
+              }
+            >
+              <PureInputRange
+                values={[minHeight, maxHeight]}
+                onChange={() => undefined}
+                min={1}
+                max={4}
+                disabled={true}
+              />
+            </InputRangeFrame>
+          </div>
         </div>
         <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
           <h1 className="text-xl font-bold text-gray-500 mb-4">Source code</h1>

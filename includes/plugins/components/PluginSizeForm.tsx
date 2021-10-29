@@ -1,10 +1,17 @@
 import { number, object } from 'yup'
 import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
 import { FormProps } from 'shared/hooks/useApiForm'
-import { InputRange } from 'shared/components/input/InputRange'
+import {
+  InputRangeFrame,
+  PureInputRange,
+} from 'shared/components/input/InputRange'
 import { toast } from 'react-hot-toast'
 import SubmitButton from 'shared/components/button/SubmitButton'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
+import { useState } from 'react'
+import { useApiRequest } from 'shared/components/form/Form'
+import { useController } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 const schema = object().shape({
   minWidth: number()
@@ -25,7 +32,6 @@ export const PluginSizeForm = ({
   query,
   initial,
 }: FormProps<typeof schema>) => {
-  const { isPending } = usePluginContext()
   const onSuccess = () => {
     toast.success('The plugin size has been updated successfully.')
   }
@@ -37,46 +43,87 @@ export const PluginSizeForm = ({
       }`,
     )
   }
+
   return (
     <UncontrolledForm
       {...{ schema, query, initial, onSuccess, onError }}
       className="flex flex-col"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InputRange
-          name="minWidth"
-          label="Minimum width"
-          className="mt-2"
-          min={1}
-          max={4}
-          disabled={isPending}
-        />
-        <InputRange
-          name="maxWidth"
-          label="Maximum width"
-          className="mt-2"
-          min={1}
-          max={4}
-          disabled={isPending}
-        />
-        <InputRange
-          name="minHeight"
-          label="Minimum height"
-          className="mt-2"
-          min={1}
-          max={4}
-          disabled={isPending}
-        />
-        <InputRange
-          name="maxHeight"
-          label="Maximum height"
-          className="mt-2"
-          min={1}
-          max={4}
-          disabled={isPending}
-        />
+        <Inputs />
       </div>
       <SubmitButton className="ml-auto mt-4" />
     </UncontrolledForm>
+  )
+}
+
+const Inputs = () => {
+  const { isPending } = usePluginContext()
+  const { isLoading } = useApiRequest()
+
+  const minWidth = useController({ name: 'minWidth' })
+  const maxWidth = useController({ name: 'maxWidth' })
+
+  const minHeight = useController({ name: 'minHeight' })
+  const maxHeight = useController({ name: 'maxHeight' })
+
+  const [width, setWidth] = useState([
+    minWidth.field.value ?? 1,
+    maxWidth.field.value ?? 4,
+  ])
+  const [height, setHeight] = useState([
+    minHeight.field.value ?? 1,
+    maxHeight.field.value ?? 4,
+  ])
+
+  const disabled = isPending || isLoading
+
+  return (
+    <>
+      <InputRangeFrame
+        className="mt-2"
+        label="Width"
+        display={width[0] === width[1] ? width[0] : `${width[0]} - ${width[1]}`}
+      >
+        <PureInputRange
+          values={width}
+          onChange={setWidth}
+          onFinalChange={([min, max]) => {
+            minWidth.field.onChange(min)
+            maxWidth.field.onChange(max)
+          }}
+          min={1}
+          max={4}
+          disabled={disabled}
+        />
+        <div className="text-red-400 ml-1 mt-0.5 text-sm">
+          <ErrorMessage name="minWidth" />
+          <ErrorMessage name="maxWidth" />
+        </div>
+      </InputRangeFrame>
+      <InputRangeFrame
+        className="mt-2"
+        label="Height"
+        display={
+          height[0] === height[1] ? height[0] : `${height[0]} - ${height[1]}`
+        }
+      >
+        <PureInputRange
+          values={height}
+          onChange={setHeight}
+          onFinalChange={([min, max]) => {
+            minHeight.field.onChange(min)
+            maxHeight.field.onChange(max)
+          }}
+          min={1}
+          max={4}
+          disabled={disabled}
+        />
+        <div className="text-red-400 ml-1 mt-0.5 text-sm">
+          <ErrorMessage name="minHeight" />
+          <ErrorMessage name="maxHeight" />
+        </div>
+      </InputRangeFrame>
+    </>
   )
 }

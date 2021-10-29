@@ -7,7 +7,7 @@ import { ErrorMessage } from '@hookform/error-message'
 
 type Props = {
   name: string
-  children?: (value: number) => ReactNode
+  display?: (value: number) => ReactNode
   min?: number
   max: number
   step?: number
@@ -18,7 +18,7 @@ type Props = {
 
 export const InputRange = ({
   name,
-  children,
+  display,
   min = 0,
   max,
   step = 1,
@@ -34,32 +34,55 @@ export const InputRange = ({
   const [innerValue, setInnerValue] = useState(value ?? min)
 
   return (
-    <label className={classNames('block', className)}>
-      <div className="flex items-center justify-between">
-        {!!label && <h1 className="text-gray-500 mr-4">{label}</h1>}
-        <span className="text-gray-400 font-bold">
-          {children ? children(innerValue) : innerValue}
-        </span>
-      </div>
+    <InputRangeFrame
+      {...{ className, label }}
+      display={display ? display(innerValue) : innerValue}
+    >
       <PureInputRange
         {...field}
         disabled={isLoading || disabled}
-        onFinalChange={onChange}
-        onChange={setInnerValue}
-        value={innerValue}
+        onFinalChange={([value]) => onChange(value)}
+        onChange={([value]) => setInnerValue(value)}
+        values={[innerValue]}
         {...{ min, max, step }}
       />
       <div className="text-red-400 ml-1 mt-0.5 text-sm">
         <ErrorMessage name={name} />
       </div>
-    </label>
+    </InputRangeFrame>
   )
 }
 
+interface InputRangeFrameProps {
+  children: ReactNode
+  className?: string
+  label?: string
+  display?: ReactNode
+}
+
+export const InputRangeFrame = ({
+  children,
+  className,
+  label,
+  display,
+}: InputRangeFrameProps) => (
+  <label className={classNames('block', className)}>
+    <div className="flex items-center justify-between">
+      {!!label && <h1 className="text-gray-500 mr-4">{label}</h1>}
+      {!!display && (
+        <span className="text-gray-400 font-bold text-right ml-auto">
+          {display}
+        </span>
+      )}
+    </div>
+    {children}
+  </label>
+)
+
 type PureInputRangeProps = {
-  value: number
-  onFinalChange?: (value: number) => void
-  onChange: (value: number) => void
+  values: number[]
+  onFinalChange?: (values: number[]) => void
+  onChange: (values: number[]) => void
   min?: number
   max: number
   step?: number
@@ -68,7 +91,7 @@ type PureInputRangeProps = {
 
 export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
   function InnerPureInput(
-    { value, min, max, onChange, onFinalChange, step, disabled, ...props },
+    { values, min = 0, max, onChange, onFinalChange, step, disabled, ...props },
     ref,
   ) {
     return (
@@ -76,12 +99,18 @@ export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
         <Range
           {...props}
           ref={ref}
-          values={[value]}
-          onChange={([value]) => onChange(value)}
-          onFinalChange={([value]) => (onFinalChange ?? onChange)(value)}
           renderTrack={({ props, children }) => (
             <div className="w-full h-9" {...props}>
               <div className="w-full h-1 rounded-full bg-gray-300 absolute top-4" />
+              {values?.length === 2 && (
+                <div
+                  className="h-1 rounded-full bg-blue-600 absolute top-4"
+                  style={{
+                    left: ((values[0] - min) / (max - min)) * 100 + '%',
+                    width: ((values[1] - values[0]) / (max - min)) * 100 + '%',
+                  }}
+                />
+              )}
               {children}
             </div>
           )}
@@ -91,7 +120,7 @@ export const PureInputRange = forwardRef<Range, PureInputRangeProps>(
               {...props}
             />
           )}
-          {...{ min, max, step, disabled }}
+          {...{ min, max, step, disabled, values, onChange, onFinalChange }}
         />
       </div>
     )
