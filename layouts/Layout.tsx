@@ -40,17 +40,18 @@ export const Layout = ({ children }: { children: ReactNode }) => {
     <main className="bg-gray-100 flex flex-col h-full min-h-screen text-gray-500">
       <div className="bg-white mb-8 p-2 border-b border-gray-200 flex">
         <NavbarLogo />
+        <div className="mr-auto" />
         {status === 'authenticated' && (
           <div className="hidden sm:flex">
             <Link href="/plugins" passHref>
-              <div className="flex font-bold items-center cursor-pointer py-2 px-3 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
-                <CgExtension className="mr-1.5" size="1.5em" />
+              <div className="flex items-center cursor-pointer py-2 px-3 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+                <CgExtension className="mr-1.5" size="1.25em" />
                 <span>Plugins</span>
               </div>
             </Link>
             <Link href="/published" passHref>
-              <div className="flex font-bold items-center cursor-pointer py-2 px-3 mr-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
-                <CgGlobeAlt className="mr-1.5" size="1.5em" />
+              <div className="flex items-center cursor-pointer py-2 px-3 mr-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+                <CgGlobeAlt className="mr-1.5" size="1.25em" />
                 <span>Published</span>
               </div>
             </Link>
