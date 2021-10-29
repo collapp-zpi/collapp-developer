@@ -1,12 +1,14 @@
 import { ComponentProps, ReactNode, useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { FiLogOut, FiSettings, FiCopy, FiGithub } from 'react-icons/fi'
+import { FiGithub, FiLogOut, FiSettings } from 'react-icons/fi'
 import { Loading } from './Loading'
 import classNames from 'classnames'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import Button from 'shared/components/button/Button'
 import { NavbarLogo } from 'shared/components/NavbarLogo'
+import Link from 'next/link'
+import { CgExtension, CgGlobeAlt } from 'react-icons/cg'
 
 const DropdownButton = ({
   children,
@@ -38,6 +40,19 @@ export const Layout = ({ children }: { children: ReactNode }) => {
     <main className="bg-gray-100 flex flex-col h-full min-h-screen text-gray-500">
       <div className="bg-white mb-8 p-2 border-b border-gray-200 flex">
         <NavbarLogo />
+        <Link href="/plugins" passHref>
+          <div className="flex font-bold items-center cursor-pointer py-2 px-3 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+            <CgExtension className="mr-1.5" size="1.5em" />
+            <span>Plugins</span>
+          </div>
+        </Link>
+        <Link href="/published" passHref>
+          <div className="flex font-bold items-center cursor-pointer py-2 px-3 mr-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-5 focus:bg-opacity-5">
+            <CgGlobeAlt className="mr-1.5" size="1.5em" />
+            <span>Published</span>
+          </div>
+        </Link>
+        <div className="ml-auto" />
         {status === 'unauthenticated' && (
           <Button
             onClick={() =>
@@ -45,14 +60,13 @@ export const Layout = ({ children }: { children: ReactNode }) => {
                 callbackUrl: `${window.location.origin}/plugins`,
               })
             }
-            className="ml-auto"
           >
             <FiGithub className="mr-2" />
             Sign in
           </Button>
         )}
         {status === 'authenticated' && data && (
-          <div className="ml-auto relative" ref={ref}>
+          <div className="relative" ref={ref}>
             <div
               className="hover:bg-gray-200 cursor-pointer transition-colors rounded-xl p-1 h-full flex items-center justify-center"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -68,10 +82,6 @@ export const Layout = ({ children }: { children: ReactNode }) => {
                 !isDropdownOpen && 'pointer-events-none opacity-0',
               )}
             >
-              <DropdownButton onClick={() => router.push('/plugins')}>
-                <FiCopy className="mr-2" />
-                <span>Plugins</span>
-              </DropdownButton>
               <DropdownButton onClick={() => router.push('/settings')}>
                 <FiSettings className="mr-2" />
                 <span>Settings</span>

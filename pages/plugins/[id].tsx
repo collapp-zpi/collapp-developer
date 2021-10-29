@@ -11,6 +11,7 @@ import { PluginDeleteForm } from 'includes/plugins/components/PluginDeleteForm'
 import { PluginFileForm } from 'includes/plugins/components/PluginFileForm'
 import { PluginSubmitForm } from 'includes/plugins/components/PluginSubmitForm'
 import { PluginContext } from 'includes/plugins/components/PluginContext'
+import Link from 'next/link'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -97,14 +98,9 @@ const Plugin = ({
                     Go to the published version of the plugin
                   </h6>
                 </div>
-                <Button
-                  color="light"
-                  onClick={
-                    () => console.log(published.id) // TODO: redirect to published plugin
-                  }
-                >
-                  View
-                </Button>
+                <Link href={`/published/${published.id}`} passHref>
+                  <Button color="light">View</Button>
+                </Link>
               </div>
             )}
             <PluginDeleteForm {...{ id, name }} />

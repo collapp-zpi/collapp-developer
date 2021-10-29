@@ -11,6 +11,7 @@ import useRequest from 'shared/hooks/useRequest'
 import { updatePluginFile } from 'includes/plugins/endpoints'
 import { File as FileModel } from '@prisma/client'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
+import download from 'downloadjs'
 
 export const parseFileSize = (bytes: number) => {
   if (!bytes) return '0 B'
@@ -19,6 +20,30 @@ export const parseFileSize = (bytes: number) => {
     (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB'][i]
   )
 }
+
+type SingleFileProps = {
+  file: { name: string; size: number; date?: Date; url?: string }
+}
+
+export const SingleFile = ({ file }: SingleFileProps) => (
+  <div className="flex items-center">
+    <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
+      <BsFileEarmarkZip size="2rem" />
+    </div>
+    <div className="flex flex-col mr-auto">
+      <div className="font-bold">{file.name}</div>
+      {!!file?.date && (
+        <div className="text-sm">{dayjs(file.date).format('LLL')}</div>
+      )}
+      <div className="text-sm text-gray-400">{parseFileSize(file.size)}</div>
+    </div>
+    {!!file?.url && (
+      <Button hasIcon color="light" onClick={() => download(file.url)}>
+        <CgSoftwareDownload size="1.5rem" />
+      </Button>
+    )}
+  </div>
+)
 
 type PluginFileFormProps = {
   id: string
@@ -64,27 +89,7 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
     <div className="flex flex-col">
       {!!file && (
         <>
-          <div className="flex items-center">
-            <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
-              <BsFileEarmarkZip size="2rem" />
-            </div>
-            <div className="flex flex-col mr-auto">
-              <div className="font-bold">{file.name}</div>
-              <div className="text-sm">{dayjs(file.date).format('LLL')}</div>
-              <div className="text-sm text-gray-400">
-                {parseFileSize(file.size)}
-              </div>
-            </div>
-            <Button
-              hasIcon
-              color="light"
-              onClick={
-                () => console.log(file?.url) // TODO: add download link
-              }
-            >
-              <CgSoftwareDownload size="1.5rem" />
-            </Button>
-          </div>
+          <SingleFile file={file} />
           {!isPending && (
             <>
               <div className="flex items-center mb-4 mt-2">
@@ -143,17 +148,7 @@ export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
       )}
       {!!innerFile && (
         <>
-          <div className="flex items-center">
-            <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
-              <BsFileEarmarkZip size="2rem" />
-            </div>
-            <div className="flex flex-col mr-auto">
-              <div className="font-bold">{innerFile.name}</div>
-              <div className="text-sm text-gray-400">
-                {parseFileSize(innerFile.size)}
-              </div>
-            </div>
-          </div>
+          <SingleFile file={innerFile} />
         </>
       )}
       {!!innerFile && (
