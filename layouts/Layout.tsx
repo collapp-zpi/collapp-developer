@@ -83,7 +83,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             </div>
             <div
               className={classNames(
-                'absolute -bottom-1 right-0 transform translate-y-full bg-white border border-gray-200 rounded-lg p-1 shadow-lg transition-opacity',
+                'absolute -bottom-1 right-0 transform translate-y-full bg-white border border-gray-200 rounded-lg p-1 shadow-lg transition-opacity z-40',
                 !isDropdownOpen && 'pointer-events-none opacity-0',
               )}
             >
