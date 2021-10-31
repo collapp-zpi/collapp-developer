@@ -16,3 +16,5 @@ export function getParams(key: string, body?: Buffer): PutObjectRequest {
     Body: body,
   }
 }
+
+export const amazonUrl = 'https://s3.amazonaws.com/aws.collapp.live/'

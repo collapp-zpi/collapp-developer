@@ -52,11 +52,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   })
 
-  //----------------------
-
-  // const url = 'https://s3.amazonaws.com/aws.collapp.live/'
-  const draftPath = `drafts/${plugin.author.id}/${id}.zip`
-
   try {
     const parsedFile: FFile = await new Promise((resolve, reject) => {
       const form = new Formidable.IncomingForm()
@@ -82,6 +77,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     fs.readFile(parsedFile.path, function (err, data) {
       if (err) throw err
+
+      const draftPath = `drafts/${plugin.author.id}/${id}.zip`
 
       s3.putObject(getParams(draftPath, data), (err, data) => {
         fs.unlink(parsedFile.path, function (err) {
