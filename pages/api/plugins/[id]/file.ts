@@ -62,7 +62,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const parsedFile: FFile = await new Promise((resolve, reject) => {
-      const form = new Formidable()
+      const form = new Formidable.IncomingForm()
 
       form.parse(req, (err: any, fields: Fields, files: Files) => {
         if (err) return reject(err)
@@ -85,7 +85,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const params: PutObjectRequest = {
       Bucket: process.env.AWS_BUCKET,
       Key: draftPath + parsedFile.name,
-      Body: req.body,
+      //region: 'us-east-1',
+      Body: parsedFile,
     }
 
     s3.putObject(params, (err, data) => {
