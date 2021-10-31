@@ -26,6 +26,7 @@ import {
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 import AWS from 'aws-sdk'
 import { PutObjectRequest } from 'aws-sdk/clients/s3'
+import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export class CreatePluginDTO {
   @IsNotEmpty({ message: 'Plugin name is required.' })
@@ -178,18 +179,7 @@ class Plugins {
     }
 
     if (!!plugin.source) {
-      const s3 = new AWS.S3({
-        accessKeyId: process.env.AWS_KEY,
-        secretAccessKey: process.env.AWS_SECRET_KEY,
-      })
-
-      const params: PutObjectRequest = {
-        Bucket: process.env.AWS_BUCKET,
-        Key: plugin.source.url,
-        //region: 'us-east-1',
-      }
-
-      s3.deleteObject(params, (err) => {
+      s3.deleteObject(getParams(plugin.source.url), (err) => {
         if (err) console.log(err)
       })
 

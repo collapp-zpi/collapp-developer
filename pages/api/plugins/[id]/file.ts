@@ -2,9 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Formidable, { Fields, File as FFile, Files } from 'formidable'
 import { getSession } from 'next-auth/react'
 import { prisma } from 'shared/utils/prismaClient'
-import AWS from 'aws-sdk'
-import { PutObjectRequest } from 'aws-sdk/clients/s3'
 import fs from 'fs'
+import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export const config = {
   api: {
@@ -55,11 +54,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   //----------------------
 
-  const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
-  })
-
   // const url = 'https://s3.amazonaws.com/aws.collapp.live/'
   const draftPath = `drafts/${plugin.author.id}/${id}.zip`
 
@@ -89,14 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     fs.readFile(parsedFile.path, function (err, data) {
       if (err) throw err
 
-      const params: PutObjectRequest = {
-        Bucket: process.env.AWS_BUCKET,
-        Key: draftPath,
-        //region: 'us-east-1',
-        Body: data,
-      }
-
-      s3.putObject(params, (err, data) => {
+      s3.putObject(getParams(draftPath, data), (err, data) => {
         fs.unlink(parsedFile.path, function (err) {
           if (err) {
             console.error(err)
@@ -119,7 +106,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     return res.status(200).json(newFile)
-  } catch (e) {
+  } catch (e: any) {
     return res.status(400).json({ message: e?.message })
   }
 }
