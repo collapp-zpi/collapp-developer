@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react'
 import { prisma } from 'shared/utils/prismaClient'
 import AWS from 'aws-sdk'
 import { PutObjectRequest } from 'aws-sdk/clients/s3'
+import fs from 'fs'
 
 export const config = {
   api: {
@@ -70,6 +71,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         resolve(files.file)
       })
     })
+
     if (!parsedFile?.name)
       return res
         .status(400)
@@ -82,23 +84,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    const params: PutObjectRequest = {
-      Bucket: process.env.AWS_BUCKET,
-      Key: draftPath + parsedFile.name,
-      //region: 'us-east-1',
-      Body: parsedFile,
-    }
+    fs.readFile(parsedFile.path, function (err, data) {
+      if (err) throw err // Something went wrong!)
 
-    s3.putObject(params, (err, data) => {
-      if (err) console.log(err)
-      else console.log(data)
+      const params: PutObjectRequest = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: draftPath + parsedFile.name,
+        //region: 'us-east-1',
+        Body: data,
+      }
+
+      s3.putObject(params, (err, data) => {
+        fs.unlink(parsedFile.path, function (err) {
+          if (err) {
+            console.error(err)
+          }
+        })
+        if (err) console.log(err)
+        else console.log(data)
+      })
     })
 
     const newFile = await prisma.file.create({
       data: {
         name: parsedFile.name,
         size: parsedFile.size,
-        url: '', // TODO: Set the S3 file url
+        url: '', // TODO: Set the S3 file url //https://s3.amazonaws.com/aws.collapp.live/drafts/[id]]/[????]
         draft: {
           connect: { id: plugin.id },
         },
