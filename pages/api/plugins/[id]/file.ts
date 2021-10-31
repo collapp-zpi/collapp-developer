@@ -27,6 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const plugin = await prisma.draftPlugin.findFirst({
     where: { id },
+    include: { author: true },
   })
 
   if (!plugin) {
@@ -59,7 +60,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     secretAccessKey: process.env.AWS_SECRET_KEY,
   })
 
-  const draftPath = `drafts/${id}/`
+  // const url = 'https://s3.amazonaws.com/aws.collapp.live/'
+  const draftPath = `drafts/${plugin.author.id}/${id}.zip`
 
   try {
     const parsedFile: FFile = await new Promise((resolve, reject) => {
@@ -85,11 +87,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     fs.readFile(parsedFile.path, function (err, data) {
-      if (err) throw err // Something went wrong!)
+      if (err) throw err
 
       const params: PutObjectRequest = {
         Bucket: process.env.AWS_BUCKET,
-        Key: draftPath + parsedFile.name,
+        Key: draftPath,
         //region: 'us-east-1',
         Body: data,
       }
@@ -109,7 +111,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         name: parsedFile.name,
         size: parsedFile.size,
-        url: '', // TODO: Set the S3 file url //https://s3.amazonaws.com/aws.collapp.live/drafts/[id]]/[????]
+        url: draftPath,
         draft: {
           connect: { id: plugin.id },
         },
