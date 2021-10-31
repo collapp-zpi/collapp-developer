@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Formidable, { Fields, File as FFile, Files } from 'formidable'
 import { getSession } from 'next-auth/react'
 import { prisma } from 'shared/utils/prismaClient'
+import AWS from 'aws-sdk'
+import { PutObjectRequest } from 'aws-sdk/clients/s3'
 
 export const config = {
   api: {
@@ -49,6 +51,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   })
 
+  //----------------------
+
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  })
+
+  const draftPath = `drafts/${id}/`
+
   try {
     const parsedFile: FFile = await new Promise((resolve, reject) => {
       const form = new Formidable()
@@ -70,6 +81,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         where: { id: file.id },
       })
     }
+
+    const params: PutObjectRequest = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: draftPath + parsedFile.name,
+      Body: req.body,
+    }
+
+    s3.putObject(params, (err, data) => {
+      if (err) console.log(err)
+      else console.log(data)
+    })
 
     const newFile = await prisma.file.create({
       data: {
