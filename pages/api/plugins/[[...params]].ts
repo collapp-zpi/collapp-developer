@@ -24,6 +24,8 @@ import {
   NotEquals,
 } from 'class-validator'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
+import AWS from 'aws-sdk'
+import { PutObjectRequest } from 'aws-sdk/clients/s3'
 
 export class CreatePluginDTO {
   @IsNotEmpty({ message: 'Plugin name is required.' })
@@ -83,6 +85,7 @@ class Plugins {
   async innerGetPlugin(id: string, user: RequestUser) {
     const plugin = await prisma.draftPlugin.findFirst({
       where: { id },
+      include: { source: true },
     })
 
     if (!plugin) {
@@ -172,6 +175,27 @@ class Plugins {
 
     if (plugin.isPending) {
       throw new BadRequestException(`Cannot make changes to a pending plugin.`)
+    }
+
+    if (!!plugin.source) {
+      const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_KEY,
+      })
+
+      const params: PutObjectRequest = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: plugin.source.url,
+        //region: 'us-east-1',
+      }
+
+      s3.deleteObject(params, (err) => {
+        if (err) console.log(err)
+      })
+
+      await prisma.file.delete({
+        where: { id: plugin.source.id },
+      })
     }
 
     return await prisma.draftPlugin.delete({
