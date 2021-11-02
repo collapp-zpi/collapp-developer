@@ -32,11 +32,11 @@ export const SingleFile = ({ file }: SingleFileProps) => (
       <BsFileEarmarkZip size="2rem" />
     </div>
     <div className="flex flex-col mr-auto">
-      <div className="font-bold">{file.name}</div>
+      <div className="font-bold">{file?.name}</div>
       {!!file?.date && (
-        <div className="text-sm">{dayjs(file.date).format('LLL')}</div>
+        <div className="text-sm">{dayjs(file?.date).format('LLL')}</div>
       )}
-      <div className="text-sm text-gray-400">{parseFileSize(file.size)}</div>
+      <div className="text-sm text-gray-400">{parseFileSize(file?.size)}</div>
     </div>
     {!!file?.url && (
       <Button
