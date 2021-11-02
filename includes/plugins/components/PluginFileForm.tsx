@@ -12,6 +12,7 @@ import { updatePluginFile } from 'includes/plugins/endpoints'
 import { File as FileModel } from '@prisma/client'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
 import download from 'downloadjs'
+import { amazonUrl } from 'shared/utils/awsHelpers'
 
 export const parseFileSize = (bytes: number) => {
   if (!bytes) return '0 B'
@@ -38,7 +39,11 @@ export const SingleFile = ({ file }: SingleFileProps) => (
       <div className="text-sm text-gray-400">{parseFileSize(file.size)}</div>
     </div>
     {!!file?.url && (
-      <Button hasIcon color="light" onClick={() => download(file.url)}>
+      <Button
+        hasIcon
+        color="light"
+        onClick={() => download(amazonUrl + file.url)}
+      >
         <CgSoftwareDownload size="1.5rem" />
       </Button>
     )}

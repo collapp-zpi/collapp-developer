@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Formidable, { Fields, File as FFile, Files } from 'formidable'
 import { getSession } from 'next-auth/react'
 import { prisma } from 'shared/utils/prismaClient'
+import fs from 'fs'
+import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export const config = {
   api: {
@@ -24,6 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const plugin = await prisma.draftPlugin.findFirst({
     where: { id },
+    include: { author: true },
   })
 
   if (!plugin) {
@@ -50,8 +53,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   try {
+    const draftPath = `drafts/${plugin.author.id}/${id}.zip`
+
     const parsedFile: FFile = await new Promise((resolve, reject) => {
-      const form = new Formidable()
+      const form = new Formidable.IncomingForm()
 
       form.parse(req, (err: any, fields: Fields, files: Files) => {
         if (err) return reject(err)
@@ -59,6 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         resolve(files.file)
       })
     })
+
     if (!parsedFile?.name)
       return res
         .status(400)
@@ -71,11 +77,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
+    fs.readFile(parsedFile.path, function (err, data) {
+      if (err) throw err
+
+      s3.putObject(getParams(draftPath, data), (err, data) => {
+        fs.unlink(parsedFile.path, function (err) {
+          if (err) {
+            console.error(err)
+          }
+        })
+        if (err) console.log(err)
+        else console.log(data)
+      })
+    })
+
     const newFile = await prisma.file.create({
       data: {
         name: parsedFile.name,
         size: parsedFile.size,
-        url: '', // TODO: Set the S3 file url
+        url: draftPath,
         draft: {
           connect: { id: plugin.id },
         },
@@ -83,7 +103,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     return res.status(200).json(newFile)
-  } catch (e) {
+  } catch (e: any) {
     return res.status(400).json({ message: e?.message })
   }
 }
