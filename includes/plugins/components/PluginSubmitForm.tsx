@@ -5,17 +5,20 @@ import { toast } from 'react-hot-toast'
 import Button from 'shared/components/button/Button'
 import Modal from 'shared/components/Modal'
 import { CgSpinner } from 'react-icons/cg'
+import { usePluginContext } from 'includes/plugins/components/PluginContext'
+import { useSWRConfig } from 'swr'
+import { generateKey } from 'shared/utils/object'
 
-type Props = {
-  id: string
-  isPending: boolean
-}
-
-export const PluginSubmitForm = ({ id, isPending }: Props) => {
+export const PluginSubmitForm = () => {
+  const { id, isPending } = usePluginContext()
   const [isModalOpen, setModalOpen] = useState(false)
+  const { mutate } = useSWRConfig()
+
   const deleteRequest = useRequest(submitPlugin(id), {
     onSuccess: () => {
       toast.success('The plugin has been submitted successfully.')
+      setModalOpen(false)
+      return mutate(generateKey('plugin', id))
     },
     onError: ({ message }) => {
       toast.error(

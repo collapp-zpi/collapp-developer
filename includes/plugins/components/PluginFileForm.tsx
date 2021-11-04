@@ -53,13 +53,12 @@ export const SingleFile = ({ file }: SingleFileProps) => (
 )
 
 type PluginFileFormProps = {
-  id: string
   file?: FileModel
 }
 
-export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
+export const PluginFileForm = ({ file }: PluginFileFormProps) => {
   const [innerFile, setInnerFile] = useState<File | undefined | null>()
-  const { isPending } = usePluginContext()
+  const { id, isPending } = usePluginContext()
   const { mutate } = useSWRConfig()
 
   const fileRequest = useRequest(updatePluginFile(id), {

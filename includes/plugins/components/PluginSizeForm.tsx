@@ -12,6 +12,9 @@ import { useState } from 'react'
 import { useApiRequest } from 'shared/components/form/Form'
 import { useController } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import { useSWRConfig } from 'swr'
+import { updatePlugin } from 'includes/plugins/endpoints'
+import { generateKey } from 'shared/utils/object'
 
 const schema = object().shape({
   minWidth: number()
@@ -29,11 +32,14 @@ const schema = object().shape({
 })
 
 export const PluginSizeForm = ({
-  query,
   initial,
-}: FormProps<typeof schema>) => {
+}: Omit<FormProps<typeof schema>, 'query'>) => {
+  const { id } = usePluginContext()
+  const { mutate } = useSWRConfig()
+
   const onSuccess = () => {
     toast.success('The plugin size has been updated successfully.')
+    return mutate(generateKey('plugin', id))
   }
 
   const onError = ({ message }: { message?: string }) => {
@@ -46,7 +52,8 @@ export const PluginSizeForm = ({
 
   return (
     <UncontrolledForm
-      {...{ schema, query, initial, onSuccess, onError }}
+      query={updatePlugin(id)}
+      {...{ schema, initial, onSuccess, onError }}
       className="flex flex-col"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
