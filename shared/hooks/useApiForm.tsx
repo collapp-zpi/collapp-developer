@@ -1,8 +1,12 @@
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import useRequest, { useRequestErrorType, useRequestQueryType } from './useRequest'
+import useRequest, {
+  useRequestErrorType,
+  useRequestQueryType,
+} from './useRequest'
 import { AnyObjectSchema, TypeOf } from 'yup'
-import { ReactNode } from 'react'
+import { ComponentProps, ComponentType, ReactNode } from 'react'
+import { SWRConfig } from 'swr'
 
 export type FormProps<T extends AnyObjectSchema> = Omit<
   useApiFormProps<T>,
@@ -43,3 +47,12 @@ const useApiForm = <T extends AnyObjectSchema>({
 }
 
 export default useApiForm
+
+export const withFallback = <T extends ComponentType>(Component: T) =>
+  function FallbackComponent({ fallback, ...props }: ComponentProps<T>) {
+    return (
+      <SWRConfig value={{ fallback }}>
+        <Component {...props} />
+      </SWRConfig>
+    )
+  }

@@ -13,7 +13,8 @@ import { PluginContext } from 'includes/plugins/components/PluginContext'
 import Link from 'next/link'
 import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
-import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { Loading } from 'layouts/Loading'
+import { withFallback } from 'shared/hooks/useApiForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -58,9 +59,7 @@ const Plugin = ({
   if (!data) {
     return (
       <AuthLayout>
-        <div className="m-12">
-          <LogoSpinner />
-        </div>
+        <Loading />
       </AuthLayout>
     )
   }
@@ -132,4 +131,4 @@ const Plugin = ({
   )
 }
 
-export default Plugin
+export default withFallback(Plugin)
