@@ -123,7 +123,7 @@ export const Layout = ({
       </div>
       <div className="flex-grow pb-8 px-8">
         {hasContainer ? (
-          <div className="container mx-auto max-w-5xl">{children}</div>
+          <div className="container mx-auto max-w-screen-xl">{children}</div>
         ) : (
           children
         )}
