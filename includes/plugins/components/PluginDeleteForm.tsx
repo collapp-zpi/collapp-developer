@@ -11,12 +11,11 @@ import { CgSpinner } from 'react-icons/cg'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
 
 type Props = {
-  id: string
   name: string
 }
 
-export const PluginDeleteForm = ({ id, name }: Props) => {
-  const { isPending } = usePluginContext()
+export const PluginDeleteForm = ({ name }: Props) => {
+  const { id, isPending } = usePluginContext()
   const router = useRouter()
   const [isModalOpen, setModalOpen] = useState(false)
   const [value, setValue] = useState('')

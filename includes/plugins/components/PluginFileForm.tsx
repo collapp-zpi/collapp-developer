@@ -13,6 +13,8 @@ import { File as FileModel } from '@prisma/client'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
 import download from 'downloadjs'
 import { amazonUrl } from 'shared/utils/awsHelpers'
+import { useSWRConfig } from 'swr'
+import { generateKey } from 'shared/utils/object'
 
 export const parseFileSize = (bytes: number) => {
   if (!bytes) return '0 B'
@@ -51,17 +53,20 @@ export const SingleFile = ({ file }: SingleFileProps) => (
 )
 
 type PluginFileFormProps = {
-  id: string
   file?: FileModel
 }
 
-export const PluginFileForm = ({ id, file }: PluginFileFormProps) => {
+export const PluginFileForm = ({ file }: PluginFileFormProps) => {
   const [innerFile, setInnerFile] = useState<File | undefined | null>()
-  const { isPending } = usePluginContext()
+  const { id, isPending } = usePluginContext()
+  const { mutate } = useSWRConfig()
 
   const fileRequest = useRequest(updatePluginFile(id), {
     onSuccess: () => {
       toast.success('The source code has been updated successfully.')
+      mutate(generateKey('plugin', id)).then(() => {
+        setInnerFile(undefined)
+      })
     },
     onError: ({ message }) => {
       toast.error(
