@@ -1,14 +1,17 @@
 import { InputText } from 'shared/components/input/InputText'
 import { object, string } from 'yup'
-import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
 import { InputTextarea } from 'shared/components/input/InputTextarea'
 import { FiAlignCenter } from 'react-icons/fi'
 import { BiText } from 'react-icons/bi'
-import { FormProps } from 'shared/hooks/useApiForm'
+import useApiForm, { FormProps } from 'shared/hooks/useApiForm'
 import SubmitButton from 'shared/components/button/SubmitButton'
 import { InputPhoto } from 'shared/components/input/InputPhoto'
 import { toast } from 'react-hot-toast'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
+import { updatePlugin } from 'includes/plugins/endpoints'
+import { generateKey } from 'shared/utils/object'
+import { useSWRConfig } from 'swr'
+import Form from 'shared/components/form/Form'
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -17,27 +20,32 @@ const schema = object().shape({
 })
 
 export const PluginForm = ({
-  query,
   initial: { icon, ...initial },
-}: FormProps<typeof schema>) => {
-  const { isPending } = usePluginContext()
-  const onSuccess = () => {
-    toast.success('The plugin has been updated successfully.')
-  }
+}: Omit<FormProps<typeof schema>, 'query'>) => {
+  const { id, isPending } = usePluginContext()
+  const { mutate } = useSWRConfig()
 
-  const onError = ({ message }: { message?: string }) => {
-    toast.error(
-      `There has been an error while updating the plugin. ${
-        !!message && `(${message})`
-      }`,
-    )
-  }
+  const apiForm = useApiForm({
+    query: updatePlugin(id),
+    schema,
+    initial,
+    onSuccess: (_, methods) => {
+      toast.success('The plugin has been updated successfully.')
+      mutate(generateKey('plugin', id)).then(({ name, description }) => {
+        methods.reset({ name, description, icon: undefined })
+      })
+    },
+    onError: ({ message }) => {
+      toast.error(
+        `There has been an error while updating the plugin. ${
+          !!message && `(${message})`
+        }`,
+      )
+    },
+  })
 
   return (
-    <UncontrolledForm
-      {...{ schema, query, initial, onSuccess, onError }}
-      className="flex flex-col"
-    >
+    <Form {...apiForm} className="flex flex-col">
       <div className="flex flex-col md:flex-row">
         <InputPhoto name="icon" image={icon} disabled={isPending} />
         <div className="flex-grow flex flex-col">
@@ -58,6 +66,6 @@ export const PluginForm = ({
         </div>
       </div>
       <SubmitButton className="ml-auto mt-4" disabled={isPending} />
-    </UncontrolledForm>
+    </Form>
   )
 }

@@ -7,7 +7,7 @@ export enum RequestState {
   Success = 'Success',
 }
 
-type useRequestErrorType = { message: string }
+export type useRequestErrorType = { message: string }
 export type useRequestQueryType = (...args: any) => Promise<any>
 export type useRequestOptionsType = {
   onSuccess?: <T>(data: T) => void
