@@ -36,36 +36,34 @@ const CreatePlugin = () => {
 
   return (
     <AuthLayout>
-      <div className="container mx-auto">
-        <Button
-          color="light"
-          onClick={() => router.push('/plugins')}
-          className="mb-4"
+      <Button
+        color="light"
+        onClick={() => router.push('/plugins')}
+        className="mb-4"
+      >
+        <GoChevronLeft className="mr-2 -ml-2" />
+        Back
+      </Button>
+      <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+        <UncontrolledForm
+          schema={schema}
+          query={createPlugin}
+          {...{ onSuccess, onError }}
         >
-          <GoChevronLeft className="mr-2 -ml-2" />
-          Back
-        </Button>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-          <UncontrolledForm
-            schema={schema}
-            query={createPlugin}
-            {...{ onSuccess, onError }}
-          >
-            <InputText
-              name="name"
-              label="Name"
-              icon={BiText}
-              className="mt-2 md:mt-0"
-            />
-            <InputTextarea
-              name="description"
-              label="Description"
-              className="mt-2"
-              icon={FiAlignCenter}
-            />
-            <SubmitButton className="ml-auto mt-4" />
-          </UncontrolledForm>
-        </div>
+          <InputText
+            name="name"
+            label="Name"
+            icon={BiText}
+            className="mt-2 md:mt-0"
+          />
+          <InputTextarea
+            name="description"
+            label="Description"
+            className="mt-2"
+            icon={FiAlignCenter}
+          />
+          <SubmitButton className="ml-auto mt-4" />
+        </UncontrolledForm>
       </div>
     </AuthLayout>
   )

@@ -27,7 +27,13 @@ const DropdownButton = ({
   </div>
 )
 
-export const Layout = ({ children }: { children: ReactNode }) => {
+export const Layout = ({
+  children,
+  hasContainer = true,
+}: {
+  children: ReactNode
+  hasContainer?: boolean
+}) => {
   const { status, data } = useSession()
   const router = useRouter()
   const [isDropdownOpen, setDropdownOpen] = useState(false)
@@ -115,7 +121,13 @@ export const Layout = ({ children }: { children: ReactNode }) => {
           </div>
         )}
       </div>
-      <div className="flex-grow pb-8 px-8">{children}</div>
+      <div className="flex-grow pb-8 px-8">
+        {hasContainer ? (
+          <div className="container mx-auto max-w-5xl">{children}</div>
+        ) : (
+          children
+        )}
+      </div>
     </main>
   )
 }

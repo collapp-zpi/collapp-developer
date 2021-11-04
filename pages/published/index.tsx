@@ -66,77 +66,67 @@ const Published = ({
       <Head>
         <title>Published</title>
       </Head>
-      <div className="container mx-auto">
-        <div className="bg-white p-6 rounded-3xl shadow-2xl overflow-x-auto mb-4">
-          <FiltersForm schema={filtersSchema}>
-            <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
-          </FiltersForm>
-        </div>
-
-        {!data && (
-          <div className="m-12">
-            <LogoSpinner />
-          </div>
-        )}
-        {!!data && !data.entities?.length && (
-          <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg">
-            No plugins found
-          </div>
-        )}
-
-        {!!data && !!data.entities?.length && (
-          <>
-            <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="text-left p-4">Name</th>
-                    <th className="text-left p-4">Description</th>
-                    <th className="text-left p-4">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.entities.map(
-                    ({
-                      id,
-                      name,
-                      description,
-                      updatedAt,
-                      icon,
-                    }: DraftPlugin) => (
-                      <tr
-                        key={id}
-                        onClick={() => router.push(`/published/${id}`)}
-                        className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="p-4 flex items-center">
-                          <img
-                            src={icon || defaultPluginIcon}
-                            className="shadow-lg w-8 h-8 mr-3 bg-gray-200 rounded-25"
-                            alt="Plugin icon"
-                          />
-                          {name}
-                        </td>
-                        <td className="p-4">{description}</td>
-                        <td className="p-4">
-                          {dayjs(updatedAt).format('LLL')}
-                        </td>
-                      </tr>
-                    ),
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <div className="flex justify-center mt-8">
-              <Pagination
-                page={data?.pagination.page}
-                pages={data?.pagination.pages}
-                setPage={(page) => setFilters({ page: String(page) })}
-              />
-            </div>
-          </>
-        )}
+      <div className="bg-white p-6 rounded-3xl shadow-2xl overflow-x-auto mb-4">
+        <FiltersForm schema={filtersSchema}>
+          <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
+        </FiltersForm>
       </div>
+
+      {!data && (
+        <div className="m-12">
+          <LogoSpinner />
+        </div>
+      )}
+      {!!data && !data.entities?.length && (
+        <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg">
+          No plugins found
+        </div>
+      )}
+
+      {!!data && !!data.entities?.length && (
+        <>
+          <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left p-4">Name</th>
+                  <th className="text-left p-4">Description</th>
+                  <th className="text-left p-4">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.entities.map(
+                  ({ id, name, description, updatedAt, icon }: DraftPlugin) => (
+                    <tr
+                      key={id}
+                      onClick={() => router.push(`/published/${id}`)}
+                      className="cursor-pointer border-t-2 border-gray-100 hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="p-4 flex items-center">
+                        <img
+                          src={icon || defaultPluginIcon}
+                          className="shadow-lg w-8 h-8 mr-3 bg-gray-200 rounded-25"
+                          alt="Plugin icon"
+                        />
+                        {name}
+                      </td>
+                      <td className="p-4">{description}</td>
+                      <td className="p-4">{dayjs(updatedAt).format('LLL')}</td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center mt-8">
+            <Pagination
+              page={data?.pagination.page}
+              pages={data?.pagination.pages}
+              setPage={(page) => setFilters({ page: String(page) })}
+            />
+          </div>
+        </>
+      )}
     </AuthLayout>
   )
 }

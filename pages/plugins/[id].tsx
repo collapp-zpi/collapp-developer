@@ -54,57 +54,49 @@ const Plugin = ({
         <title>Plugin</title>
       </Head>
       <PluginContext.Provider value={{ id, isPending }}>
-        <div className="container mx-auto">
-          <Button
-            color="light"
-            onClick={() => router.push('/plugins')}
-            className="mb-4"
-          >
-            <GoChevronLeft className="mr-2 -ml-2" />
-            Back
-          </Button>
-          <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-            <h1 className="text-xl font-bold text-gray-500 mb-4">
-              General info
-            </h1>
-            <PluginForm
-              initial={{ name, description, icon }}
-              query={updatePlugin(id)}
-            />
-          </div>
-          <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-            <h1 className="text-xl font-bold text-gray-500 mb-4">
-              Plugin size
-            </h1>
-            <PluginSizeForm
-              query={updatePlugin(id)}
-              initial={{ minWidth, maxWidth, minHeight, maxHeight }}
-            />
-          </div>
-          <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-            <h1 className="text-xl font-bold text-gray-500 mb-4">
-              Source code
-            </h1>
-            <PluginFileForm id={id} file={source} />
-          </div>
-          <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-            <h1 className="text-xl font-bold text-gray-500 mb-4">Manage</h1>
-            <PluginSubmitForm {...{ id, isPending }} />
-            {!!published && (
-              <div className="flex items-center mb-4">
-                <div className="flex-grow flex flex-col mr-2">
-                  <h4 className="font-bold text-md">View published</h4>
-                  <h6 className="text-sm">
-                    Go to the published version of the plugin
-                  </h6>
-                </div>
-                <Link href={`/published/${published.id}`} passHref>
-                  <Button color="light">View</Button>
-                </Link>
+        <Button
+          color="light"
+          onClick={() => router.push('/plugins')}
+          className="mb-4"
+        >
+          <GoChevronLeft className="mr-2 -ml-2" />
+          Back
+        </Button>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">General info</h1>
+          <PluginForm
+            initial={{ name, description, icon }}
+            query={updatePlugin(id)}
+          />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Plugin size</h1>
+          <PluginSizeForm
+            query={updatePlugin(id)}
+            initial={{ minWidth, maxWidth, minHeight, maxHeight }}
+          />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Source code</h1>
+          <PluginFileForm id={id} file={source} />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Manage</h1>
+          <PluginSubmitForm {...{ id, isPending }} />
+          {!!published && (
+            <div className="flex items-center mb-4">
+              <div className="flex-grow flex flex-col mr-2">
+                <h4 className="font-bold text-md">View published</h4>
+                <h6 className="text-sm">
+                  Go to the published version of the plugin
+                </h6>
               </div>
-            )}
-            <PluginDeleteForm {...{ id, name }} />
-          </div>
+              <Link href={`/published/${published.id}`} passHref>
+                <Button color="light">View</Button>
+              </Link>
+            </div>
+          )}
+          <PluginDeleteForm {...{ id, name }} />
         </div>
       </PluginContext.Provider>
     </AuthLayout>

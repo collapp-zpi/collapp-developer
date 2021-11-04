@@ -54,31 +54,27 @@ const UserSettings = ({
       <Head>
         <title>Settings</title>
       </Head>
-      <div className="container mx-auto">
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-          <h1 className="text-2xl font-bold text-gray-500 mb-4">
-            User settings
-          </h1>
-          <UncontrolledForm
-            {...{ schema, onSuccess, onError }}
-            query={updateUser}
-            initial={{ name: user.name }}
-            className="flex flex-col"
-          >
-            <div className="flex flex-col md:flex-row">
-              <InputPhoto name="image" image={user.image} />
-              <div className="flex-grow flex flex-col">
-                <InputText
-                  name="name"
-                  label="Name"
-                  icon={BiText}
-                  className="mt-2 md:mt-0"
-                />
-              </div>
+      <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+        <h1 className="text-2xl font-bold text-gray-500 mb-4">User settings</h1>
+        <UncontrolledForm
+          {...{ schema, onSuccess, onError }}
+          query={updateUser}
+          initial={{ name: user.name }}
+          className="flex flex-col"
+        >
+          <div className="flex flex-col md:flex-row">
+            <InputPhoto name="image" image={user.image} />
+            <div className="flex-grow flex flex-col">
+              <InputText
+                name="name"
+                label="Name"
+                icon={BiText}
+                className="mt-2 md:mt-0"
+              />
             </div>
-            <SubmitButton className="ml-auto mt-4" />
-          </UncontrolledForm>
-        </div>
+          </div>
+          <SubmitButton className="ml-auto mt-4" />
+        </UncontrolledForm>
       </div>
     </AuthLayout>
   )
