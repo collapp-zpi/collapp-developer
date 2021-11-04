@@ -1,6 +1,5 @@
 import { number, object } from 'yup'
-import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
-import { FormProps } from 'shared/hooks/useApiForm'
+import useApiForm, { FormProps } from 'shared/hooks/useApiForm'
 import {
   InputRangeFrame,
   PureInputRange,
@@ -9,7 +8,7 @@ import { toast } from 'react-hot-toast'
 import SubmitButton from 'shared/components/button/SubmitButton'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
 import { useState } from 'react'
-import { useApiRequest } from 'shared/components/form/Form'
+import Form, { useApiRequest } from 'shared/components/form/Form'
 import { useController } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import { useSWRConfig } from 'swr'
@@ -37,30 +36,33 @@ export const PluginSizeForm = ({
   const { id } = usePluginContext()
   const { mutate } = useSWRConfig()
 
-  const onSuccess = () => {
-    toast.success('The plugin size has been updated successfully.')
-    return mutate(generateKey('plugin', id))
-  }
-
-  const onError = ({ message }: { message?: string }) => {
-    toast.error(
-      `There has been an error while updating the plugin size. ${
-        !!message && `(${message})`
-      }`,
-    )
-  }
+  const apiForm = useApiForm({
+    query: updatePlugin(id),
+    schema,
+    initial,
+    onSuccess: (_, methods) => {
+      toast.success('The plugin size has been updated successfully.')
+      mutate(generateKey('plugin', id)).then((data) => {
+        const { minWidth, maxWidth, minHeight, maxHeight } = data
+        methods.reset({ minWidth, maxWidth, minHeight, maxHeight })
+      })
+    },
+    onError: ({ message }) => {
+      toast.error(
+        `There has been an error while updating the plugin size. ${
+          !!message && `(${message})`
+        }`,
+      )
+    },
+  })
 
   return (
-    <UncontrolledForm
-      query={updatePlugin(id)}
-      {...{ schema, initial, onSuccess, onError }}
-      className="flex flex-col"
-    >
+    <Form {...apiForm} className="flex flex-col">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Inputs />
       </div>
       <SubmitButton className="ml-auto mt-4" />
-    </UncontrolledForm>
+    </Form>
   )
 }
 
