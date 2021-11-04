@@ -12,6 +12,9 @@ import { PluginFileForm } from 'includes/plugins/components/PluginFileForm'
 import { PluginSubmitForm } from 'includes/plugins/components/PluginSubmitForm'
 import { PluginContext } from 'includes/plugins/components/PluginContext'
 import Link from 'next/link'
+import { generateKey } from 'shared/utils/object'
+import { useQuery } from 'shared/hooks/useQuery'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -23,17 +26,46 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
+
+  if (!res.ok) {
+    return {
+      props: {
+        error: await res.json(),
+        isError: true,
+      },
+    }
+  }
+
   return {
     props: {
-      plugin: await res.json(),
+      fallback: {
+        [generateKey('plugin', String(id))]: await res.json(),
+      },
     },
   }
 }
 
 const Plugin = ({
-  plugin,
+  props,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
+  const pathId = String(router.query.id)
+  const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`)
+
+  if (props?.isError) {
+    return <div>error hello</div>
+  }
+
+  if (!data) {
+    return (
+      <AuthLayout>
+        <div className="m-12">
+          <LogoSpinner />
+        </div>
+      </AuthLayout>
+    )
+  }
+
   const {
     name,
     description,
@@ -46,7 +78,7 @@ const Plugin = ({
     isPending,
     source,
     published,
-  } = plugin
+  } = data
 
   return (
     <AuthLayout>
