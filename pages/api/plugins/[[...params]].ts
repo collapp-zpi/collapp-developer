@@ -24,8 +24,6 @@ import {
   NotEquals,
 } from 'class-validator'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
-import AWS from 'aws-sdk'
-import { PutObjectRequest } from 'aws-sdk/clients/s3'
 import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export class CreatePluginDTO {
@@ -107,6 +105,13 @@ class Plugins {
       include: {
         source: true,
         published: true,
+        logs: {
+          select: {
+            id: true,
+            content: true,
+            date: true,
+          },
+        },
       },
     })
 
@@ -135,6 +140,9 @@ class Plugins {
           connect: {
             id: user.id,
           },
+        },
+        logs: {
+          create: [{ content: 'Created' }],
         },
       },
     })
@@ -234,6 +242,9 @@ class Plugins {
       where: { id },
       data: {
         isPending: true,
+        logs: {
+          create: [{ content: 'Submitted' }],
+        },
       },
     })
   }

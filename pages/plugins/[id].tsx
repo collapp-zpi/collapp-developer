@@ -15,6 +15,8 @@ import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { Loading } from 'layouts/Loading'
 import { withFallback } from 'shared/hooks/useApiForm'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -45,12 +47,41 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
+interface LogType {
+  id: string
+  date: string
+  content: string
+}
+
 const Plugin = ({
   props,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
   const pathId = String(router.query.id)
-  const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`)
+  const [isRefetching, setRefetching] = useState(false)
+  const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`, {
+    refreshInterval: isRefetching ? 3000 : undefined,
+  })
+
+  const {
+    name,
+    description,
+    id,
+    icon,
+    minWidth,
+    maxWidth,
+    minHeight,
+    maxHeight,
+    isPending,
+    isBuilding,
+    source,
+    published,
+    logs,
+  } = data || {}
+
+  useEffect(() => {
+    setRefetching(isBuilding)
+  }, [isBuilding])
 
   if (props?.isError) {
     return <div>error hello</div>
@@ -63,20 +94,6 @@ const Plugin = ({
       </AuthLayout>
     )
   }
-
-  const {
-    name,
-    description,
-    id,
-    icon,
-    minWidth,
-    maxWidth,
-    minHeight,
-    maxHeight,
-    isPending,
-    source,
-    published,
-  } = data
 
   return (
     <AuthLayout>
@@ -125,6 +142,27 @@ const Plugin = ({
           )}
 
           <PluginDeleteForm name={name} />
+        </div>
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+          <h1 className="text-xl font-bold text-gray-500 mb-4">Logs</h1>
+          <table>
+            <thead>
+              <tr>
+                <td className="py-2 px-3 font-bold">Date</td>
+                <td className="py-2 px-3 font-bold">Message</td>
+              </tr>
+            </thead>
+            <tbody>
+              {logs.map(({ id, date, content }: LogType) => (
+                <tr key={id}>
+                  <td className="py-2 px-3 text-sm text-gray-400">
+                    {dayjs(date).format('LLL')}
+                  </td>
+                  <td className="py-2 px-3">{content}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </PluginContext.Provider>
     </AuthLayout>

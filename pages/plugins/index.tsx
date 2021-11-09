@@ -111,6 +111,7 @@ const Plugins = ({
                     name,
                     description,
                     isPending,
+                    isBuilding,
                     createdAt,
                     icon,
                   }: DraftPlugin) => (
@@ -133,7 +134,11 @@ const Plugins = ({
                         <div
                           className={classNames(
                             'w-4 h-4 rounded-full',
-                            isPending ? 'bg-green-500' : 'bg-gray-300',
+                            isBuilding
+                              ? 'bg-yellow-500'
+                              : isPending
+                              ? 'bg-green-500'
+                              : 'bg-gray-300',
                           )}
                         />
                       </td>
