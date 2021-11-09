@@ -14,6 +14,7 @@ import { InputText } from 'shared/components/input/InputText'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
+import { truncate } from 'shared/utils/text'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -108,10 +109,12 @@ const Published = ({
                           className="shadow-lg w-8 h-8 mr-3 bg-gray-200 rounded-25"
                           alt="Plugin icon"
                         />
-                        {name}
+                        {truncate(name, 50)}
                       </td>
-                      <td className="p-4">{description}</td>
-                      <td className="p-4">{dayjs(updatedAt).format('LLL')}</td>
+                      <td className="p-4">{truncate(description, 100)}</td>
+                      <td className="p-4 text-sm">
+                        {dayjs(updatedAt).format('LLL')}
+                      </td>
                     </tr>
                   ),
                 )}

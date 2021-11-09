@@ -17,6 +17,8 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { generateKey, objectPick } from 'shared/utils/object'
+import { Tooltip } from 'shared/components/Tooltip'
+import { truncate } from 'shared/utils/text'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -101,7 +103,7 @@ const Plugins = ({
                   <th className="text-left p-4">Name</th>
                   <th className="text-left p-4">Description</th>
                   <th className="text-left p-4">Date</th>
-                  <th className="text-left p-4">Pending</th>
+                  <th className="text-left p-4">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,21 +128,33 @@ const Plugins = ({
                           className="shadow-lg w-8 h-8 mr-3 bg-gray-200 rounded-25"
                           alt="Plugin icon"
                         />
-                        {name}
+                        {truncate(name, 50)}
                       </td>
-                      <td className="p-4">{description}</td>
-                      <td className="p-4">{dayjs(createdAt).format('LLL')}</td>
+                      <td className="p-4">{truncate(description, 100)}</td>
+                      <td className="p-4 text-sm">
+                        {dayjs(createdAt).format('LLL')}
+                      </td>
                       <td className="p-4">
-                        <div
-                          className={classNames(
-                            'w-4 h-4 rounded-full',
+                        <Tooltip
+                          value={
                             isBuilding
-                              ? 'bg-yellow-500'
+                              ? 'Building'
                               : isPending
-                              ? 'bg-green-500'
-                              : 'bg-gray-300',
-                          )}
-                        />
+                              ? 'Pending'
+                              : 'Draft'
+                          }
+                        >
+                          <div
+                            className={classNames(
+                              'w-4 h-4 rounded-full',
+                              isBuilding
+                                ? 'bg-yellow-500'
+                                : isPending
+                                ? 'bg-green-500'
+                                : 'bg-gray-300',
+                            )}
+                          />
+                        </Tooltip>
                       </td>
                     </tr>
                   ),
