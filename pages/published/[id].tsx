@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import { AuthLayout } from 'layouts/AuthLayout'
+import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import Button from 'shared/components/button/Button'
 import { GoChevronLeft } from 'react-icons/go'
@@ -10,6 +10,7 @@ import {
   InputRangeFrame,
   PureInputRange,
 } from 'shared/components/input/InputRange'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -45,7 +46,7 @@ const Published = ({
   } = published
 
   return (
-    <AuthLayout>
+    <Layout>
       <Head>
         <title>Plugin</title>
       </Head>
@@ -119,8 +120,8 @@ const Published = ({
           </div>
         )}
       </div>
-    </AuthLayout>
+    </Layout>
   )
 }
 
-export default Published
+export default withAuth(Published)

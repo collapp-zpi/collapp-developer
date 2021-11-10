@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
-import { AuthLayout } from 'layouts/AuthLayout'
+import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import Button from 'shared/components/button/Button'
 import { GoPlus } from 'react-icons/go'
@@ -19,6 +19,7 @@ import { Pagination } from 'shared/components/Pagination'
 import { generateKey, objectPick } from 'shared/utils/object'
 import { Tooltip } from 'shared/components/Tooltip'
 import { truncate } from 'shared/utils/text'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -67,7 +68,7 @@ const Plugins = ({
   }
 
   return (
-    <AuthLayout>
+    <Layout>
       <Head>
         <title>Plugins</title>
       </Head>
@@ -171,8 +172,8 @@ const Plugins = ({
           </div>
         </>
       )}
-    </AuthLayout>
+    </Layout>
   )
 }
 
-export default withFilters(Plugins, ['limit', 'page', 'name'])
+export default withAuth(withFilters(Plugins, ['limit', 'page', 'name']))

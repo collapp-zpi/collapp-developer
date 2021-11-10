@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { AuthLayout } from 'layouts/AuthLayout'
+import { Layout } from 'layouts/Layout'
 import { toast } from 'react-hot-toast'
 import { object, string } from 'yup'
 import { InputPhoto } from 'shared/components/input/InputPhoto'
@@ -14,6 +14,7 @@ import Form from 'shared/components/form/Form'
 import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { Loading } from 'layouts/Loading'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/user`, {
@@ -59,16 +60,16 @@ const UserSettings = ({
 
   if (!data) {
     return (
-      <AuthLayout>
+      <Layout>
         <Loading />
-      </AuthLayout>
+      </Layout>
     )
   }
 
   const { name, image } = data
 
   return (
-    <AuthLayout>
+    <Layout>
       <Head>
         <title>Settings</title>
       </Head>
@@ -76,11 +77,11 @@ const UserSettings = ({
         <h1 className="text-2xl font-bold text-gray-500 mb-4">User settings</h1>
         <UserForm {...{ name, image }} />
       </div>
-    </AuthLayout>
+    </Layout>
   )
 }
 
-export default withFallback(UserSettings)
+export default withAuth(withFallback(UserSettings))
 
 interface UserFormProps {
   name: string

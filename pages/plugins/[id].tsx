@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
-import { AuthLayout } from 'layouts/AuthLayout'
+import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import { PluginForm } from 'includes/plugins/components/PluginForm'
 import Button from 'shared/components/button/Button'
@@ -17,6 +17,7 @@ import { Loading } from 'layouts/Loading'
 import { withFallback } from 'shared/hooks/useApiForm'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -89,14 +90,14 @@ const Plugin = ({
 
   if (!data) {
     return (
-      <AuthLayout>
+      <Layout>
         <Loading />
-      </AuthLayout>
+      </Layout>
     )
   }
 
   return (
-    <AuthLayout>
+    <Layout>
       <Head>
         <title>Plugin</title>
       </Head>
@@ -165,8 +166,8 @@ const Plugin = ({
           </table>
         </div>
       </PluginContext.Provider>
-    </AuthLayout>
+    </Layout>
   )
 }
 
-export default withFallback(Plugin)
+export default withAuth(withFallback(Plugin))

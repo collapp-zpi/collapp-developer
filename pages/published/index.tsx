@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
-import { AuthLayout } from 'layouts/AuthLayout'
+import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { defaultPluginIcon } from 'config/defaultIcons'
@@ -15,6 +15,7 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { truncate } from 'shared/utils/text'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -63,7 +64,7 @@ const Published = ({
   }
 
   return (
-    <AuthLayout>
+    <Layout>
       <Head>
         <title>Published</title>
       </Head>
@@ -130,8 +131,8 @@ const Published = ({
           </div>
         </>
       )}
-    </AuthLayout>
+    </Layout>
   )
 }
 
-export default withFilters(Published, ['limit', 'page', 'name'])
+export default withAuth(withFilters(Published, ['limit', 'page', 'name']))
