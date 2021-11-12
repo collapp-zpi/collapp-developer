@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
@@ -13,11 +13,12 @@ import { PluginContext } from 'includes/plugins/components/PluginContext'
 import Link from 'next/link'
 import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
-import { Loading } from 'layouts/Loading'
 import { withFallback } from 'shared/hooks/useApiForm'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { withAuth } from 'shared/hooks/useAuth'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -34,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         error: await res.json(),
-        isError: true,
       },
     }
   }
@@ -54,15 +54,17 @@ interface LogType {
   content: string
 }
 
-const Plugin = ({
-  props,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Plugin = () => {
   const router = useRouter()
   const pathId = String(router.query.id)
   const [isRefetching, setRefetching] = useState(false)
-  const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`, {
-    refreshInterval: isRefetching ? 3000 : undefined,
-  })
+  const { data, error } = useQuery(
+    ['plugin', pathId],
+    `/api/plugins/${pathId}`,
+    {
+      refreshInterval: isRefetching ? 3000 : undefined,
+    },
+  )
 
   const {
     name,
@@ -84,18 +86,6 @@ const Plugin = ({
     setRefetching(isBuilding)
   }, [isBuilding])
 
-  if (props?.isError) {
-    return <div>error hello</div>
-  }
-
-  if (!data) {
-    return (
-      <Layout>
-        <Loading />
-      </Layout>
-    )
-  }
-
   return (
     <Layout>
       <Head>
@@ -110,61 +100,81 @@ const Plugin = ({
           <GoChevronLeft className="mr-2 -ml-2" />
           Back
         </Button>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">General info</h1>
-          <PluginForm initial={{ name, description, icon }} />
-        </div>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">Plugin size</h1>
-          <PluginSizeForm
-            initial={{ minWidth, maxWidth, minHeight, maxHeight }}
-          />
-        </div>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">Source code</h1>
-          <PluginFileForm file={source} />
-        </div>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">Manage</h1>
-          <PluginSubmitForm />
-
-          {!!published && (
-            <div className="flex items-center mb-4">
-              <div className="flex-grow flex flex-col mr-2">
-                <h4 className="font-bold text-md">View published</h4>
-                <h6 className="text-sm">
-                  Go to the published version of the plugin
-                </h6>
-              </div>
-              <Link href={`/published/${published.id}`} passHref>
-                <Button color="light">View</Button>
-              </Link>
+        {!!error && (
+          <div className="mt-6">
+            <ErrorInfo error={error} />
+          </div>
+        )}
+        {!data && !error && (
+          <div className="m-12">
+            <LogoSpinner />
+          </div>
+        )}
+        {!!data && !error && (
+          <>
+            <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+              <h1 className="text-xl font-bold text-gray-500 mb-4">
+                General info
+              </h1>
+              <PluginForm initial={{ name, description, icon }} />
             </div>
-          )}
+            <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+              <h1 className="text-xl font-bold text-gray-500 mb-4">
+                Plugin size
+              </h1>
+              <PluginSizeForm
+                initial={{ minWidth, maxWidth, minHeight, maxHeight }}
+              />
+            </div>
+            <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+              <h1 className="text-xl font-bold text-gray-500 mb-4">
+                Source code
+              </h1>
+              <PluginFileForm file={source} />
+            </div>
+            <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+              <h1 className="text-xl font-bold text-gray-500 mb-4">Manage</h1>
+              <PluginSubmitForm />
 
-          <PluginDeleteForm name={name} />
-        </div>
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
-          <h1 className="text-xl font-bold text-gray-500 mb-4">Logs</h1>
-          <table>
-            <thead>
-              <tr>
-                <td className="py-2 px-3 font-bold">Date</td>
-                <td className="py-2 px-3 font-bold">Message</td>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map(({ id, date, content }: LogType) => (
-                <tr key={id}>
-                  <td className="py-2 px-3 text-sm text-gray-400">
-                    {dayjs(date).format('LLL')}
-                  </td>
-                  <td className="py-2 px-3">{content}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              {!!published && (
+                <div className="flex items-center mb-4">
+                  <div className="flex-grow flex flex-col mr-2">
+                    <h4 className="font-bold text-md">View published</h4>
+                    <h6 className="text-sm">
+                      Go to the published version of the plugin
+                    </h6>
+                  </div>
+                  <Link href={`/published/${published.id}`} passHref>
+                    <Button color="light">View</Button>
+                  </Link>
+                </div>
+              )}
+
+              <PluginDeleteForm name={name} />
+            </div>
+            <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl mt-8">
+              <h1 className="text-xl font-bold text-gray-500 mb-4">Logs</h1>
+              <table>
+                <thead>
+                  <tr>
+                    <td className="py-2 px-3 font-bold">Date</td>
+                    <td className="py-2 px-3 font-bold">Message</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {logs.map(({ id, date, content }: LogType) => (
+                    <tr key={id}>
+                      <td className="py-2 px-3 text-sm text-gray-400">
+                        {dayjs(date).format('LLL')}
+                      </td>
+                      <td className="py-2 px-3">{content}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </PluginContext.Provider>
     </Layout>
   )

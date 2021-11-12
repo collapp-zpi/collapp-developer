@@ -6,15 +6,16 @@ import { InputPhoto } from 'shared/components/input/InputPhoto'
 import { InputText } from 'shared/components/input/InputText'
 import { BiText } from 'react-icons/bi'
 import SubmitButton from 'shared/components/button/SubmitButton'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
 import { updateUser } from 'includes/user/endpoints'
 import { useSWRConfig } from 'swr'
 import useApiForm, { withFallback } from 'shared/hooks/useApiForm'
 import Form from 'shared/components/form/Form'
 import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
-import { Loading } from 'layouts/Loading'
 import { withAuth } from 'shared/hooks/useAuth'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/user`, {
@@ -30,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         error: await res.json(),
-        isError: true,
       },
     }
   }
@@ -49,34 +49,33 @@ const schema = object().shape({
   image: string(),
 })
 
-const UserSettings = ({
-  props,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data } = useQuery('user', `/api/user`)
-
-  if (props?.isError) {
-    return <div>error hello</div>
-  }
-
-  if (!data) {
-    return (
-      <Layout>
-        <Loading />
-      </Layout>
-    )
-  }
-
-  const { name, image } = data
+const UserSettings = () => {
+  const { data, error } = useQuery('user', `/api/user`)
+  const { name, image } = data || {}
 
   return (
     <Layout>
       <Head>
         <title>Settings</title>
       </Head>
-      <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-        <h1 className="text-2xl font-bold text-gray-500 mb-4">User settings</h1>
-        <UserForm {...{ name, image }} />
-      </div>
+      {!!error && (
+        <div className="mt-6">
+          <ErrorInfo error={error} />
+        </div>
+      )}
+      {!data && !error && (
+        <div className="m-12">
+          <LogoSpinner />
+        </div>
+      )}
+      {!!data && !error && (
+        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+          <h1 className="text-2xl font-bold text-gray-500 mb-4">
+            User settings
+          </h1>
+          <UserForm {...{ name, image }} />
+        </div>
+      )}
     </Layout>
   )
 }

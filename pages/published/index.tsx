@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
@@ -16,6 +16,7 @@ import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -34,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         error: await res.json(),
-        isError: true,
       },
     }
   }
@@ -52,16 +52,10 @@ const filtersSchema = object().shape({
   name: string().default(''),
 })
 
-const Published = ({
-  props,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Published = () => {
   const router = useRouter()
   const [, setFilters] = useFilters()
-  const { data } = useQuery('published', '/api/published')
-
-  if (props?.isError) {
-    return <div>error hello</div>
-  }
+  const { data, error } = useQuery('published', '/api/published')
 
   return (
     <Layout>
@@ -74,18 +68,23 @@ const Published = ({
         </FiltersForm>
       </div>
 
-      {!data && (
+      {!!error && (
+        <div className="mt-12">
+          <ErrorInfo error={error} />
+        </div>
+      )}
+      {!data && !error && (
         <div className="m-12">
           <LogoSpinner />
         </div>
       )}
-      {!!data && !data.entities?.length && (
+      {!!data && !error && !data.entities?.length && (
         <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg">
           No plugins found
         </div>
       )}
 
-      {!!data && !!data.entities?.length && (
+      {!!data && !error && !!data.entities?.length && (
         <>
           <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
             <table className="w-full border-collapse">
