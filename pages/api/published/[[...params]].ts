@@ -23,6 +23,7 @@ class Published {
     return fetchWithPagination('publishedPlugin', limit, page, {
       authorId: user.id,
       ...(name && { name: { contains: name, mode: 'insensitive' } }),
+      isDeleted: false,
     })
   }
 

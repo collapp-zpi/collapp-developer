@@ -180,19 +180,78 @@ class Plugins {
 
   @Delete('/:id')
   async deletePlugin(@Param('id') id: string, @User user: RequestUser) {
-    const plugin = await this.innerGetPlugin(id, user)
+    const plugin = await prisma.draftPlugin.findFirst({
+      where: { id },
+      include: {
+        source: {
+          select: {
+            id: true,
+            url: true,
+          },
+        },
+        published: {
+          select: {
+            id: true,
+            source: {
+              select: {
+                id: true,
+                url: true,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin does not exist.')
+    }
+
+    if (plugin.authorId !== user.id) {
+      throw new UnauthorizedException('The plugin has a different author.')
+    }
 
     if (plugin.isPending) {
       throw new BadRequestException(`Cannot make changes to a pending plugin.`)
     }
 
-    if (!!plugin.source) {
+    if (plugin.source) {
       s3.deleteObject(getParams(plugin.source.url), (err) => {
         if (err) console.log(err)
       })
 
       await prisma.file.delete({
         where: { id: plugin.source.id },
+      })
+    }
+
+    if (plugin.published) {
+      if (
+        plugin.published?.source?.id &&
+        plugin.published.source.id !== plugin?.source?.id
+      ) {
+        s3.deleteObject(getParams(plugin.published.source.url), (err) => {
+          if (err) console.log(err)
+        })
+
+        await prisma.file.delete({
+          where: { id: plugin.published.source.id },
+        })
+      }
+      await prisma.publishedPlugin.update({
+        where: { id: plugin.published.id },
+        data: {
+          icon: '',
+          isDeleted: true,
+          spaces: {
+            updateMany: {
+              where: {},
+              data: {
+                data: {},
+              },
+            },
+          },
+        },
       })
     }
 

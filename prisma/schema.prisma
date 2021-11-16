@@ -63,8 +63,8 @@ model PublishedPlugin {
   authorId    String?
   author      DeveloperUser?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
-  draftId     String
-  draft       DraftPlugin      @relation(fields: [draftId], references: [id])
+  draftId     String?
+  draft       DraftPlugin?      @relation(fields: [draftId], references: [id], onDelete: SetNull)
 
   isDeleted   Boolean          @default(false)
 
