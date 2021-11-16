@@ -21,19 +21,13 @@ import { Tooltip } from 'shared/components/Tooltip'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { fetchApi } from 'shared/utils/fetchApi'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
   const search = new URLSearchParams(params)
 
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins?${search}`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
+  const res = await fetchApi(`/api/plugins?${search}`)(context)
 
   if (!res.ok) {
     return {

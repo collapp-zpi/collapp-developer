@@ -16,16 +16,10 @@ import { useQuery } from 'shared/hooks/useQuery'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { fetchApi } from 'shared/utils/fetchApi'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/user`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
+  const res = await fetchApi('/api/user')(context)
 
   if (!res.ok) {
     return {

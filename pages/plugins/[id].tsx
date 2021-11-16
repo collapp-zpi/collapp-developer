@@ -19,17 +19,11 @@ import { useEffect, useState } from 'react'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { fetchApi } from 'shared/utils/fetchApi'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins/${id}`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
+  const res = await fetchApi(`/api/plugins/${id}`)(context)
 
   if (!res.ok) {
     return {
