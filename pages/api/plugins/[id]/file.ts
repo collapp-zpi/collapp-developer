@@ -47,14 +47,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const file = await prisma.file.findUnique({
     where: { draftId: plugin.id },
-    include: {
-      published: true,
-    },
+    include: { published: true },
   })
 
   try {
-    const draftPath = `drafts/${plugin.author.id}/${id}.zip`
-
     const parsedFile: FFile = await new Promise((resolve, reject) => {
       const form = new Formidable.IncomingForm()
 
@@ -71,23 +67,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         .json({ message: 'An error ocurred while parsing the file' })
 
     if (file && !file.published) {
-      // TODO: Delete file from S3
       await prisma.file.delete({
         where: { id: file.id },
       })
     }
 
+    const draftPath = `drafts/${plugin?.author?.id}/${id}.zip`
+
     fs.readFile(parsedFile.path, function (err, data) {
       if (err) throw err
 
-      s3.putObject(getParams(draftPath, data), (err, data) => {
+      s3.putObject(getParams(draftPath, data), (err) => {
         fs.unlink(parsedFile.path, function (err) {
           if (err) {
             console.error(err)
           }
         })
         if (err) console.log(err)
-        else console.log(data)
       })
     })
 

@@ -228,14 +228,13 @@ class Plugins {
     if (plugin.published) {
       if (
         plugin.published?.source?.id &&
-        plugin.published.source.id !== plugin?.source?.id
+        plugin.published.source.id !== plugin.source?.id
       ) {
-        s3.deleteObject(getParams(plugin.published.source.url), (err) => {
-          if (err) console.log(err)
-        })
-
         await prisma.file.delete({
           where: { id: plugin.published.source.id },
+        })
+        await fetch(`https://collapp-build-server.herokuapp.com/plugin/${id}`, {
+          method: 'DELETE',
         })
       }
       await prisma.publishedPlugin.update({
