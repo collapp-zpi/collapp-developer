@@ -2,6 +2,7 @@ import { prisma } from 'shared/utils/prismaClient'
 import {
   Body,
   createHandler,
+  Delete,
   Get,
   Patch,
   ValidationPipe,
@@ -41,6 +42,25 @@ class UserSettings {
     return await prisma.developerUser.update({
       where: { id: user.id },
       data: { ...body },
+    })
+  }
+
+  @Delete()
+  async deleteAccount(@User user: RequestUser) {
+    return await prisma.developerUser.update({
+      where: { id: user.id },
+      data: {
+        name: 'Deleted User',
+        email: null,
+        emailVerified: null,
+        image: '',
+        accounts: {
+          deleteMany: {},
+        },
+        sessions: {
+          deleteMany: {},
+        },
+      },
     })
   }
 }

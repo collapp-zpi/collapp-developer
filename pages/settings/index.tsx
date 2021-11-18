@@ -17,6 +17,7 @@ import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { fetchApi } from 'shared/utils/fetchApi'
+import { AccountDeleteForm } from 'includes/user/AccountDeleteForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetchApi('/api/user')(context)
@@ -63,12 +64,18 @@ const UserSettings = () => {
         </div>
       )}
       {!!data && !error && (
-        <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
-          <h1 className="text-2xl font-bold text-gray-500 mb-4">
-            User settings
-          </h1>
-          <UserForm {...{ name, image }} />
-        </div>
+        <>
+          <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
+            <h1 className="text-2xl font-bold text-gray-500 mb-4">
+              User settings
+            </h1>
+            <UserForm {...{ name, image }} />
+          </div>
+
+          <div className="bg-white px-8 py-8 mt-12 rounded-3xl shadow-2xl">
+            <AccountDeleteForm />
+          </div>
+        </>
       )}
     </Layout>
   )
