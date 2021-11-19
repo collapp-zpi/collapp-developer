@@ -18,6 +18,7 @@ import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { fetchApi } from 'shared/utils/fetchApi'
 import { AccountDeleteForm } from 'includes/user/AccountDeleteForm'
+import { defaultUserIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetchApi('/api/user')(context)
@@ -112,7 +113,7 @@ const UserForm = ({ name, image }: UserFormProps) => {
   return (
     <Form {...apiForm} className="flex flex-col">
       <div className="flex flex-col md:flex-row">
-        <InputPhoto name="image" image={image} />
+        <InputPhoto name="image" image={image || defaultUserIcon} />
         <div className="flex-grow flex flex-col">
           <InputText
             name="name"

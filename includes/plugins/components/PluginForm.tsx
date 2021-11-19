@@ -12,6 +12,7 @@ import { updatePlugin } from 'includes/plugins/endpoints'
 import { generateKey } from 'shared/utils/object'
 import { useSWRConfig } from 'swr'
 import Form from 'shared/components/form/Form'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -47,7 +48,11 @@ export const PluginForm = ({
   return (
     <Form {...apiForm} className="flex flex-col">
       <div className="flex flex-col md:flex-row">
-        <InputPhoto name="icon" image={icon} disabled={isPending} />
+        <InputPhoto
+          name="icon"
+          image={icon || defaultPluginIcon}
+          disabled={isPending}
+        />
         <div className="flex-grow flex flex-col">
           <InputText
             name="name"

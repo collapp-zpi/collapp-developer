@@ -4,7 +4,6 @@ import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
-import { defaultPluginIcon } from 'config/defaultIcons'
 import { generateKey, objectPick } from 'shared/utils/object'
 import { object, string } from 'yup'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
@@ -18,6 +17,7 @@ import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { fetchApi } from 'shared/utils/fetchApi'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])

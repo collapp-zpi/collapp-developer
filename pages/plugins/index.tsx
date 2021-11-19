@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import Button from 'shared/components/button/Button'
 import { GoPlus } from 'react-icons/go'
 import dayjs from 'dayjs'
-import { defaultPluginIcon } from 'config/defaultIcons'
 import classNames from 'classnames'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { useQuery } from 'shared/hooks/useQuery'
@@ -22,6 +21,7 @@ import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { fetchApi } from 'shared/utils/fetchApi'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])

@@ -16,6 +16,7 @@ import { useQuery } from 'shared/hooks/useQuery'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { fetchApi } from 'shared/utils/fetchApi'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -86,7 +87,7 @@ const Published = () => {
           <div className="bg-white px-8 py-8 rounded-3xl shadow-2xl">
             <div className="flex">
               <img
-                src={icon}
+                src={icon || defaultPluginIcon}
                 className="rounded-25 w-12 mr-4"
                 alt="Plugin icon"
               />
