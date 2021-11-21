@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
@@ -11,30 +11,22 @@ import {
   PureInputRange,
 } from 'shared/components/input/InputRange'
 import { withAuth } from 'shared/hooks/useAuth'
-import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import { fetchApi } from 'shared/utils/fetchApi'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const res = await fetchApi(`/api/published/${id}`)(context)
-
-  if (!res.ok) {
-    return {
-      props: {
-        error: await res.json(),
-      },
-    }
-  }
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const id = String(context.query.id)
+  const fetch = fetchApiFallback(context)
+  const published = await fetch(['published', id], `/api/published/${id}`)
 
   return {
     props: {
-      fallback: {
-        [generateKey('published', String(id))]: await res.json(),
-      },
+      fallback: { ...published },
     },
   }
 }

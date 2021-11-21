@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
@@ -15,33 +15,26 @@ import { InputText } from 'shared/components/input/InputText'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
-import { generateKey, objectPick } from 'shared/utils/object'
+import { objectPick } from 'shared/utils/object'
 import { Tooltip } from 'shared/components/Tooltip'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
-import { fetchApi } from 'shared/utils/fetchApi'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
   const search = new URLSearchParams(params)
 
-  const res = await fetchApi(`/api/plugins?${search}`)(context)
-
-  if (!res.ok) {
-    return {
-      props: {
-        error: await res.json(),
-      },
-    }
-  }
+  const fetch = fetchApiFallback(context)
+  const plugins = await fetch(['plugins', params], `/api/plugins?${search}`)
 
   return {
     props: {
-      fallback: {
-        [generateKey('plugins', params)]: await res.json(),
-      },
+      fallback: { ...plugins },
     },
   }
 }

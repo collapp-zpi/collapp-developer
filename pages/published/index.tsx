@@ -1,10 +1,10 @@
-import type { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
-import { generateKey, objectPick } from 'shared/utils/object'
+import { objectPick } from 'shared/utils/object'
 import { object, string } from 'yup'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { useQuery } from 'shared/hooks/useQuery'
@@ -16,28 +16,24 @@ import { Pagination } from 'shared/components/Pagination'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
-import { fetchApi } from 'shared/utils/fetchApi'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
   const search = new URLSearchParams(params)
 
-  const res = await fetchApi(`/api/published?${search}`)(context)
-
-  if (!res.ok) {
-    return {
-      props: {
-        error: await res.json(),
-      },
-    }
-  }
+  const fetch = fetchApiFallback(context)
+  const published = await fetch(
+    ['published', params],
+    `/api/published?${search}`,
+  )
 
   return {
     props: {
-      fallback: {
-        [generateKey('published', params)]: await res.json(),
-      },
+      fallback: { ...published },
     },
   }
 }

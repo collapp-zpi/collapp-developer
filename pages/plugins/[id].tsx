@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
@@ -11,7 +11,6 @@ import { PluginFileForm } from 'includes/plugins/components/PluginFileForm'
 import { PluginSubmitForm } from 'includes/plugins/components/PluginSubmitForm'
 import { PluginContext } from 'includes/plugins/components/PluginContext'
 import Link from 'next/link'
-import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { withFallback } from 'shared/hooks/useApiForm'
 import dayjs from 'dayjs'
@@ -19,25 +18,18 @@ import { useEffect, useState } from 'react'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import { fetchApi } from 'shared/utils/fetchApi'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const res = await fetchApi(`/api/plugins/${id}`)(context)
-
-  if (!res.ok) {
-    return {
-      props: {
-        error: await res.json(),
-      },
-    }
-  }
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const id = String(context.query.id)
+  const fetch = fetchApiFallback(context)
+  const plugin = await fetch(['plugin', id], `/api/plugins/${id}`)
 
   return {
     props: {
-      fallback: {
-        [generateKey('plugin', String(id))]: await res.json(),
-      },
+      fallback: { ...plugin },
     },
   }
 }
