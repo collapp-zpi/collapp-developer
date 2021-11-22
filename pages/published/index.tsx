@@ -1,12 +1,10 @@
-import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
-import { objectPick } from 'shared/utils/object'
 import { object, string } from 'yup'
-import { useFilters, withFilters } from 'shared/hooks/useFilters'
+import { useFilters } from 'shared/hooks/useFilters'
 import { useQuery } from 'shared/hooks/useQuery'
 import { FiltersForm } from 'shared/components/form/FiltersForm'
 import { InputText } from 'shared/components/input/InputText'
@@ -16,27 +14,7 @@ import { Pagination } from 'shared/components/Pagination'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const params = objectPick(context.query, ['limit', 'page', 'name'])
-  const search = new URLSearchParams(params)
-
-  const fetch = fetchApiFallback(context)
-  const published = await fetch(
-    ['published', params],
-    `/api/published?${search}`,
-  )
-
-  return {
-    props: {
-      fallback: { ...published },
-    },
-  }
-}
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -124,4 +102,4 @@ const Published = () => {
   )
 }
 
-export default withAuth(withFilters(Published, ['limit', 'page', 'name']))
+export default withAuth(Published, ['limit', 'page', 'name'])

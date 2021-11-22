@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { DraftPlugin } from '@prisma/client'
 import { Layout } from 'layouts/Layout'
@@ -15,29 +14,11 @@ import { InputText } from 'shared/components/input/InputText'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
-import { objectPick } from 'shared/utils/object'
 import { Tooltip } from 'shared/components/Tooltip'
 import { truncate } from 'shared/utils/text'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const params = objectPick(context.query, ['limit', 'page', 'name'])
-  const search = new URLSearchParams(params)
-
-  const fetch = fetchApiFallback(context)
-  const plugins = await fetch(['plugins', params], `/api/plugins?${search}`)
-
-  return {
-    props: {
-      fallback: { ...plugins },
-    },
-  }
-}
 
 const filtersSchema = object().shape({
   name: string().default(''),

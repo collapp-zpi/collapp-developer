@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import { Layout } from 'layouts/Layout'
 import { useRouter } from 'next/router'
@@ -14,22 +13,7 @@ import { withAuth } from 'shared/hooks/useAuth'
 import { useQuery } from 'shared/hooks/useQuery'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const id = String(context.query.id)
-  const fetch = fetchApiFallback(context)
-  const published = await fetch(['published', id], `/api/published/${id}`)
-
-  return {
-    props: {
-      fallback: { ...published },
-    },
-  }
-}
 
 const Published = () => {
   const router = useRouter()

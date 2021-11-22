@@ -6,31 +6,16 @@ import { InputPhoto } from 'shared/components/input/InputPhoto'
 import { InputText } from 'shared/components/input/InputText'
 import { BiText } from 'react-icons/bi'
 import SubmitButton from 'shared/components/button/SubmitButton'
-import { GetServerSidePropsContext } from 'next'
 import { updateUser } from 'includes/user/endpoints'
 import { useSWRConfig } from 'swr'
-import useApiForm, { withFallback } from 'shared/hooks/useApiForm'
+import useApiForm from 'shared/hooks/useApiForm'
 import Form from 'shared/components/form/Form'
 import { useQuery } from 'shared/hooks/useQuery'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
 import { AccountDeleteForm } from 'includes/user/AccountDeleteForm'
 import { defaultUserIcon } from 'shared/utils/defaultIcons'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const fetch = fetchApiFallback(context)
-  const user = await fetch(['user'], '/api/user')
-
-  return {
-    props: {
-      fallback: { ...user },
-    },
-  }
-}
 
 const schema = object().shape({
   name: string().required().default(''),
@@ -74,7 +59,7 @@ const UserSettings = () => {
   )
 }
 
-export default withAuth(withFallback(UserSettings))
+export default withAuth(UserSettings)
 
 interface UserFormProps {
   name: string
