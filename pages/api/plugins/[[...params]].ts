@@ -117,6 +117,9 @@ class Plugins {
             content: true,
             date: true,
           },
+          orderBy: {
+            date: 'desc',
+          },
         },
       },
     })
