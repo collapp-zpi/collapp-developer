@@ -75,10 +75,16 @@ class Plugins {
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
     @Query('name') name?: string,
   ) {
-    return fetchWithPagination('draftPlugin', limit, page, {
-      authorId: user.id,
-      ...(name && { name: { contains: name, mode: 'insensitive' } }),
-    })
+    return fetchWithPagination(
+      'draftPlugin',
+      limit,
+      page,
+      {
+        authorId: user.id,
+        ...(name && { name: { contains: name, mode: 'insensitive' } }),
+      },
+      { updatedAt: 'desc' },
+    )
   }
 
   async innerGetPlugin(id: string, user: RequestUser) {
