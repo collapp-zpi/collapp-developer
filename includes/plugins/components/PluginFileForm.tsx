@@ -12,7 +12,7 @@ import { updatePluginFile } from 'includes/plugins/endpoints'
 import { File as FileModel } from '@prisma/client'
 import { usePluginContext } from 'includes/plugins/components/PluginContext'
 import download from 'downloadjs'
-import { amazonUrl } from 'shared/utils/awsHelpers'
+import { cloudfrontUrl } from 'shared/utils/awsHelpers'
 import { useSWRConfig } from 'swr'
 import { generateKey } from 'shared/utils/object'
 
@@ -28,29 +28,39 @@ type SingleFileProps = {
   file: { name: string; size: number; date?: Date; url?: string }
 }
 
-export const SingleFile = ({ file }: SingleFileProps) => (
-  <div className="flex items-center">
-    <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
-      <BsFileEarmarkZip size="2rem" />
-    </div>
-    <div className="flex flex-col mr-auto">
-      <div className="font-bold">{file?.name}</div>
-      {!!file?.date && (
-        <div className="text-sm">{dayjs(file?.date).format('LLL')}</div>
+export const SingleFile = ({ file }: SingleFileProps) => {
+  const handleDownload = (url: string) => () => {
+    try {
+      download(url)
+    } catch (e) {
+      toast.error(`Could not download file, please try again later.`)
+    }
+  }
+
+  return (
+    <div className="flex items-center">
+      <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
+        <BsFileEarmarkZip size="2rem" />
+      </div>
+      <div className="flex flex-col mr-auto">
+        <div className="font-bold">{file?.name}</div>
+        {!!file?.date && (
+          <div className="text-sm">{dayjs(file?.date).format('LLL')}</div>
+        )}
+        <div className="text-sm text-gray-400">{parseFileSize(file?.size)}</div>
+      </div>
+      {!!file?.url && (
+        <Button
+          hasIcon
+          color="light"
+          onClick={handleDownload(cloudfrontUrl + file.url)}
+        >
+          <CgSoftwareDownload size="1.5rem" />
+        </Button>
       )}
-      <div className="text-sm text-gray-400">{parseFileSize(file?.size)}</div>
     </div>
-    {!!file?.url && (
-      <Button
-        hasIcon
-        color="light"
-        onClick={() => download(amazonUrl + file.url)}
-      >
-        <CgSoftwareDownload size="1.5rem" />
-      </Button>
-    )}
-  </div>
-)
+  )
+}
 
 type PluginFileFormProps = {
   file?: FileModel
