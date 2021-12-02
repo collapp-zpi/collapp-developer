@@ -242,10 +242,10 @@ class Plugins {
         await prisma.file.delete({
           where: { id: plugin.published.source.id },
         })
-        await fetch(`https://collapp-build-server.herokuapp.com/plugin/${id}`, {
-          method: 'DELETE',
-        })
       }
+      await fetch(`https://collapp-build-server.herokuapp.com/plugin/${id}`, {
+        method: 'DELETE',
+      })
       await prisma.publishedPlugin.update({
         where: { id: plugin.published.id },
         data: {
