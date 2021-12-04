@@ -69,6 +69,7 @@ export const Layout = ({
         <div className="ml-auto" />
         {status === 'unauthenticated' && (
           <Button
+            data-test="button-login"
             onClick={() =>
               signIn('github', {
                 callbackUrl: `${window.location.origin}/plugins`,
@@ -84,6 +85,7 @@ export const Layout = ({
             <div
               className="hover:bg-gray-200 cursor-pointer transition-colors rounded-xl p-1 h-full flex items-center justify-center"
               onClick={() => setDropdownOpen(!isDropdownOpen)}
+              data-test="logged-profile"
             >
               <img
                 src={query?.data?.image || defaultUserIcon}
