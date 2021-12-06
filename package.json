@@ -11,7 +11,8 @@
     "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main",
     "shared-push": "git subtree push --prefix=shared https://github.com/collapp-zpi/shared main",
     "shared-pull": "git subtree pull --prefix=shared https://github.com/collapp-zpi/shared main",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "dev:test": "set CYPRESS_TEST=true&& npm run dev"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
