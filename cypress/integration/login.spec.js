@@ -43,7 +43,7 @@ describe('login', () => {
 
         // remove the two lines below if you need to stay logged in
         // for your remaining tests
-        // cy.visit('/api/auth/signout')
+        cy.visit('/plugins/create')
         // cy.get('form').submit()
       }
     })
