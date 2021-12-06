@@ -3,48 +3,49 @@ describe('login', () => {
     cy.visit('/')
   })
 
-  it('Login with GitHub', () => {
-    const username = Cypress.env('GITHUB_USER')
-    const password = Cypress.env('GITHUB_PW')
+  it('Login with Auth0', () => {
+    const username = Cypress.env('USER_NAME')
+    const password = Cypress.env('USER_PWD')
     const loginUrl = Cypress.env('SITE_NAME')
     const cookieName = Cypress.env('COOKIE_NAME')
     const socialLoginOptions = {
       username,
       password,
       loginUrl,
+      args: ['--no-sandbox'],
+      usernameField: '#username',
+      passwordField: '#password',
+      passwordSubmitBtn: 'button[name="action"]',
       headless: true,
-      logs: false,
-      isPopup: true,
-      loginSelector: '[data-test="button-login"]',
+      logs: true,
+      loginSelector: 'button[type="submit"]',
       postLoginSelector: '[data-test="logged-profile"]',
     }
 
-    return cy
-      .task('GitHubSocialLogin', socialLoginOptions)
-      .then(({ cookies }) => {
-        cy.clearCookies()
+    return cy.task('Auth0Login', socialLoginOptions).then(({ cookies }) => {
+      cy.clearCookies()
 
-        const cookie = cookies
-          .filter((cookie) => cookie.name === cookieName)
-          .pop()
-        if (cookie) {
-          cy.setCookie(cookie.name, cookie.value, {
-            domain: cookie.domain,
-            expiry: cookie.expires,
-            httpOnly: cookie.httpOnly,
-            path: cookie.path,
-            secure: cookie.secure,
-          })
+      const cookie = cookies
+        .filter((cookie) => cookie.name === cookieName)
+        .pop()
+      if (cookie) {
+        cy.setCookie(cookie.name, cookie.value, {
+          domain: cookie.domain,
+          expiry: cookie.expires,
+          httpOnly: cookie.httpOnly,
+          path: cookie.path,
+          secure: cookie.secure,
+        })
 
-          Cypress.Cookies.defaults({
-            preserve: cookieName,
-          })
+        Cypress.Cookies.defaults({
+          preserve: cookieName,
+        })
 
-          // remove the two lines below if you need to stay logged in
-          // for your remaining tests
-          // cy.visit('/api/auth/signout')
-          // cy.get('form').submit()
-        }
-      })
+        // remove the two lines below if you need to stay logged in
+        // for your remaining tests
+        // cy.visit('/api/auth/signout')
+        // cy.get('form').submit()
+      }
+    })
   })
 })

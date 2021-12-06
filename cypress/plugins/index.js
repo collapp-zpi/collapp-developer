@@ -1,7 +1,7 @@
-const { GitHubSocialLogin } = require('cypress-social-logins').plugins
+const { CustomizedLogin } = require('cypress-social-logins').plugins
 
-module.exports = (on, config) => {
+module.exports = (on) => {
   on('task', {
-    GitHubSocialLogin: GitHubSocialLogin,
+    Auth0Login: (options) => CustomizedLogin(options),
   })
 }

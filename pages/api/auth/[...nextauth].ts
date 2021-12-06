@@ -5,22 +5,23 @@ import { PrismaExtendedAdapter } from 'shared/utils/PrismaExtendedAdapter'
 
 export default NextAuth({
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
     ...(!process.env.CYPRESS_TEST
-      ? []
+      ? [
+          GitHubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+          }),
+        ]
       : [
           Auth0Provider({
-            clientId: process.env.AUTH0_CLIENT_ID,
-            clientSecret: process.env.AUTH0_CLIENT_SECRET,
+            clientId: process.env.AUTH0_CLIENT_ID as string,
+            clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
             issuer: process.env.AUTH0_ISSUER,
           }),
         ]),
   ],
   pages: {
-    // signIn: '../../',
+    ...(!process.env.CYPRESS_TEST && { signIn: '../../' }),
     error: '../../error',
     signOut: '../../',
   },
