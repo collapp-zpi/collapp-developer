@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "doppler run next dev -- -p 3001",
     "build": "doppler run next build",
-    "start": "doppler run next start",
+    "start": "doppler run next start -- -p 3001",
     "lint": "next lint",
     "prisma-push": "git subtree push --prefix=prisma https://github.com/collapp-zpi/prisma main",
     "prisma-pull": "git subtree pull --prefix=prisma https://github.com/collapp-zpi/prisma main",
     "shared-push": "git subtree push --prefix=shared https://github.com/collapp-zpi/shared main",
     "shared-pull": "git subtree pull --prefix=shared https://github.com/collapp-zpi/shared main",
     "cypress": "cypress open",
-    "dev:test": "set CYPRESS_TEST=true&& npm run dev"
+    "start:test": "set CYPRESS_TEST=true&& npm start"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",

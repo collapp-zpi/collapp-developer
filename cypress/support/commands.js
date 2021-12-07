@@ -23,3 +23,42 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  const username = Cypress.env('USER_NAME')
+  const password = Cypress.env('USER_PWD')
+  const loginUrl = Cypress.env('SITE_NAME')
+  const cookieName = Cypress.env('COOKIE_NAME')
+  const socialLoginOptions = {
+    username,
+    password,
+    loginUrl,
+    args: ['--no-sandbox'],
+    usernameField: '#username',
+    passwordField: '#password',
+    passwordSubmitBtn: 'button[name="action"]',
+    headless: true,
+    logs: false,
+    loginSelector: 'button[type="submit"]',
+    postLoginSelector: '[data-test="logged-profile"]',
+  }
+
+  return cy.task('Auth0Login', socialLoginOptions).then(({ cookies }) => {
+    cy.clearCookies()
+
+    const cookie = cookies.filter((cookie) => cookie.name === cookieName).pop()
+    if (cookie) {
+      cy.setCookie(cookie.name, cookie.value, {
+        domain: cookie.domain,
+        expiry: cookie.expires,
+        httpOnly: cookie.httpOnly,
+        path: cookie.path,
+        secure: cookie.secure,
+      })
+
+      Cypress.Cookies.defaults({
+        preserve: cookieName,
+      })
+    }
+  })
+})

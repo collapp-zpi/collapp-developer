@@ -21,9 +21,11 @@ export default NextAuth({
         ]),
   ],
   pages: {
-    ...(!process.env.CYPRESS_TEST && { signIn: '../../' }),
+    ...(!process.env.CYPRESS_TEST && {
+      signIn: '../../',
+      signOut: '../../',
+    }),
     error: '../../error',
-    signOut: '../../',
   },
   adapter: PrismaExtendedAdapter('developer'),
   secret: process.env.AUTH_SECRET,
