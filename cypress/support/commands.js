@@ -27,8 +27,9 @@
 Cypress.Commands.add('login', () => {
   const username = Cypress.env('USER_NAME')
   const password = Cypress.env('USER_PWD')
-  const loginUrl = Cypress.env('SITE_NAME')
-  const cookieName = Cypress.env('COOKIE_NAME')
+  const loginUrl = 'http://localhost:3001/api/auth/signin'
+  const cookieName = 'next-auth.session-token'
+
   const socialLoginOptions = {
     username,
     password,

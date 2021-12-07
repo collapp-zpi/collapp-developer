@@ -5,6 +5,7 @@ describe('login', () => {
 
   it('Login with Auth0', () => {
     cy.login()
-    cy.visit('/plugins/create')
+    cy.visit('/')
+    cy.get('[data-test="logged-profile"]').should('exist')
   })
 })
