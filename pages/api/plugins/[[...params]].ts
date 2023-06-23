@@ -24,7 +24,6 @@ import {
   NotEquals,
 } from 'class-validator'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
-import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export class CreatePluginDTO {
   @IsNotEmpty({ message: 'Plugin name is required.' })
@@ -225,8 +224,11 @@ class Plugins {
     }
 
     if (plugin.source) {
-      s3.deleteObject(getParams(plugin.source.url), (err) => {
-        if (err) console.log(err)
+      await fetch(process.env.STORAGE_ROOT + plugin.source.url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${process.env.STORAGE_SECRET}`
+        },
       })
 
       await prisma.file.delete({

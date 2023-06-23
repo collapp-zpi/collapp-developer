@@ -3,7 +3,6 @@ import Formidable, { Fields, File as FFile, Files } from 'formidable'
 import { getSession } from 'next-auth/react'
 import { prisma } from 'shared/utils/prismaClient'
 import fs from 'fs'
-import { getParams, s3 } from 'shared/utils/awsHelpers'
 
 export const config = {
   api: {
@@ -72,19 +71,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    const draftPath = `drafts/${plugin?.author?.id}/${id}.zip`
+    const draftPath = `/drafts/${plugin?.author?.id}/${id}.zip`
 
-    fs.readFile(parsedFile.path, function (err, data) {
-      if (err) throw err
+    await new Promise((res, rej) => {
+      fs.readFile(parsedFile.path, async function (err, data) {
+        if (err) throw err
 
-      s3.putObject(getParams(draftPath, data), (err) => {
-        fs.unlink(parsedFile.path, function (err) {
-          if (err) {
-            console.error(err)
-          }
-        })
-        if (err) console.log(err)
+        fetch(process.env.STORAGE_ROOT + draftPath, {
+          method: 'PUT',
+          headers: {
+            'Content-type': '*/*',
+            Authorization: `Bearer ${process.env.STORAGE_SECRET}`
+          },
+          body: data
+        }).then(res).catch(rej)
       })
+    }).catch((e) => console.log(e))
+
+    fs.unlink(parsedFile.path, (err) => {
+      if (err) console.log(err)
     })
 
     const newFile = await prisma.file.create({
