@@ -77,7 +77,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       fs.readFile(parsedFile.path, async function (err, data) {
         if (err) throw err
 
-        fetch(process.env.STORAGE_ROOT + draftPath, {
+        fetch(process.env.NEXT_PUBLIC_STORAGE_ROOT + draftPath, {
           method: 'PUT',
           headers: {
             'Content-type': '*/*',

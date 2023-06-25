@@ -30,7 +30,9 @@ type SingleFileProps = {
 export const SingleFile = ({ file }: SingleFileProps) => {
   const handleDownload = (url: string) => async () => {
     try {
-      const data = await fetch(`/api/download` + url).then((res) => res.blob())
+      const data = await fetch(process.env.NEXT_PUBLIC_STORAGE_ROOT + url).then(
+        (res) => res.blob(),
+      )
 
       download(data, file.name)
     } catch (e) {
@@ -42,7 +44,7 @@ export const SingleFile = ({ file }: SingleFileProps) => {
   return (
     <div className="flex items-center">
       <div className="flex items-center justify-center py-2 pr-3 text-gray-400">
-        <BsFileEarmarkZip size="2rem"/>
+        <BsFileEarmarkZip size="2rem" />
       </div>
       <div className="flex flex-col mr-auto">
         <div className="font-bold">{file?.name}</div>
@@ -52,12 +54,8 @@ export const SingleFile = ({ file }: SingleFileProps) => {
         <div className="text-sm text-gray-400">{parseFileSize(file?.size)}</div>
       </div>
       {!!file?.url && (
-        <Button
-          hasIcon
-          color="light"
-          onClick={handleDownload(file.url)}
-        >
-          <CgSoftwareDownload size="1.5rem"/>
+        <Button hasIcon color="light" onClick={handleDownload(file.url)}>
+          <CgSoftwareDownload size="1.5rem" />
         </Button>
       )}
     </div>
@@ -111,19 +109,19 @@ export const PluginFileForm = ({ file }: PluginFileFormProps) => {
     <div className="flex flex-col">
       {!!file && (
         <>
-          <SingleFile file={file}/>
+          <SingleFile file={file} />
           {!isPending && (
             <>
               <div className="flex items-center mb-4 mt-2">
-                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1"/>
+                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
                 {!!innerFile ? (
                   <div className="font-bold text-sm text-gray-400">
-                    <FiArrowDown strokeWidth={3} size="1.1rem"/>
+                    <FiArrowDown strokeWidth={3} size="1.1rem" />
                   </div>
                 ) : (
                   <div className="font-bold text-sm text-gray-400">OR</div>
                 )}
-                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1"/>
+                <div className="flex-grow mx-2 border-gray-100 border-t-2 h-1 mt-1" />
               </div>
               {innerFile === undefined && (
                 <Button
@@ -148,12 +146,12 @@ export const PluginFileForm = ({ file }: PluginFileFormProps) => {
               isDragReject
                 ? 'border-red-500'
                 : isDragAccept
-                  ? 'border-green-500'
-                  : 'border-gray-300 focus-within:border-blue-500',
+                ? 'border-green-500'
+                : 'border-gray-300 focus-within:border-blue-500',
             )}
           >
             <input {...getInputProps()} />
-            <FiUploadCloud size="4em"/>
+            <FiUploadCloud size="4em" />
             <span className="mt-3 font-bold text-lg">
               Drag and drop the file here
             </span>
@@ -170,7 +168,7 @@ export const PluginFileForm = ({ file }: PluginFileFormProps) => {
       )}
       {!!innerFile && (
         <>
-          <SingleFile file={innerFile}/>
+          <SingleFile file={innerFile} />
         </>
       )}
       {!!innerFile && (
@@ -189,7 +187,7 @@ export const PluginFileForm = ({ file }: PluginFileFormProps) => {
             onClick={() => fileRequest.send(innerFile)}
           >
             {fileRequest.isLoading && (
-              <CgSpinner className="animate-spin mr-2 -ml-2"/>
+              <CgSpinner className="animate-spin mr-2 -ml-2" />
             )}
             Submit
           </Button>

@@ -224,10 +224,10 @@ class Plugins {
     }
 
     if (plugin.source) {
-      await fetch(process.env.STORAGE_ROOT + plugin.source.url, {
+      await fetch(process.env.NEXT_PUBLIC_STORAGE_ROOT + plugin.source.url, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${process.env.STORAGE_SECRET}`
+          Authorization: `Bearer ${process.env.STORAGE_SECRET}`,
         },
       })
 
@@ -245,7 +245,7 @@ class Plugins {
           where: { id: plugin.published.source.id },
         })
       }
-      await fetch(`https://collapp-build-server.herokuapp.com/plugin/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_STORAGE_ROOT}/plugin/${id}`, {
         method: 'DELETE',
       })
       await prisma.publishedPlugin.update({
